@@ -1,0 +1,28 @@
+# System files
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Data files (large datasets - available from source)
+data/
+
+# Model outputs and logs
+models/logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+venv/
+env/
