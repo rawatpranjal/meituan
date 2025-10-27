@@ -10,6 +10,21 @@
 - Log files must be timestamped and live in the same folder as the .py script
 - **ALWAYS show file links at the end**: Display full paths to both .py script AND .log file after every execution
 
+**FILE NAMING CONVENTION**:
+- ALL files must use highly specific, descriptive names that clearly indicate:
+  1. What the file does
+  2. How it fits within the larger system architecture
+- **Naming Pattern**: `{model_id}_{tier}_{algorithm}_{objective}_{file_type}_{timestamp}.{ext}`
+  - `model_id`: Sequential number (01, 02, 03...)
+  - `tier`: Model tier/complexity (tier1, tier2, tier3...)
+  - `algorithm`: Algorithm type (bipartite, greedy, rl, auction...)
+  - `objective`: Cost function (distance_to_pickup, total_delivery_time, detour_cost...)
+  - `file_type`: execution, assignment_log, cycle_summary, analysis, playbook, journey
+  - `timestamp`: YYYYMMDD_HHMMSS format
+- **Example**: `01_tier1_bipartite_distance_to_pickup_execution_20251027_181213.log`
+- **Critical Rule**: Related files (model script, logs, analysis, visualizations) MUST share the same base name prefix
+- This ensures full traceability and makes the project structure self-documenting
+
 ## Project Overview
 - **ML System Design/Optimization Project** using Meituan food delivery operational data
 - Dataset from TSL-Meituan Data-Driven Research Challenge

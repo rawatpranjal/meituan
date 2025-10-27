@@ -28,14 +28,14 @@ from logger import SimulationLogger
 
 DATA_PATH = "/Users/pranjal/Code/meituan/data/INFORMS.org/meituan_informs_data/"
 LOGS_DIR = "/Users/pranjal/Code/meituan/models/logs"
-MODEL_NAME = "tier1_baseline_with_viz"
+MODEL_NAME = "01_tier1_bipartite_distance_to_pickup"
 
 random.seed(42)
 np.random.seed(42)
 
 # Setup stdout logging
 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-log_file = f"{LOGS_DIR}/01_static_bipartite_matching_{timestamp}.log"
+log_file = f"{LOGS_DIR}/{MODEL_NAME}_execution_{timestamp}.log"
 log = open(log_file, 'w')
 sys.stdout = log
 
@@ -341,13 +341,13 @@ def run_simulation_with_viz():
 
         # --- D. GENERATE VISUALIZATIONS (First 3 dispatches) ---
         if dispatch_idx < 3:
-            viz_filename = f"{LOGS_DIR}/playbook_dispatch_{dispatch_idx+1}_{dispatch_time}.png"
+            viz_filename = f"{LOGS_DIR}/{MODEL_NAME}_playbook_dispatch_{dispatch_idx+1}_{dispatch_time}.png"
             create_playbook_visualization(
                 dispatch_time, waiting_orders, available_couriers,
                 proposed_assignments, waybill_lookup, viz_filename
             )
 
-            journey_filename = f"{LOGS_DIR}/journey_detail_dispatch_{dispatch_idx+1}_{dispatch_time}.png"
+            journey_filename = f"{LOGS_DIR}/{MODEL_NAME}_journey_dispatch_{dispatch_idx+1}_{dispatch_time}.png"
             create_journey_detail_visualization(
                 dispatch_time, waiting_orders, available_couriers,
                 proposed_assignments, waybill_lookup, journey_filename, sample_size=15
@@ -478,12 +478,12 @@ def run_simulation_with_viz():
 
     print("\nVISUALIZATIONS:")
     print("Playbook Views (all assignments):")
-    print("  - playbook_dispatch_1_*.png, playbook_dispatch_2_*.png, playbook_dispatch_3_*.png")
+    print(f"  - {MODEL_NAME}_playbook_dispatch_1_*.png, _2_*.png, _3_*.png")
     print("  - Red triangles: Available couriers")
     print("  - Blue circles: Waiting orders (at restaurant pickup locations)")
     print("  - Gray lines: Assignment connections (courier → order)")
     print("\nJourney Details (sample L-shaped paths):")
-    print("  - journey_detail_dispatch_1_*.png, journey_detail_dispatch_2_*.png, journey_detail_dispatch_3_*.png")
+    print(f"  - {MODEL_NAME}_journey_dispatch_1_*.png, _2_*.png, _3_*.png")
     print("  - Shows complete path: Courier (red △) → Pickup (blue ○) → Delivery (green □)")
     print("  - Blue solid lines: Courier to pickup, Green dashed lines: Pickup to delivery")
     print("  - Zoomed to ~15 sampled assignments for clarity")
