@@ -16,11 +16,15 @@ from datetime import datetime
 
 # Import simulator modules
 sys.path.insert(0, '/Users/pranjal/Code/meituan/models/simulator')
-from physics import AVERAGE_TASK_DURATION, GLOBAL_REJECTION_PROBABILITY, euclidean_distance
+from physics import AVERAGE_TASK_DURATION, GLOBAL_REJECTION_PROBABILITY
 from state import (initialize_courier_states, get_available_couriers,
                    update_courier_after_assignment, get_courier_state_summary)
 from assignment_strategy import Tier1Baseline
 from logger import SimulationLogger
+
+# Import cost function module
+sys.path.insert(0, '/Users/pranjal/Code/meituan/models')
+from cost import DistanceToPickup
 
 # ============================================================================
 # CONFIGURATION
@@ -285,12 +289,16 @@ def run_simulation_with_viz():
     courier_states = initialize_courier_states(first_dispatch_couriers, waybill_lookup)
     print(f"Initialized {len(courier_states):,} couriers")
 
+    # Initialize cost function
+    cost_function = DistanceToPickup()
+    print(f"Cost function: {cost_function.get_name()} - {cost_function.get_description()}")
+
     # Initialize assignment strategy
-    assignment_strategy = Tier1Baseline()
-    print(f"Assignment strategy: Tier 1 Baseline (Distance to Pickup)")
+    assignment_strategy = Tier1Baseline(cost_function)
+    print(f"Assignment strategy: Tier 1 Baseline (Static Bipartite Matching)")
 
     # Initialize logger
-    logger = SimulationLogger(LOGS_DIR, MODEL_NAME)
+    logger = SimulationLogger(LOGS_DIR, MODEL_NAME, cost_function.get_name())
     print(f"\nMetrics logging:")
     print(f"  Assignment log: {logger.assignment_log_path}")
     print(f"  Cycle summary: {logger.cycle_summary_path}")

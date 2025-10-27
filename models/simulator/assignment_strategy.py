@@ -3,12 +3,14 @@ Assignment Strategy - The "Brain"
 
 Pluggable algorithms for order-to-courier assignment.
 This module allows easy swapping of different assignment strategies.
+
+Note: Assignment strategies now accept cost functions as parameters,
+allowing separation of the optimization algorithm from the cost function.
 """
 
 from abc import ABC, abstractmethod
 import numpy as np
 from scipy.optimize import linear_sum_assignment
-from physics import euclidean_distance
 
 
 class AssignmentStrategy(ABC):
@@ -37,15 +39,24 @@ class AssignmentStrategy(ABC):
 
 class Tier1Baseline(AssignmentStrategy):
     """
-    Tier 1 Baseline: Distance to Pickup
+    Tier 1 Baseline: Static Bipartite Matching
 
-    Cost function: Euclidean distance from courier's current location to restaurant (pickup)
     Algorithm: Hungarian algorithm (optimal bipartite matching)
+    Cost function: Pluggable (passed as parameter)
     """
+
+    def __init__(self, cost_function):
+        """
+        Initialize assignment strategy with a cost function
+
+        Args:
+            cost_function: Instance of a cost function from models.cost module
+        """
+        self.cost_function = cost_function
 
     def make_assignments(self, waiting_orders, available_couriers, waybill_lookup):
         """
-        Assign orders to couriers using distance-to-pickup cost
+        Assign orders to couriers using the configured cost function
 
         Returns list of (order, courier, cost) tuples
         """
@@ -67,21 +78,18 @@ class Tier1Baseline(AssignmentStrategy):
                 cost_matrix[i, :] = 1e9
                 continue
 
-            # Get restaurant (pickup) location
-            restaurant_lat = waybill_lookup[order_id]['sender_lat']
-            restaurant_lng = waybill_lookup[order_id]['sender_lng']
+            # Get order location details
+            order_location = waybill_lookup[order_id]
 
             for j, courier in enumerate(available_couriers):
-                courier_lat = courier['rider_lat']
-                courier_lng = courier['rider_lng']
-
-                # Calculate Euclidean distance to pickup
-                distance = euclidean_distance(
-                    courier_lat, courier_lng,
-                    restaurant_lat, restaurant_lng
+                # Calculate cost using the configured cost function
+                cost = self.cost_function.compute_cost(
+                    courier=courier,
+                    order=order,
+                    order_location=order_location
                 )
 
-                cost_matrix[i, j] = distance
+                cost_matrix[i, j] = cost
 
         # Solve assignment problem using Hungarian algorithm
         row_ind, col_ind = linear_sum_assignment(cost_matrix)

@@ -13,16 +13,18 @@ class SimulationLogger:
     Manages CSV logging for granular and summary metrics
     """
 
-    def __init__(self, log_dir, model_name="tier1_baseline"):
+    def __init__(self, log_dir, model_name="tier1_baseline", cost_function_name="unknown"):
         """
-        Initialize logger with output directory and model name
+        Initialize logger with output directory, model name, and cost function
 
         Args:
             log_dir: Directory to save CSV files
             model_name: Name of the model being tested (for filename)
+            cost_function_name: Name of the cost function being used
         """
         self.log_dir = log_dir
         self.model_name = model_name
+        self.cost_function_name = cost_function_name
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
         # Create assignment log
@@ -35,7 +37,8 @@ class SimulationLogger:
             'is_assigned_by_baseline', 'was_accepted',
             'actual_assigned_courier_id', 'is_match_with_actual',
             'num_orders_in_batch', 'num_couriers_in_pool',
-            'order_pickup_lat', 'order_pickup_lng'
+            'order_pickup_lat', 'order_pickup_lng',
+            'cost_function'
         ])
 
         # Create cycle summary log
@@ -48,7 +51,8 @@ class SimulationLogger:
             'num_proposed_assignments', 'num_accepted_assignments', 'num_rejections',
             'assignment_rate', 'acceptance_rate',
             'total_cost_of_cycle', 'avg_cost_per_assignment',
-            'agreement_rate_with_actual'
+            'agreement_rate_with_actual',
+            'cost_function'
         ])
 
     def log_assignment(self, dispatch_time, order, courier, cost, rank, is_assigned,
@@ -79,7 +83,8 @@ class SimulationLogger:
             is_assigned, was_accepted,
             actual_courier_id, is_match,
             n_orders, n_couriers,
-            pickup_lat, pickup_lng
+            pickup_lat, pickup_lng,
+            self.cost_function_name
         ])
 
     def log_cycle_summary(self, dispatch_time, n_orders, n_couriers,
@@ -109,7 +114,8 @@ class SimulationLogger:
             n_proposed, n_accepted, n_rejections,
             assignment_rate, acceptance_rate,
             total_cost, avg_cost,
-            agreement_rate
+            agreement_rate,
+            self.cost_function_name
         ])
 
     def flush(self):
