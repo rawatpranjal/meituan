@@ -11,7 +11,7 @@ import sys
 from datetime import datetime
 
 # Setup logging
-log_file = f"/Users/pranjal/Code/meituan/eda/02_comprehensive_journey_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+log_file = f"/Users/pranjal/Code/meituan/eda/logs/02_comprehensive_journey_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 log = open(log_file, 'w')
 sys.stdout = log
 

@@ -9,7 +9,7 @@ import sys
 from datetime import datetime
 
 # Setup logging
-log_file = f"/Users/pranjal/Code/meituan/eda/01_initial_data_verification_full_eda_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+log_file = f"/Users/pranjal/Code/meituan/eda/logs/01_initial_data_verification_full_eda_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 log = open(log_file, 'w')
 sys.stdout = log
 

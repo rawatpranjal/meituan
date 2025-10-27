@@ -11,6 +11,7 @@ data/
 
 # Model outputs and logs
 models/logs/
+eda/logs/
 *.log
 
 # IDE

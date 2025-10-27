@@ -10,7 +10,7 @@ from datetime import datetime
 from math import radians, sin, cos, sqrt, atan2
 
 # Setup logging
-log_file = f"/Users/pranjal/Code/meituan/eda/03_debugging_and_investigations_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+log_file = f"/Users/pranjal/Code/meituan/eda/logs/03_debugging_and_investigations_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 log = open(log_file, 'w')
 sys.stdout = log
 
