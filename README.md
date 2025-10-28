@@ -1,9 +1,15 @@
-# Meituan Courier-Order Assignment Optimization
+# On-Demand Food Delivery (Meituan)
 
 Batch-based food delivery dispatch simulation using real-world operational data from Meituan/INFORMS TSL Challenge.
 
+## Dataset Attribution
+
+Data provided by Meituan for INFORMS Transportation Science and Logistics (TSL) Data-Driven Research Challenge.
+
 **Dataset**: Meituan (March 2024), 654K orders, 24 dispatch cycles
+**Source**: https://github.com/meituan/meituan_informs_data
 **License**: CC BY-NC 4.0 (Academic use only)
+**Citation**: "This research was supported by data provided by Meituan."
 
 ---
 
@@ -14,11 +20,12 @@ meituan/
 ├── data/                           # Raw Meituan dataset (INFORMS challenge)
 ├── eda/                            # Exploratory data analysis
 ├── context/                        # Research papers
+├── visualizations/                 # Model comparison GIFs
 ├── models/                         # Assignment algorithms and simulation
 │   ├── cost/                       # Cost function modules
 │   ├── simulator/                  # Stateful batch-dispatch framework
 │   ├── evaluation/                 # Analysis scripts
-│   ├── visualization/              # GIF generation
+│   ├── visualization/              # GIF generation tools
 │   ├── logs/                       # Execution logs and outputs
 │   ├── 01_tier1_bipartite_distance_to_pickup.py
 │   ├── 02_tier2_batch_vrp_distance_to_pickup.py
@@ -55,13 +62,13 @@ Discrete-time batch dispatch for on-demand delivery:
 Side-by-side animated comparisons (24 dispatch cycles, 2.5s per frame):
 
 ### Model 01: Greedy Bipartite
-![Model 01](models/logs/01_tier1_bipartite_distance_to_pickup_20251027_203531_comparison.gif)
+![Model 01](visualizations/01_tier1_bipartite_distance_to_pickup_20251027_203531_comparison.gif)
 
 ### Model 02: Batch VRP
-![Model 02](models/logs/02_tier2_batch_vrp_distance_to_pickup_20251027_205445_comparison.gif)
+![Model 02](visualizations/02_tier2_batch_vrp_distance_to_pickup_20251027_205445_comparison.gif)
 
 ### Model 03: Online Greedy
-![Model 03](models/logs/03_tier3_online_greedy_distance_to_pickup_20251027_205649_comparison.gif)
+![Model 03](visualizations/03_tier3_online_greedy_distance_to_pickup_20251027_205649_comparison.gif)
 
 **Legend**: Blue circles (orders), red/gray triangles (couriers), lines (assignments). Left panel shows model assignments, right panel shows Meituan's actual assignments.
 
@@ -95,16 +102,9 @@ Pluggable cost function system (`models/cost/`):
 
 ---
 
-## Dataset Attribution
-
-Data provided by Meituan for INFORMS Transportation Science and Logistics (TSL) Data-Driven Research Challenge.
-
-**Source**: https://github.com/meituan/meituan_informs_data
-**License**: CC BY-NC 4.0 (Academic use only)
-**Citation**: "This research was supported by data provided by Meituan."
-
----
-
 ## References
 
-See `context/` directory for research papers on vehicle routing, dynamic fleet management, and online matching algorithms.
+- Tafreshian, A., Masoud, N., & Yin, Y. (2020). Frontiers in service science: Ride matching for peer-to-peer ride sharing: A review and future directions. *Service Science*.
+- Neural Computing and Applications (2023). Dynamic vehicle routing optimization.
+- Transportation Research Part B (2018). Methodological advances in ride-sharing systems.
+- OR Spectrum (2020). Optimization models for on-demand delivery services.
