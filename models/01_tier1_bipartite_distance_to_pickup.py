@@ -21,6 +21,7 @@ from state import (initialize_courier_states, get_available_couriers,
                    update_courier_after_assignment, get_courier_state_summary)
 from assignment_strategy import Tier1Baseline
 from logger import SimulationLogger
+from courier_timeline_logger import CourierTimelineLogger
 
 # Import cost function module
 sys.path.insert(0, '/Users/pranjal/Code/meituan/models')
@@ -252,13 +253,15 @@ def run_simulation_with_viz():
     # Build waybill lookup dictionary
     print("\nBuilding waybill lookup dictionary...")
     waybill_subset = waybill.select(['order_id', 'sender_lat', 'sender_lng',
-                                      'recipient_lat', 'recipient_lng', 'courier_id'])
+                                      'recipient_lat', 'recipient_lng', 'courier_id',
+                                      'platform_order_time'])
     order_ids = waybill_subset['order_id'].to_list()
     sender_lats = waybill_subset['sender_lat'].to_list()
     sender_lngs = waybill_subset['sender_lng'].to_list()
     recipient_lats = waybill_subset['recipient_lat'].to_list()
     recipient_lngs = waybill_subset['recipient_lng'].to_list()
     actual_courier_ids = waybill_subset['courier_id'].to_list()
+    platform_order_times = waybill_subset['platform_order_time'].to_list()
 
     waybill_lookup = {
         order_ids[i]: {
@@ -266,7 +269,8 @@ def run_simulation_with_viz():
             'sender_lng': sender_lngs[i],
             'recipient_lat': recipient_lats[i],
             'recipient_lng': recipient_lngs[i],
-            'actual_courier_id': actual_courier_ids[i]
+            'actual_courier_id': actual_courier_ids[i],
+            'platform_order_time': platform_order_times[i]
         }
         for i in range(len(order_ids))
     }
@@ -280,15 +284,6 @@ def run_simulation_with_viz():
     dispatch_times = dispatch_waybill['dispatch_time'].unique().sort().to_list()
     print(f"Total dispatch moments to process: {len(dispatch_times)}")
 
-    # Initialize courier states from first dispatch moment
-    first_dispatch_time = dispatch_times[0]
-    first_dispatch_couriers = dispatch_rider.filter(
-        pl.col('dispatch_time') == first_dispatch_time
-    ).to_dicts()
-
-    courier_states = initialize_courier_states(first_dispatch_couriers, waybill_lookup)
-    print(f"Initialized {len(courier_states):,} couriers")
-
     # Initialize cost function
     cost_function = DistanceToPickup()
     print(f"Cost function: {cost_function.get_name()} - {cost_function.get_description()}")
@@ -297,11 +292,22 @@ def run_simulation_with_viz():
     assignment_strategy = Tier1Baseline(cost_function)
     print(f"Assignment strategy: Tier 1 Baseline (Static Bipartite Matching)")
 
-    # Initialize logger
+    # Initialize loggers
     logger = SimulationLogger(LOGS_DIR, MODEL_NAME, cost_function.get_name())
+    timeline_logger = CourierTimelineLogger(LOGS_DIR, MODEL_NAME)
     print(f"\nMetrics logging:")
     print(f"  Assignment log: {logger.assignment_log_path}")
     print(f"  Cycle summary: {logger.cycle_summary_path}")
+    print(f"  Courier timeline: {timeline_logger.get_log_path()}")
+
+    # Initialize courier states from first dispatch moment
+    first_dispatch_time = dispatch_times[0]
+    first_dispatch_couriers = dispatch_rider.filter(
+        pl.col('dispatch_time') == first_dispatch_time
+    ).to_dicts()
+
+    courier_states = initialize_courier_states(first_dispatch_couriers, waybill_lookup, timeline_logger)
+    print(f"Initialized {len(courier_states):,} couriers")
 
     # Physics constants
     print(f"\nPhysics constants (calibrated from historical data):")
@@ -328,8 +334,15 @@ def run_simulation_with_viz():
         total_orders_processed += n_orders
 
         # --- B. GET AVAILABLE COURIERS ---
-        available_couriers = get_available_couriers(dispatch_time, courier_states)
+        available_couriers = get_available_couriers(dispatch_time, courier_states, timeline_logger)
         n_couriers = len(available_couriers)
+
+        # Build courier location lookup for this dispatch moment (for logging actual assignments)
+        dispatch_couriers_df = dispatch_rider.filter(pl.col('dispatch_time') == dispatch_time)
+        courier_location_lookup = {
+            row['courier_id']: (row['rider_lat'], row['rider_lng'])
+            for row in dispatch_couriers_df.select(['courier_id', 'rider_lat', 'rider_lng']).iter_rows(named=True)
+        }
 
         print(f"  Waiting orders: {n_orders}")
         print(f"  Available couriers: {n_couriers}")
@@ -386,7 +399,7 @@ def run_simulation_with_viz():
                 )
                 update_courier_after_assignment(
                     courier['courier_id'], courier_states, dispatch_time,
-                    delivery_location, AVERAGE_TASK_DURATION
+                    delivery_location, AVERAGE_TASK_DURATION, timeline_logger
                 )
 
         n_accepted = len(accepted_assignments)
@@ -418,6 +431,7 @@ def run_simulation_with_viz():
             pickup_lat = waybill_lookup[order_id]['sender_lat']
             pickup_lng = waybill_lookup[order_id]['sender_lng']
             actual_courier_id = waybill_lookup[order_id].get('actual_courier_id')
+            platform_order_time = waybill_lookup[order_id].get('platform_order_time')
 
             # Find if this order was in our assignments
             courier = None
@@ -441,10 +455,21 @@ def run_simulation_with_viz():
             if is_match:
                 num_matches += 1
 
+            # Get courier locations for logging
+            baseline_courier_lat = courier['rider_lat'] if courier else None
+            baseline_courier_lng = courier['rider_lng'] if courier else None
+
+            actual_courier_lat = None
+            actual_courier_lng = None
+            if actual_courier_id and actual_courier_id in courier_location_lookup:
+                actual_courier_lat, actual_courier_lng = courier_location_lookup[actual_courier_id]
+
             logger.log_assignment(
                 dispatch_time, order, courier, cost, rank,
                 is_assigned, was_accepted, actual_courier_id, is_match,
-                n_orders, n_couriers, pickup_lat, pickup_lng
+                n_orders, n_couriers, pickup_lat, pickup_lng, platform_order_time,
+                baseline_courier_lat, baseline_courier_lng,
+                actual_courier_lat, actual_courier_lng
             )
 
         # Log cycle summary
@@ -496,9 +521,11 @@ def run_simulation_with_viz():
     print("  - Blue solid lines: Courier to pickup, Green dashed lines: Pickup to delivery")
     print("  - Zoomed to ~15 sampled assignments for clarity")
 
-    # Close logger
+    # Close loggers
     logger.close()
+    timeline_logger.close()
     log_paths = logger.get_log_paths()
+    timeline_path = timeline_logger.get_log_path()
 
     # Close stdout log
     sys.stdout = sys.__stdout__
@@ -507,6 +534,7 @@ def run_simulation_with_viz():
     print(f"\nLog saved to: {log_file}")
     print(f"Assignment log: {log_paths['assignment_log']}")
     print(f"Cycle summary: {log_paths['cycle_summary']}")
+    print(f"Courier timeline: {timeline_path}")
 
 
 if __name__ == "__main__":

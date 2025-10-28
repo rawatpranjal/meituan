@@ -64,8 +64,8 @@ Side-by-side animated comparisons (24 dispatch cycles, 2.5s per frame):
 ### Model 01: Greedy Bipartite
 ![Model 01](visualizations/01_tier1_bipartite_distance_to_pickup_20251027_203531_comparison.gif)
 
-### Model 02: Batch VRP
-![Model 02](visualizations/02_tier2_batch_vrp_distance_to_pickup_20251027_205445_comparison.gif)
+### Model 02: Batch VRP (Fixed)
+![Model 02](visualizations/02_tier2_batch_vrp_distance_to_pickup_20251028_195230_comparison.gif)
 
 ### Model 03: Online Greedy
 ![Model 03](visualizations/03_tier3_online_greedy_distance_to_pickup_20251027_205649_comparison.gif)

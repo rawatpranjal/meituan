@@ -38,6 +38,9 @@ class SimulationLogger:
             'actual_assigned_courier_id', 'is_match_with_actual',
             'num_orders_in_batch', 'num_couriers_in_pool',
             'order_pickup_lat', 'order_pickup_lng',
+            'baseline_courier_lat', 'baseline_courier_lng',
+            'actual_courier_lat', 'actual_courier_lng',
+            'platform_order_time', 'wait_for_assignment_seconds',
             'cost_function'
         ])
 
@@ -57,7 +60,9 @@ class SimulationLogger:
 
     def log_assignment(self, dispatch_time, order, courier, cost, rank, is_assigned,
                       was_accepted, actual_courier_id, is_match, n_orders, n_couriers,
-                      pickup_lat, pickup_lng):
+                      pickup_lat, pickup_lng, platform_order_time=None,
+                      baseline_courier_lat=None, baseline_courier_lng=None,
+                      actual_courier_lat=None, actual_courier_lng=None):
         """
         Log a single order assignment (or non-assignment)
 
@@ -74,8 +79,16 @@ class SimulationLogger:
             n_orders: Total orders in batch
             n_couriers: Total available couriers
             pickup_lat, pickup_lng: Order pickup location
+            platform_order_time: When customer placed order (for wait time calculation)
+            baseline_courier_lat, baseline_courier_lng: Baseline courier location (optional)
+            actual_courier_lat, actual_courier_lng: Actual courier location (optional)
         """
         courier_id = courier['courier_id'] if courier else None
+
+        # Calculate wait time if platform_order_time is available
+        wait_seconds = None
+        if platform_order_time is not None and is_assigned:
+            wait_seconds = dispatch_time - platform_order_time
 
         self.assignment_writer.writerow([
             dispatch_time, order['order_id'],
@@ -84,6 +97,9 @@ class SimulationLogger:
             actual_courier_id, is_match,
             n_orders, n_couriers,
             pickup_lat, pickup_lng,
+            baseline_courier_lat, baseline_courier_lng,
+            actual_courier_lat, actual_courier_lng,
+            platform_order_time, wait_seconds,
             self.cost_function_name
         ])
 

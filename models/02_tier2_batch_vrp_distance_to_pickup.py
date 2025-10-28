@@ -389,31 +389,42 @@ def run_simulation_with_viz():
         cycle_total_cost = 0
         bundle_sizes = []
 
-        # Process each courier's bundle
+        # Process each courier's bundle with per-order rejection
         for c_id, bundle_data in courier_bundles.items():
             courier = bundle_data['courier']
             bundle = bundle_data['assignments']
             bundle_size = len(bundle)
             bundle_sizes.append(bundle_size)
 
-            # Courier decides to accept or reject the entire bundle
-            if random.random() < GLOBAL_REJECTION_PROBABILITY:
-                # Rejected entire bundle!
-                rejected_assignments.extend(bundle)
-                total_rejections += bundle_size
-            else:
-                # Accepted entire bundle!
-                accepted_assignments.extend(bundle)
-                for order, _, cost in bundle:
-                    cycle_total_cost += cost
+            # Apply rejection per-order within bundle (more realistic for multi-order deliveries)
+            bundle_accepted = []
+            bundle_rejected = []
+
+            for order, courier, cost in bundle:
+                if random.random() < GLOBAL_REJECTION_PROBABILITY:
+                    # This specific order rejected
+                    bundle_rejected.append((order, courier, cost))
+                    total_rejections += 1
+                else:
+                    # This specific order accepted
+                    bundle_accepted.append((order, courier, cost))
                     total_assignments_accepted += 1
 
-                # Update courier state with bundled task duration
-                # Task duration scales with number of orders in bundle
-                bundle_task_duration = AVERAGE_TASK_DURATION * bundle_size
+            accepted_assignments.extend(bundle_accepted)
+            rejected_assignments.extend(bundle_rejected)
 
-                # Use last delivery location in bundle (simplified routing)
-                last_order = bundle[-1][0]
+            # If at least one order was accepted, update courier state and add cost
+            if bundle_accepted:
+                # Add cost only once per bundle (all orders have same cost to cluster centroid)
+                bundle_cost = bundle_accepted[0][2]
+                cycle_total_cost += bundle_cost
+
+                # Task duration scales with number of ACCEPTED orders in bundle
+                accepted_count = len(bundle_accepted)
+                bundle_task_duration = AVERAGE_TASK_DURATION * accepted_count
+
+                # Use last delivery location in accepted orders (simplified routing)
+                last_order = bundle_accepted[-1][0]
                 delivery_location = (
                     waybill_lookup[last_order['order_id']]['recipient_lat'],
                     waybill_lookup[last_order['order_id']]['recipient_lng']

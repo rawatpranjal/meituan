@@ -324,7 +324,7 @@ if __name__ == "__main__":
 
     # Use most recent files (can be parameterized)
     # TODO: Update these timestamps to match your most recent model run
-    RUN_TIMESTAMP = "20251027_181214"  # Update this to analyze a specific run
+    RUN_TIMESTAMP = "20251027_185000"  # Update this to analyze a specific run
 
     assignment_log = f"{LOGS_DIR}/{MODEL_NAME}_assignment_log_{RUN_TIMESTAMP}.csv"
     cycle_summary = f"{LOGS_DIR}/{MODEL_NAME}_cycle_summary_{RUN_TIMESTAMP}.csv"

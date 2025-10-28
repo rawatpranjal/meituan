@@ -3,6 +3,15 @@
 ## AI INSTRUCTIONS
 **DO NOT provide unsolicited opinions, suggestions, or interpretations. Do what you're told. Facts only.**
 
+**DOCUMENTATION RULES**:
+- When creating READMEs or documentation: Document existing code only
+- NO examples, NO analogies, NO suggestions, NO opinions
+- NO "future work" sections, NO "how to extend" sections
+- NO business advice, NO hypothetical scenarios
+- Professional technical documentation format only
+- Remember: You are an AI with short memory and limited domain knowledge
+- You document what exists. You do not teach, suggest, or speculate.
+
 **LOGGING REQUIREMENT**:
 - ALL code execution MUST save stdout to log files
 - No log file = no proof = not acceptable
