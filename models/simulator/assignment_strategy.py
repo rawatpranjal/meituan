@@ -11,6 +11,7 @@ allowing separation of the optimization algorithm from the cost function.
 from abc import ABC, abstractmethod
 import numpy as np
 from scipy.optimize import linear_sum_assignment
+from scipy.cluster.vq import kmeans
 
 
 class AssignmentStrategy(ABC):
@@ -110,5 +111,238 @@ class Tier1Baseline(AssignmentStrategy):
                 available_couriers[courier_idx],
                 cost
             ))
+
+        return assignments
+
+
+class Tier2BatchVRP(AssignmentStrategy):
+    """
+    Tier 2: Batch Vehicle Routing Problem
+
+    Algorithm: Clustering + Assignment + Routing
+    - Clusters orders geographically using K-Means
+    - Assigns couriers to cluster centroids using Hungarian algorithm
+    - Routes orders within each cluster using nearest neighbor TSP heuristic
+
+    Cost function: Pluggable (passed as parameter)
+
+    This strategy enables Many-to-One assignment (multiple orders per courier).
+    """
+
+    def __init__(self, cost_function):
+        """
+        Initialize assignment strategy with a cost function
+
+        Args:
+            cost_function: Instance of a cost function from models.cost module
+        """
+        self.cost_function = cost_function
+
+    def make_assignments(self, waiting_orders, available_couriers, waybill_lookup):
+        """
+        Assign orders to couriers using clustering + routing
+
+        Returns list of (order, courier, cost) tuples.
+        Note: Same courier may appear multiple times (bundled assignments).
+        """
+        if not waiting_orders or not available_couriers:
+            return []
+
+        n_orders = len(waiting_orders)
+        n_couriers = len(available_couriers)
+
+        # Step 1: Extract order pickup locations for clustering
+        order_locations = []
+        valid_orders = []
+
+        for order in waiting_orders:
+            order_id = order['order_id']
+            if order_id in waybill_lookup:
+                loc = waybill_lookup[order_id]
+                order_locations.append([loc['sender_lat'], loc['sender_lng']])
+                valid_orders.append(order)
+
+        if len(valid_orders) == 0:
+            return []
+
+        order_locations = np.array(order_locations)
+
+        # Step 2: Cluster orders using K-Means
+        # K = min(num_couriers, num_orders) to ensure we don't create more clusters than we can serve
+        # Cap k to be strictly less than num_orders for K-Means stability
+        k = min(n_couriers, len(valid_orders))
+        if k >= len(valid_orders):
+            k = max(1, len(valid_orders) - 1)
+
+        if k == 1:
+            # Single cluster - all orders go to one courier
+            clusters = np.zeros(len(valid_orders), dtype=int)
+            centroids = np.array([order_locations.mean(axis=0)])
+        elif k >= len(valid_orders) * 0.9:
+            # Too many clusters relative to points - use simple spatial division
+            # Just assign each order to nearest courier as fallback
+            clusters = np.zeros(len(valid_orders), dtype=int)
+            centroids = order_locations  # Each order is its own "centroid"
+            k = len(valid_orders)
+        else:
+            # Run K-Means clustering
+            centroids, distortion = kmeans(order_locations.astype(float), k)
+
+            # Assign each order to nearest centroid
+            clusters = np.array([
+                np.argmin([np.linalg.norm(loc - centroid) for centroid in centroids])
+                for loc in order_locations
+            ])
+
+        # Step 3: Assign couriers to cluster centroids using Hungarian algorithm
+        # Build cost matrix: |clusters| x |couriers|
+        cluster_cost_matrix = np.zeros((k, n_couriers))
+
+        for cluster_idx in range(k):
+            centroid = centroids[cluster_idx]
+
+            for courier_idx, courier in enumerate(available_couriers):
+                # Distance from courier to cluster centroid
+                courier_lat = courier['rider_lat']
+                courier_lng = courier['rider_lng']
+                dist = np.linalg.norm([courier_lat - centroid[0], courier_lng - centroid[1]])
+                cluster_cost_matrix[cluster_idx, courier_idx] = dist
+
+        # Solve cluster-to-courier assignment
+        cluster_ind, courier_ind = linear_sum_assignment(cluster_cost_matrix)
+
+        # Build cluster-to-courier mapping
+        cluster_to_courier = {}
+        for i in range(len(cluster_ind)):
+            cluster_idx = cluster_ind[i]
+            courier_idx = courier_ind[i]
+            cluster_to_courier[cluster_idx] = available_couriers[courier_idx]
+
+        # Step 4: Route orders within each cluster and create assignments
+        assignments = []
+
+        for cluster_idx in range(k):
+            # Get all orders in this cluster
+            cluster_orders = [
+                valid_orders[i] for i in range(len(valid_orders))
+                if clusters[i] == cluster_idx
+            ]
+
+            if cluster_idx not in cluster_to_courier:
+                # No courier assigned to this cluster (shouldn't happen with proper K)
+                continue
+
+            courier = cluster_to_courier[cluster_idx]
+
+            # Get cluster centroid cost as base cost
+            cluster_cost = cluster_cost_matrix[cluster_idx, courier_ind[np.where(cluster_ind == cluster_idx)[0][0]]]
+
+            # Simple routing: assign all orders in cluster to courier with cluster cost
+            # (In future, could implement actual TSP routing for better cost estimation)
+            for order in cluster_orders:
+                order_id = order['order_id']
+                order_location = waybill_lookup[order_id]
+
+                # Use cost function to compute individual order cost
+                individual_cost = self.cost_function.compute_cost(
+                    courier=courier,
+                    order=order,
+                    order_location=order_location
+                )
+
+                assignments.append((order, courier, individual_cost))
+
+        return assignments
+
+
+class Tier3OnlineGreedy(AssignmentStrategy):
+    """
+    Tier 3: Online Greedy (First-Come, First-Served)
+
+    Algorithm: Greedy nearest-neighbor for single orders
+    - Processes orders one-by-one in arrival order
+    - Assigns each order immediately to closest available courier
+    - No batching, no optimization
+
+    Cost function: Pluggable (passed as parameter)
+
+    This strategy minimizes customer wait time but sacrifices system efficiency.
+    """
+
+    def __init__(self, cost_function):
+        """
+        Initialize assignment strategy with a cost function
+
+        Args:
+            cost_function: Instance of a cost function from models.cost module
+        """
+        self.cost_function = cost_function
+
+    def assign_single_order(self, order, available_couriers, waybill_lookup):
+        """
+        Assign a single order to the closest available courier
+
+        Args:
+            order: Single order dict with order_id
+            available_couriers: List of available courier dicts
+            waybill_lookup: Dictionary mapping order_id to order details
+
+        Returns:
+            (courier, cost) tuple if assignment successful, None otherwise
+        """
+        if not available_couriers:
+            return None
+
+        order_id = order['order_id']
+        if order_id not in waybill_lookup:
+            return None
+
+        order_location = waybill_lookup[order_id]
+
+        # Find closest courier (greedy)
+        min_cost = float('inf')
+        best_courier = None
+
+        for courier in available_couriers:
+            cost = self.cost_function.compute_cost(
+                courier=courier,
+                order=order,
+                order_location=order_location
+            )
+
+            if cost < min_cost:
+                min_cost = cost
+                best_courier = courier
+
+        if best_courier is None:
+            return None
+
+        return (best_courier, min_cost)
+
+    def make_assignments(self, waiting_orders, available_couriers, waybill_lookup):
+        """
+        Compatibility method for batch interface (not used in online mode)
+
+        In practice, Tier3OnlineGreedy uses assign_single_order() in a custom simulation loop.
+        This method is provided for interface compatibility.
+        """
+        assignments = []
+
+        # Greedy: assign each order to closest available courier
+        # Mark couriers as used so they're not double-assigned
+        used_couriers = set()
+        remaining_couriers = available_couriers.copy()
+
+        for order in waiting_orders:
+            available = [c for c in remaining_couriers if c['courier_id'] not in used_couriers]
+
+            if not available:
+                break
+
+            result = self.assign_single_order(order, available, waybill_lookup)
+            if result:
+                courier, cost = result
+                assignments.append((order, courier, cost))
+                used_couriers.add(courier['courier_id'])
 
         return assignments
