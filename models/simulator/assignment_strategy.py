@@ -129,14 +129,16 @@ class Tier2BatchVRP(AssignmentStrategy):
     This strategy enables Many-to-One assignment (multiple orders per courier).
     """
 
-    def __init__(self, cost_function):
+    def __init__(self, cost_function, max_bundle_size=5):
         """
         Initialize assignment strategy with a cost function
 
         Args:
             cost_function: Instance of a cost function from models.cost module
+            max_bundle_size: Maximum orders per courier bundle (default: 5)
         """
         self.cost_function = cost_function
+        self.max_bundle_size = max_bundle_size
 
     def make_assignments(self, waiting_orders, available_couriers, waybill_lookup):
         """
@@ -168,24 +170,24 @@ class Tier2BatchVRP(AssignmentStrategy):
         order_locations = np.array(order_locations)
 
         # Step 2: Cluster orders using K-Means
-        # K = min(num_couriers, num_orders) to ensure we don't create more clusters than we can serve
-        # Cap k to be strictly less than num_orders for K-Means stability
-        k = min(n_couriers, len(valid_orders))
-        if k >= len(valid_orders):
-            k = max(1, len(valid_orders) - 1)
+        # Calculate K based on max_bundle_size to create reasonable bundles
+        # K = num_orders / max_bundle_size (rounded up) but not more than available couriers
+        desired_k = (len(valid_orders) + self.max_bundle_size - 1) // self.max_bundle_size
+        k = min(n_couriers, desired_k)
+        k = max(1, k)  # At least 1 cluster
 
         if k == 1:
-            # Single cluster - all orders go to one courier
+            # Single cluster - all orders go to one courier (only if very few orders)
             clusters = np.zeros(len(valid_orders), dtype=int)
             centroids = np.array([order_locations.mean(axis=0)])
-        elif k >= len(valid_orders) * 0.9:
-            # Too many clusters relative to points - use simple spatial division
-            # Just assign each order to nearest courier as fallback
-            clusters = np.zeros(len(valid_orders), dtype=int)
-            centroids = order_locations  # Each order is its own "centroid"
-            k = len(valid_orders)
+        elif k >= len(valid_orders):
+            # More clusters than orders - each order is its own cluster
+            # This ensures no bundle exceeds 1 order
+            clusters = np.arange(len(valid_orders))
+            centroids = order_locations
+            k = len(valid_orders)  # Update k to match actual number of clusters
         else:
-            # Run K-Means clustering
+            # Run K-Means clustering for normal case
             centroids, distortion = kmeans(order_locations.astype(float), k)
 
             # Assign each order to nearest centroid
@@ -195,18 +197,22 @@ class Tier2BatchVRP(AssignmentStrategy):
             ])
 
         # Step 3: Assign couriers to cluster centroids using Hungarian algorithm
-        # Build cost matrix: |clusters| x |couriers|
-        cluster_cost_matrix = np.zeros((k, n_couriers))
+        # Get unique cluster indices to handle properly
+        unique_clusters = np.unique(clusters)
+        n_clusters = len(unique_clusters)
 
-        for cluster_idx in range(k):
-            centroid = centroids[cluster_idx]
+        # Build cost matrix: |unique_clusters| x |couriers|
+        cluster_cost_matrix = np.zeros((n_clusters, n_couriers))
+
+        for i, cluster_idx in enumerate(unique_clusters):
+            centroid = centroids[cluster_idx] if cluster_idx < len(centroids) else centroids[-1]
 
             for courier_idx, courier in enumerate(available_couriers):
                 # Distance from courier to cluster centroid
                 courier_lat = courier['rider_lat']
                 courier_lng = courier['rider_lng']
                 dist = np.linalg.norm([courier_lat - centroid[0], courier_lng - centroid[1]])
-                cluster_cost_matrix[cluster_idx, courier_idx] = dist
+                cluster_cost_matrix[i, courier_idx] = dist
 
         # Solve cluster-to-courier assignment
         cluster_ind, courier_ind = linear_sum_assignment(cluster_cost_matrix)
@@ -214,14 +220,15 @@ class Tier2BatchVRP(AssignmentStrategy):
         # Build cluster-to-courier mapping
         cluster_to_courier = {}
         for i in range(len(cluster_ind)):
-            cluster_idx = cluster_ind[i]
+            matrix_idx = cluster_ind[i]
             courier_idx = courier_ind[i]
-            cluster_to_courier[cluster_idx] = available_couriers[courier_idx]
+            actual_cluster_idx = unique_clusters[matrix_idx]
+            cluster_to_courier[actual_cluster_idx] = available_couriers[courier_idx]
 
         # Step 4: Route orders within each cluster and create assignments
         assignments = []
 
-        for cluster_idx in range(k):
+        for cluster_idx in unique_clusters:
             # Get all orders in this cluster
             cluster_orders = [
                 valid_orders[i] for i in range(len(valid_orders))
@@ -235,7 +242,9 @@ class Tier2BatchVRP(AssignmentStrategy):
             courier = cluster_to_courier[cluster_idx]
 
             # Get cluster centroid cost as base cost
-            cluster_cost = cluster_cost_matrix[cluster_idx, courier_ind[np.where(cluster_ind == cluster_idx)[0][0]]]
+            matrix_idx = np.where(unique_clusters == cluster_idx)[0][0]
+            courier_idx = courier_ind[np.where(cluster_ind == matrix_idx)[0][0]]
+            cluster_cost = cluster_cost_matrix[matrix_idx, courier_idx]
 
             # Simple routing: assign all orders in cluster to courier with cluster cost
             # (In future, could implement actual TSP routing for better cost estimation)

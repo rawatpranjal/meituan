@@ -420,8 +420,12 @@ def run_simulation_with_viz():
                 cycle_total_cost += bundle_cost
 
                 # Task duration scales with number of ACCEPTED orders in bundle
+                # But cap at reasonable limit (max 5x base duration)
                 accepted_count = len(bundle_accepted)
-                bundle_task_duration = AVERAGE_TASK_DURATION * accepted_count
+                bundle_task_duration = min(
+                    AVERAGE_TASK_DURATION * accepted_count,
+                    AVERAGE_TASK_DURATION * 5  # Cap at 5x base duration (~2 hours max)
+                )
 
                 # Use last delivery location in accepted orders (simplified routing)
                 last_order = bundle_accepted[-1][0]
