@@ -1,4 +1,4 @@
-# Hierarchical Dispatch Algorithms for Food Delivery: A Simulation Study
+# Matching Algorithms for Food Delivery
 
 ## 1. Introduction
 
@@ -6,47 +6,107 @@ Real-time dispatch optimization in food delivery networks presents a combinatori
 
 ---
 
-## 2. Problem Formulation & Algorithms
-
-### 2.1 Core Assignment Problem
+## 2. Algorithms
 
 **Notation:**
 - $C$ = set of available couriers
 - $O$ = set of ready orders
-- $B$ = set of candidate bundles (subsets of $O$)
-- $y_{cb} \in \{0,1\}$ = binary decision variable (courier $c$ assigned to bundle $b$)
 - $L_c$ = current location of courier $c$
 - $L_o^P$ = pickup location (restaurant) of order $o$
 - $L_o^D$ = dropoff location (customer) of order $o$
-- $t_{now}$ = current simulation time
+- $t(\cdot, \cdot)$ = travel time between locations
+- $T_{\text{tour}}(b)$ = TSP tour duration through all pickup and dropoff locations in bundle $b$
 
-**Assignment Problem:**
+### 2.1 Greedy Baseline
+
+**Approach:** Myopic heuristic that assigns each ready order to the nearest available courier. Orders processed sequentially in arrival order.
+
+**No formal optimization.** For each order $o$, compute $c^* = \arg\min_{c \in C} t(L_c, L_o^P)$ and assign courier $c^*$ to order $o$.
+
+**Properties:** Time complexity $O(|C| \cdot |O|)$. No route optimization. No bundling capability.
+
+### 2.2 Hungarian Algorithm (Optimal Bipartite Matching)
+
+**Approach:** Solves optimal bipartite matching between couriers and orders, minimizing total assignment cost.
+
+**Optimization Problem:**
+
+Constructs cost matrix $M \in \mathbb{R}^{|C| \times |O|}$ where $M_{co} = t(L_c, L_o^P) + T_{\text{tour}}(\{o\})$. Solves:
 
 $$
 \begin{align*}
-\min_{y_{cb}} \quad & \sum_{c \in C} \sum_{b \in B} \text{cost}(c, b) \cdot y_{cb}
+\min_{y_{co}} \quad & \sum_{c \in C} \sum_{o \in O} M_{co} \cdot y_{co}
 \end{align*}
 $$
 
 subject to:
 $$
 \begin{align*}
-& \sum_{b \in B} y_{cb} \le 1, && \forall c \in C \quad \text{(each courier assigned at most once)} \\
-& \sum_{c \in C} \sum_{b \mid o \in b} y_{cb} \le 1, && \forall o \in O \quad \text{(each order assigned at most once)}
+& \sum_{o \in O} y_{co} \le 1, && \forall c \in C \quad \text{(each courier assigned at most once)} \\
+& \sum_{c \in C} y_{co} \le 1, && \forall o \in O \quad \text{(each order assigned at most once)} \\
+& y_{co} \in \{0,1\}, && \forall c \in C, o \in O
 \end{align*}
 $$
 
-### 2.2 Cost Functions
+**Properties:** Time complexity $O(\min(|C|, |O|)^2 \cdot \max(|C|, |O|))$. Globally optimal for 1-to-1 assignments. No bundling.
 
-**Base Cost Function** (Greedy, Hungarian, Simple, Network):
+### 2.3 Simple Bundling
+
+**Approach:** Extends Hungarian matching by allowing bundles of 1-3 orders from the same restaurant.
+
+**Optimization Problem:**
+
+**Step 1 - Bundle Generation:** For each restaurant $r$ with ready orders $O_r$, enumerate feasible bundles:
 
 $$
-\text{cost}(c, b) = t(L_c, L_{b,\text{first}}^P) + T_{\text{tour}}(b)
+B = \bigcup_{r \in R} \{b \subseteq O_r : 1 \le |b| \le 3\}
 $$
 
-where $t(\cdot, \cdot)$ denotes travel time and $T_{\text{tour}}(b)$ is the TSP tour duration through all pickup and dropoff locations in bundle $b$.
+**Step 2 - Set Packing:** Select non-overlapping bundles to maximize orders assigned:
 
-**Anticipatory Cost Function** (Anticipated Bundling):
+$$
+\begin{align*}
+\max_{z_b} \quad & \sum_{b \in B} |b| \cdot z_b \\
+\text{s.t.} \quad & \sum_{b : o \in b} z_b \le 1, && \forall o \in O \\
+& z_b \in \{0,1\}, && \forall b \in B
+\end{align*}
+$$
+
+**Step 3 - Assignment:** Apply Hungarian algorithm to assign selected bundles to couriers using cost $\text{cost}(c, b) = t(L_c, L_{b,\text{first}}^P) + T_{\text{tour}}(b)$.
+
+**Properties:** Since Simple Bundling can select single-order bundles ($|b|=1$), it subsumes Hungarian algorithm's solution space.
+
+### 2.4 Network Bundling
+
+**Approach:** Generalizes Simple Bundling with geographic clustering across multiple restaurants.
+
+**Optimization Problem:**
+
+**Step 1 - Cluster Generation:** Apply radius-based clustering (400m threshold) to group nearby orders:
+
+$$
+\text{Cluster}_i = \{o \in O : \exists o' \in \text{Cluster}_i, \, d(L_o^P, L_{o'}^P) \le 400m\}
+$$
+
+**Step 2 - Bundle Generation:** Within each cluster, enumerate feasible bundles of 1-3 orders (any restaurant):
+
+$$
+B = \bigcup_{i} \{b \subseteq \text{Cluster}_i : 1 \le |b| \le 3\}
+$$
+
+**Step 3 - Set Packing + Assignment:** Same as Simple Bundling (maximize orders via set packing, then Hungarian assignment).
+
+**Properties:** Enables multi-restaurant bundles for dense urban areas. Larger solution space than Simple Bundling.
+
+### 2.5 Anticipated Bundling
+
+**Approach:** Incorporates lookahead optimization by considering PENDING orders (not yet ready) alongside READY orders.
+
+**Optimization Problem:**
+
+**Step 1 - Bundle Generation:** Maintain two pools: $O_{\text{READY}}$ (ready now) and $O_{\text{PENDING}}$ (preparing, ready within 300s lookahead window). Apply geographic clustering as in Network Bundling. Generate bundles mixing both states.
+
+**Step 2 - Holistic Cost Function:** For each courier-bundle pair $(c, b)$, compute:
 
 $$
 \begin{align*}
@@ -67,51 +127,26 @@ T_{\text{delay}} &= \sum_{o \in b} \max(0, t_{\text{pickup\_start}} - \text{read
 \end{align*}
 $$
 
-Parameters: $\alpha = 0.5$, $\beta = 0.3$. The holistic cost function balances courier time commitment, idle time waiting for food preparation, and delays imposed on ready orders. The urgency bonus provides priority to immediately available orders.
+Parameters: $\alpha = 0.5$, $\beta = 0.3$.
 
-### 2.3 Algorithm Descriptions
-
-**Greedy Baseline**
-
-Myopic heuristic: for each ready order, assign nearest available courier. Orders processed sequentially in arrival order. Time complexity: $O(|C| \cdot |O|)$. No bundling capability.
-
-**Hungarian Algorithm (Optimal Bipartite Matching)**
-
-Solves optimal bipartite matching between couriers and orders. Constructs cost matrix $M \in \mathbb{R}^{|C| \times |O|}$ where $M_{co} = \text{cost}(c, \{o\})$. Solves $\min \sum_{c,o} M_{co} \cdot y_{co}$ using Hungarian algorithm. Time complexity: $O(\min(|C|, |O|)^2 \cdot \max(|C|, |O|))$. Globally optimal for 1-to-1 assignments. No bundling.
-
-**Simple Bundling**
-
-Extends Hungarian matching with bundles of 1-3 orders from same restaurant. For each restaurant $r$ with ready orders $O_r$, enumerate feasible subsets $b \subseteq O_r$ where $|b| \le 3$:
-
-$$
-B = \bigcup_{r \in R} \{b \subseteq O_r : 1 \le |b| \le 3\}
-$$
-
-Solve set packing problem to select non-overlapping bundles:
+**Step 3 - Assignment:** Construct cost matrix $M \in \mathbb{R}^{|C| \times |B|}$ where $M_{cb} = \text{cost}(c, b)$. Solve:
 
 $$
 \begin{align*}
-\max \quad & \sum_{b \in B} |b| \cdot z_b \\
-\text{s.t.} \quad & \sum_{b : o \in b} z_b \le 1, && \forall o \in O \\
-& z_b \in \{0,1\}, && \forall b \in B
+\min_{y_{cb}} \quad & \sum_{c \in C} \sum_{b \in B} M_{cb} \cdot y_{cb}
 \end{align*}
 $$
 
-Apply Hungarian algorithm to assign selected bundles to couriers. Since Simple Bundling can select single-order bundles, it subsumes Hungarian algorithm's solution space.
-
-**Network Bundling**
-
-Generalizes Simple Bundling with geographic clustering across multiple restaurants. Apply radius-based clustering (400m threshold) to group nearby orders:
-
+subject to:
 $$
-\text{Cluster}_i = \{o \in O : \exists o' \in \text{Cluster}_i, \, d(L_o^P, L_{o'}^P) \le 400m\}
+\begin{align*}
+& \sum_{b \in B} y_{cb} \le 1, && \forall c \in C \quad \text{(each courier assigned at most once)} \\
+& \sum_{c \in C} \sum_{b \mid o \in b} y_{cb} \le 1, && \forall o \in O \quad \text{(each order assigned at most once)} \\
+& y_{cb} \in \{0,1\}, && \forall c \in C, b \in B
+\end{align*}
 $$
 
-Enumerate feasible bundles within each cluster. Solve set packing + Hungarian assignment. Enables multi-restaurant bundles for dense urban areas.
-
-**Anticipated Bundling**
-
-Incorporates lookahead optimization by considering PENDING orders (not yet ready) alongside READY orders. Maintain two pools: $O_{\text{READY}}$ (ready now) and $O_{\text{PENDING}}$ (preparing, ready within 300s lookahead window). Generate bundles mixing both states. Apply holistic cost function (Section 2.2) that balances immediate dispatch against future efficiency. Solve Hungarian assignment of bundles to couriers.
+**Properties:** Holistic cost function balances courier time commitment, idle time waiting for food preparation, and delays imposed on ready orders. Urgency bonus provides priority to immediately available orders, preventing over-optimization for distant future efficiency.
 
 ---
 
