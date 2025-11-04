@@ -1,0 +1,164 @@
+[
+  {
+    "time": 300,
+    "courier_id": 0,
+    "order_ids": [
+      1
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 300,
+    "courier_id": 3,
+    "order_ids": [
+      0
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 600,
+    "courier_id": 1,
+    "order_ids": [
+      2
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 600,
+    "courier_id": 4,
+    "order_ids": [
+      3
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 900,
+    "courier_id": 2,
+    "order_ids": [
+      4
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1200,
+    "courier_id": 3,
+    "order_ids": [
+      5
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1500,
+    "courier_id": 0,
+    "order_ids": [
+      10
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1800,
+    "courier_id": 1,
+    "order_ids": [
+      9
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1800,
+    "courier_id": 4,
+    "order_ids": [
+      11
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2100,
+    "courier_id": 2,
+    "order_ids": [
+      18
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2400,
+    "courier_id": 0,
+    "order_ids": [
+      14
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2400,
+    "courier_id": 1,
+    "order_ids": [
+      21
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2400,
+    "courier_id": 3,
+    "order_ids": [
+      20
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2700,
+    "courier_id": 4,
+    "order_ids": [
+      22
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3000,
+    "courier_id": 1,
+    "order_ids": [
+      23
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3000,
+    "courier_id": 2,
+    "order_ids": [
+      26
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3000,
+    "courier_id": 3,
+    "order_ids": [
+      27
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3600,
+    "courier_id": 4,
+    "order_ids": [
+      31
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  }
+]

@@ -1,0 +1,79 @@
+# Configuration C: "The Pop-Up Problem"
+#
+# Goal: Test adaptability and anticipatory logic. This scenario creates chaos
+# and rewards the algorithm that can think ahead.
+#
+# Expected Visual Outcome:
+# - Reactive algorithms: Always one step behind, long journeys from center after burst starts
+# - Anticipated: PRECOGNITION - couriers pre-positioned before burst, instant response
+
+scenario:
+  name: "popup_problem"
+  description: "Unpredictable bursts to test anticipatory intelligence"
+  duration_hours: 4  # Longer simulation
+  random_seed: 42
+
+# Fixed physics parameters
+physics:
+  map_size_m: 5000
+  distance_metric: "manhattan"
+  courier_speed_kmh: 30
+  pickup_service_time_s: 90
+  dropoff_service_time_s: 45
+  meal_prep_time_s: 300
+  order_expiration_minutes: 30
+  batch_interval_s: 60
+
+# Restaurant configuration
+restaurants:
+  count: 8
+  layout: "scattered"
+
+  # Scattered layout parameters
+  scattered:
+    num_clusters: 4  # Four corner clusters
+    cluster_radius: 0.4  # Tight clusters in each corner
+
+# Courier configuration
+couriers:
+  count: 12
+  layout: "central"
+
+  # Central layout parameters
+  central:
+    center: [2.5, 2.5]  # Dead center of map
+    scatter_radius: 0.3  # Tightly grouped at start
+
+# Demand configuration
+demand:
+  total_orders: 350
+  profile: "unpredictable_bursts"
+
+  # Unpredictable bursts parameters
+  unpredictable_bursts:
+    calm_rate: 0.2  # orders/min during calm periods
+    burst_rate: 4.0  # orders/min during bursts (20x increase!)
+    burst_duration_minutes: 20  # Each burst lasts 20 minutes
+    num_bursts: 4  # 4 surprise bursts over 4 hours
+    burst_pattern: "rotating_zones"  # Bursts hit different corners sequentially
+
+# Algorithm configuration
+algorithms:
+  bundling:
+    max_bundle_size: 3
+
+  anticipated:
+    lookahead_window_s: 900  # 15-minute lookahead is critical here
+    alpha_penalty: 0.5
+    beta_penalty: 0.3
+
+# Visualization
+visualization:
+  frames: 240  # 4 hours at 1-min intervals
+  fps: 2
+  sample_interval_s: 60
+
+  features:
+    show_downtown_box: false
+    show_river: false
+    show_burst_indicator: true  # Pulse animation when burst is active

@@ -1,0 +1,85 @@
+# Configuration B: "The River Divide"
+#
+# Goal: Test network intelligence and the ability to solve a geographic bottleneck.
+# This scenario is specifically designed to showcase the advantage of Network Bundling.
+#
+# Expected Visual Outcome:
+# - Simple Bundling: "Convoys" - thick bundle routes from single restaurant across bridge
+# - Network Bundling: BRILLIANT - multi-restaurant pickup before crossing bridge once (the "pro move")
+
+scenario:
+  name: "river_divide"
+  description: "Geographic bottleneck to test network intelligence"
+  duration_hours: 3
+  random_seed: 42
+
+# Fixed physics parameters
+physics:
+  map_size_m: 5000
+  distance_metric: "manhattan"
+  courier_speed_kmh: 30
+  pickup_service_time_s: 90
+  dropoff_service_time_s: 45
+  meal_prep_time_s: 300
+  order_expiration_minutes: 30
+  batch_interval_s: 60
+
+# Restaurant configuration
+restaurants:
+  count: 6
+  layout: "divided"
+
+  # Divided layout parameters
+  divided:
+    river_position: 2500  # All restaurants south of center line
+    side: "south"
+
+# Courier configuration
+couriers:
+  count: 15  # More couriers needed for longer trips
+  layout: "zonal"
+
+  # Zonal layout parameters
+  zonal:
+    zones:
+      south: 10  # 67% start south (near restaurants)
+      north: 5   # 33% start north (near customers)
+    boundary_y: 2500  # River position
+
+# Demand configuration
+demand:
+  total_orders: 300
+  profile: "steady_high"
+
+  # Steady high parameters
+  steady_high:
+    rate: 1.67  # orders/min - constant relentless pressure
+    customer_constraint: "north_only"  # All deliveries cross the river
+
+# Geography features
+geography:
+  river_y_position: 2500  # Center line (in meters)
+  bridges:  # Two crossing points (for visualization)
+    - [1500, 2500]
+    - [3500, 2500]
+
+# Algorithm configuration
+algorithms:
+  bundling:
+    max_bundle_size: 3
+
+  anticipated:
+    lookahead_window_s: 900
+    alpha_penalty: 0.5
+    beta_penalty: 0.3
+
+# Visualization
+visualization:
+  frames: 180  # 3 hours at 1-min intervals
+  fps: 2
+  sample_interval_s: 60
+
+  features:
+    show_downtown_box: false
+    show_river: true  # Draw the river line and bridge markers
+    show_burst_indicator: false

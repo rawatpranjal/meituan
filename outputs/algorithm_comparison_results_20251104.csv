@@ -1,0 +1,16 @@
+Scenario,Algorithm,Orders_Delivered,Total_Distance_km,Bundles_Created,Avg_Delivery_Time_min,Rank_by_Deliveries
+Downtown Crush,Anticipated Bundling,252,383.83,98,25.4,1
+Downtown Crush,Network Bundling,216,456.05,146,24.5,2
+Downtown Crush,Simple Bundling,213,454.00,202,22.3,3
+Downtown Crush,Hungarian,209,460.86,220,21.0,4
+Downtown Crush,Greedy,175,485.28,187,30.7,5
+Popup Problem,Network Bundling,130,306.69,87,26.5,1
+Popup Problem,Anticipated Bundling,124,268.32,70,26.9,2
+Popup Problem,Simple Bundling,118,307.72,98,26.0,3
+Popup Problem,Hungarian,109,348.79,121,25.0,4
+Popup Problem,Greedy,109,372.61,121,27.5,5
+River Divide,Anticipated Bundling,230,541.95,106,29.1,1
+River Divide,Network Bundling,203,704.22,159,28.3,2
+River Divide,Simple Bundling,196,717.46,181,27.2,3
+River Divide,Hungarian,182,734.48,197,25.7,4
+River Divide,Greedy,155,742.07,170,35.8,5

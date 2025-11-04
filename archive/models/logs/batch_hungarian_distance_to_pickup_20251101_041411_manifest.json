@@ -1,0 +1,30 @@
+{
+  "model_name": "batch_hungarian_distance_to_pickup_20251101_041411",
+  "timestamp": "2025-11-01T04:16:11.827962",
+  "configuration": {
+    "mode": "batch",
+    "strategy": "hungarian",
+    "cost_function": "distance_to_pickup",
+    "bundling": "off",
+    "micro_batch_sec": null,
+    "milp_time_limit_sec": null,
+    "milp_scope": null,
+    "seed": 42,
+    "data_dir": "/Users/pranjal/Code/meituan/data/INFORMS.org/meituan_informs_data"
+  },
+  "results": {
+    "mode": "BATCH",
+    "total_orders": 167566,
+    "total_assigned": 4498,
+    "total_rejected": 654,
+    "final_backlog": 11423,
+    "assignment_rate": 0.026843154339185753,
+    "num_batches": 24
+  },
+  "output_files": {
+    "assignment_log": "batch_hungarian_distance_to_pickup_20251101_041411_assignment_log.csv",
+    "cycle_summary": "batch_hungarian_distance_to_pickup_20251101_041411_cycle_summary.csv",
+    "courier_timeline": "batch_hungarian_distance_to_pickup_20251101_041411_courier_timeline.csv",
+    "manifest": "batch_hungarian_distance_to_pickup_20251101_041411_manifest.json"
+  }
+}

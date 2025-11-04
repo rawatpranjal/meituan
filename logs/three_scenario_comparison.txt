@@ -1,0 +1,134 @@
+================================================================================
+ALGORITHM PERFORMANCE COMPARISON ACROSS THREE SCENARIOS
+================================================================================
+
+SCENARIO 1: DOWNTOWN CRUSH (400 orders, 3 hours, 12 couriers, 8 restaurants)
+Concentrated demand testing bundling power
+--------------------------------------------------------------------------------
+Algorithm               Fulfill  AvgTime  P90Time  Throughput  Orders/CH  Fresh  Distance  BundleSize  Util
+                        Rate(%)  (min)    (min)    (ord/hr)              (min)  (km)                  (%)
+--------------------------------------------------------------------------------
+Greedy                  46.4     30.7     35.6     58.3        4.86       20.7   485.3     1.00        91.8
+Hungarian               55.4     21.0     26.1     69.7        5.81       11.0   460.9     1.00        91.1
+Simple Bundling         56.5     22.3     28.4     71.0        5.92       12.3   454.0     1.11        90.4
+Network Bundling        57.3     24.5     33.7     72.0        6.00       14.5   456.1     1.56        91.0
+Anticipated Bundling    66.8     25.4     31.1     84.0        7.00       15.4   383.8     2.68        89.2
+--------------------------------------------------------------------------------
+Winner by Metric:       ANTCP    HUN      HUN      ANTCP       ANTCP      HUN    ANTCP     ANTCP       GRDY
+
+
+SCENARIO 2: POPUP PROBLEM (350 orders, 4 hours, 12 couriers, 8 restaurants)
+Unpredictable bursts testing anticipatory intelligence
+--------------------------------------------------------------------------------
+Algorithm               Fulfill  AvgTime  P90Time  Throughput  Orders/CH  Fresh  Distance  BundleSize  Util
+                        Rate(%)  (min)    (min)    (ord/hr)              (min)  (km)                  (%)
+--------------------------------------------------------------------------------
+Greedy                  58.3     27.5     33.8     27.2        2.27       17.5   372.6     1.00        73.2
+Hungarian               58.3     25.0     31.6     27.2        2.27       15.0   348.8     1.00        71.0
+Simple Bundling         63.1     26.0     33.5     29.5        2.46       16.0   307.7     1.43        67.7
+Network Bundling        69.5     26.5     35.0     32.5        2.71       16.5   306.7     1.76        68.0
+Anticipated Bundling    66.3     26.9     34.1     31.0        2.58       16.9   268.3     2.21        63.0
+--------------------------------------------------------------------------------
+Winner by Metric:       NTWK     HUN      HUN      NTWK        NTWK       HUN    ANTCP     ANTCP       GRDY
+
+
+SCENARIO 3: RIVER DIVIDE (300 orders, 3 hours, 15 couriers, 6 restaurants)
+Geographic bottleneck - INCOMPLETE RUN (only 2/5 algorithms completed)
+--------------------------------------------------------------------------------
+Algorithm               Fulfill  AvgTime  P90Time  Throughput  Orders/CH  Fresh  Distance  BundleSize  Util
+                        Rate(%)  (min)    (min)    (ord/hr)              (min)  (km)                  (%)
+--------------------------------------------------------------------------------
+Greedy                  54.6     35.8     43.0     51.7        3.44       25.8   742.1     1.00        97.1
+Hungarian               64.1     25.7     32.9     60.7        4.04       15.7   734.5     1.00        96.7
+Simple Bundling         --       --       --       --          --         --     --        --          --
+Network Bundling        --       --       --       --          --         --     --        --          --
+Anticipated Bundling    --       --       --       --          --         --     --        --          --
+--------------------------------------------------------------------------------
+Winner by Metric:       HUN      HUN      HUN      HUN         HUN        HUN    HUN       --          HUN
+
+
+================================================================================
+CROSS-SCENARIO PERFORMANCE SUMMARY
+================================================================================
+
+FULFILLMENT RATE (orders delivered / total orders):
+                        Downtown     Popup        River
+                        Crush        Problem      Divide
+------------------------------------------------------------------------
+Greedy                  46.4%        58.3%        54.6%
+Hungarian               55.4%        58.3%        64.1%
+Simple Bundling         56.5%        63.1%        --
+Network Bundling        57.3%        69.5%        --
+Anticipated Bundling    66.8%        66.3%        --
+
+
+AVG CLICK-TO-DOOR TIME (minutes - lower is better):
+                        Downtown     Popup        River
+                        Crush        Problem      Divide
+------------------------------------------------------------------------
+Greedy                  30.7         27.5         35.8
+Hungarian               21.0         25.0         25.7
+Simple Bundling         22.3         26.0         --
+Network Bundling        24.5         26.5         --
+Anticipated Bundling    25.4         26.9         --
+
+
+TOTAL DISTANCE TRAVELED (km - lower is better):
+                        Downtown     Popup        River
+                        Crush        Problem      Divide
+------------------------------------------------------------------------
+Greedy                  485.3        372.6        742.1
+Hungarian               460.9        348.8        734.5
+Simple Bundling         454.0        307.7        --
+Network Bundling        456.1        306.7        --
+Anticipated Bundling    383.8        268.3        --
+
+
+AVERAGE BUNDLE SIZE (orders per assignment):
+                        Downtown     Popup        River
+                        Crush        Problem      Divide
+------------------------------------------------------------------------
+Greedy                  1.00         1.00         1.00
+Hungarian               1.00         1.00         1.00
+Simple Bundling         1.11         1.43         --
+Network Bundling        1.56         1.76         --
+Anticipated Bundling    2.68         2.21         --
+
+
+================================================================================
+KEY INSIGHTS
+================================================================================
+
+FULFILLMENT CHAMPION:
+  - Anticipated: Wins Downtown Crush by 9.5 points (66.8% vs 57.3%)
+  - Network: Wins Popup Problem by 3.2 points (69.5% vs 66.3%)
+  - Algorithms with bundling consistently outperform single-order strategies
+
+SPEED CHAMPION:
+  - Hungarian: Fastest avg delivery time in ALL scenarios (21.0, 25.0, 25.7 min)
+  - Hungarian: Fastest P90 delivery time in ALL scenarios (26.1, 31.6, 32.9 min)
+  - Speed comes at cost of fulfillment volume
+
+EFFICIENCY CHAMPION:
+  - Anticipated: Best distance efficiency in both complete scenarios
+    * Downtown: 383.8 km (16% less than 2nd place)
+    * Popup: 268.3 km (13% less than 2nd place)
+  - Bundling reduces total distance traveled by 15-21%
+
+BUNDLING POWER:
+  - Anticipated achieves 2.21-2.68 orders per bundle
+  - Network achieves 1.56-1.76 orders per bundle
+  - Simple achieves 1.11-1.43 orders per bundle
+  - Greedy/Hungarian: 1.00 (no bundling)
+
+THE HUNGARIAN PARADOX:
+  - Fastest individual deliveries but NOT highest fulfillment
+  - Optimizes for speed over volume
+  - Best for customer experience, suboptimal for throughput
+
+SCENARIO-SPECIFIC PATTERNS:
+  - Downtown Crush: Anticipated dominates (+16% fulfillment)
+  - Popup Problem: Network slightly edges Anticipated (+3% fulfillment)
+  - River Divide: INCOMPLETE (needs re-run with all 5 algorithms)
+
+================================================================================

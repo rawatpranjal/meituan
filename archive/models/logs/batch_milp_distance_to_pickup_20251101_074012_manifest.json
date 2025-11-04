@@ -1,0 +1,30 @@
+{
+  "model_name": "batch_milp_distance_to_pickup_20251101_074012",
+  "timestamp": "2025-11-01T07:43:43.521174",
+  "configuration": {
+    "mode": "batch",
+    "strategy": "milp",
+    "cost_function": "distance_to_pickup",
+    "bundling": "off",
+    "micro_batch_sec": null,
+    "milp_time_limit_sec": 5,
+    "milp_orders_cap": 500,
+    "seed": 42,
+    "data_dir": "/Users/pranjal/Code/meituan/data/INFORMS.org/meituan_informs_data"
+  },
+  "results": {
+    "mode": "BATCH",
+    "total_orders": 163536,
+    "total_assigned": 3136,
+    "total_rejected": 464,
+    "final_backlog": 12785,
+    "assignment_rate": 0.01917620585069954,
+    "num_batches": 24
+  },
+  "output_files": {
+    "assignment_log": "batch_milp_distance_to_pickup_20251101_074012_assignment_log.csv",
+    "cycle_summary": "batch_milp_distance_to_pickup_20251101_074012_cycle_summary.csv",
+    "courier_timeline": "batch_milp_distance_to_pickup_20251101_074012_courier_timeline.csv",
+    "manifest": "batch_milp_distance_to_pickup_20251101_074012_manifest.json"
+  }
+}

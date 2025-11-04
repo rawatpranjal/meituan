@@ -1,0 +1,143 @@
+# Base Configuration Template for Food Delivery Simulation
+# This file documents all available configuration options with explanations
+
+# ==============================================================================
+# SCENARIO METADATA
+# ==============================================================================
+scenario:
+  name: "example_scenario"  # REQUIRED: Unique identifier for this scenario
+  description: "Example scenario configuration"  # Human-readable description
+  duration_hours: 3  # REQUIRED: Total simulation time in hours
+  random_seed: 42  # Random seed for reproducibility
+
+# ==============================================================================
+# PHYSICS PARAMETERS (Fixed across all scenarios for fair comparison)
+# ==============================================================================
+physics:
+  map_size_m: 5000  # Map dimensions in meters (5000m = 5km)
+  distance_metric: "manhattan"  # Distance calculation: "euclidean" or "manhattan"
+  courier_speed_kmh: 30  # Courier travel speed in km/h
+  pickup_service_time_s: 90  # Time to collect food at restaurant (seconds)
+  dropoff_service_time_s: 45  # Time to deliver to customer (seconds)
+  meal_prep_time_s: 300  # Base food preparation time (5 minutes)
+  order_expiration_minutes: 30  # Order expires if not picked up within X minutes
+  batch_interval_s: 60  # How often assignment decisions are made (seconds)
+
+# ==============================================================================
+# RESTAURANT CONFIGURATION
+# ==============================================================================
+restaurants:
+  count: 8  # REQUIRED: Number of restaurants in the simulation
+  layout: "clustered"  # Layout generator: "clustered", "divided", "scattered", "random", "explicit"
+
+  # Optional: Explicit locations (only used if layout="explicit")
+  locations:
+    - [1.5, 1.5]  # Restaurant 0 at (x, y) in km
+    - [1.7, 1.5]  # Restaurant 1
+    # Add more as needed
+
+  # Layout-specific parameters
+  clustered:
+    downtown_fraction: 0.75  # Fraction of restaurants in downtown cluster (0.0-1.0)
+    downtown_center: [1.25, 1.25]  # Center of downtown cluster in km
+    downtown_radius: 0.5  # Radius of downtown cluster in km
+
+  divided:
+    river_position: 2.5  # Y-coordinate of river dividing line (in km)
+    side: "south"  # Which side restaurants are on: "north" or "south"
+
+  scattered:
+    num_clusters: 4  # Number of geographic clusters
+    cluster_radius: 0.3  # Radius of each cluster in km
+
+# ==============================================================================
+# COURIER CONFIGURATION
+# ==============================================================================
+couriers:
+  count: 12  # REQUIRED: Number of couriers in the fleet
+  layout: "central"  # Layout generator: "central", "zonal", "random", "explicit"
+
+  # Optional: Explicit locations (only used if layout="explicit")
+  locations:
+    - [2.5, 2.5]  # Courier 0 starting position
+    # Add more as needed
+
+  # Layout-specific parameters
+  central:
+    center: [2.5, 2.5]  # Central gathering point in km
+    scatter_radius: 0.5  # How spread out couriers start (km)
+
+  zonal:
+    zones:
+      south: 10  # Number of couriers starting in south zone
+      north: 5   # Number of couriers starting in north zone
+    boundary_y: 2.5  # Y-coordinate dividing zones
+
+# ==============================================================================
+# DEMAND GENERATION
+# ==============================================================================
+demand:
+  total_orders: 400  # REQUIRED: Total number of orders to generate
+  profile: "sustained_peak"  # REQUIRED: "sustained_peak", "steady_high", "unpredictable_bursts", "poisson", "scripted"
+
+  # Profile: "sustained_peak" (for Downtown Crush scenario)
+  sustained_peak:
+    peak_duration_hours: 2  # Length of peak period
+    peak_start_hour: 0.5  # When peak starts (hours from simulation start)
+    peak_restaurant_weight: 0.9  # Fraction of orders at clustered restaurants during peak
+    off_peak_rate: 0.33  # Orders per minute outside peak
+    peak_rate: 2.5  # Orders per minute during peak
+
+  # Profile: "steady_high" (for River Divide scenario)
+  steady_high:
+    rate: 1.67  # Constant orders per minute throughout simulation
+    customer_constraint: "north_only"  # "north_only", "south_only", or null
+
+  # Profile: "unpredictable_bursts" (for Pop-Up Problem scenario)
+  unpredictable_bursts:
+    calm_rate: 0.2  # Orders/min during calm periods
+    burst_rate: 4.0  # Orders/min during bursts
+    burst_duration_minutes: 20  # How long each burst lasts
+    num_bursts: 4  # Number of burst events
+    burst_pattern: "rotating_zones"  # "rotating_zones", "random", "single_cluster"
+
+  # Profile: "poisson" (generic Poisson process)
+  poisson:
+    base_rate: 1.0  # Base orders per minute
+    peak_multiplier: 2.5  # Rate multiplier during peak
+    peak_start_hour: 0.25  # When peak starts
+    peak_end_hour: 0.75  # When peak ends
+
+  # Profile: "scripted" (for precise test scenarios)
+  scripted:
+    orders:
+      - time: 300  # Placement time in seconds
+        restaurant_id: 0  # Which restaurant
+        customer_location: [4.5, 4.5]  # Delivery location in km
+      # Add more scripted orders as needed
+
+# ==============================================================================
+# ALGORITHM CONFIGURATION
+# ==============================================================================
+algorithms:
+  bundling:
+    max_bundle_size: 3  # Maximum orders per courier assignment
+
+  anticipated:
+    lookahead_window_s: 900  # How far ahead to look (15 minutes)
+    alpha_penalty: 0.5  # Penalty for courier wait time
+    beta_penalty: 0.3  # Penalty for food freshness loss
+
+# ==============================================================================
+# VISUALIZATION SETTINGS
+# ==============================================================================
+visualization:
+  frames: 60  # Number of frames in generated GIF
+  fps: 2  # Frames per second (playback speed)
+  sample_interval_s: 60  # Time between sampled states (seconds)
+
+  # Scenario-specific visual features (optional)
+  features:
+    show_river: false  # Draw river line for divided scenarios
+    show_downtown_box: false  # Highlight downtown cluster
+    show_burst_indicator: false  # Pulse animation during bursts

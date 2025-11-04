@@ -1,0 +1,2349 @@
+[
+  {
+    "time": 330,
+    "courier_id": 3,
+    "order_ids": [
+      0
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 330,
+    "courier_id": 0,
+    "order_ids": [
+      0
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 420,
+    "courier_id": 1,
+    "order_ids": [
+      1
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 420,
+    "courier_id": 4,
+    "order_ids": [
+      1
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 600,
+    "courier_id": 7,
+    "order_ids": [
+      2
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 750,
+    "courier_id": 6,
+    "order_ids": [
+      3
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 750,
+    "courier_id": 2,
+    "order_ids": [
+      3
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 810,
+    "courier_id": 5,
+    "order_ids": [
+      4
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 960,
+    "courier_id": 3,
+    "order_ids": [
+      5
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1050,
+    "courier_id": 1,
+    "order_ids": [
+      7
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1110,
+    "courier_id": 4,
+    "order_ids": [
+      6
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1140,
+    "courier_id": 7,
+    "order_ids": [
+      8
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1380,
+    "courier_id": 0,
+    "order_ids": [
+      9
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1560,
+    "courier_id": 6,
+    "order_ids": [
+      10
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1590,
+    "courier_id": 5,
+    "order_ids": [
+      11
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1680,
+    "courier_id": 1,
+    "order_ids": [
+      12
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1800,
+    "courier_id": 4,
+    "order_ids": [
+      13
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 1800,
+    "courier_id": 2,
+    "order_ids": [
+      13
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 1800,
+    "courier_id": 7,
+    "order_ids": [
+      14
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 1920,
+    "courier_id": 3,
+    "order_ids": [
+      15
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2010,
+    "courier_id": 6,
+    "order_ids": [
+      16
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2040,
+    "courier_id": 0,
+    "order_ids": [
+      17
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2280,
+    "courier_id": 5,
+    "order_ids": [
+      18
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2310,
+    "courier_id": 1,
+    "order_ids": [
+      20
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2310,
+    "courier_id": 2,
+    "order_ids": [
+      21
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2310,
+    "courier_id": 4,
+    "order_ids": [
+      19,
+      22
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 2370,
+    "courier_id": 7,
+    "order_ids": [
+      23
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2550,
+    "courier_id": 6,
+    "order_ids": [
+      24
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2580,
+    "courier_id": 3,
+    "order_ids": [
+      25
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2730,
+    "courier_id": 0,
+    "order_ids": [
+      26
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2760,
+    "courier_id": 5,
+    "order_ids": [
+      27
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2820,
+    "courier_id": 1,
+    "order_ids": [
+      28
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 2970,
+    "courier_id": 2,
+    "order_ids": [
+      29
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3060,
+    "courier_id": 4,
+    "order_ids": [
+      30
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3330,
+    "courier_id": 0,
+    "order_ids": [
+      31
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3390,
+    "courier_id": 3,
+    "order_ids": [
+      32
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 3390,
+    "courier_id": 6,
+    "order_ids": [
+      32
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 3480,
+    "courier_id": 1,
+    "order_ids": [
+      33
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3600,
+    "courier_id": 4,
+    "order_ids": [
+      34
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3780,
+    "courier_id": 5,
+    "order_ids": [
+      35
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 3780,
+    "courier_id": 2,
+    "order_ids": [
+      35
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 3900,
+    "courier_id": 0,
+    "order_ids": [
+      36
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 3960,
+    "courier_id": 3,
+    "order_ids": [
+      37
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 3960,
+    "courier_id": 1,
+    "order_ids": [
+      37
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 3990,
+    "courier_id": 7,
+    "order_ids": [
+      38
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 4080,
+    "courier_id": 4,
+    "order_ids": [
+      39
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 4290,
+    "courier_id": 5,
+    "order_ids": [
+      40,
+      41
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 4320,
+    "courier_id": 6,
+    "order_ids": [
+      42
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 4440,
+    "courier_id": 0,
+    "order_ids": [
+      44
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 4560,
+    "courier_id": 2,
+    "order_ids": [
+      45
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 4680,
+    "courier_id": 3,
+    "order_ids": [
+      47
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 4680,
+    "courier_id": 4,
+    "order_ids": [
+      46
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 4860,
+    "courier_id": 1,
+    "order_ids": [
+      49
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 4920,
+    "courier_id": 7,
+    "order_ids": [
+      48
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 4950,
+    "courier_id": 0,
+    "order_ids": [
+      43
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 5220,
+    "courier_id": 2,
+    "order_ids": [
+      50
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 5310,
+    "courier_id": 3,
+    "order_ids": [
+      51
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 5310,
+    "courier_id": 4,
+    "order_ids": [
+      51
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 5340,
+    "courier_id": 6,
+    "order_ids": [
+      52
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 5370,
+    "courier_id": 1,
+    "order_ids": [
+      53
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 5400,
+    "courier_id": 5,
+    "order_ids": [
+      54
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 5550,
+    "courier_id": 2,
+    "order_ids": [
+      56,
+      57
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 5580,
+    "courier_id": 0,
+    "order_ids": [
+      55
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 5670,
+    "courier_id": 1,
+    "order_ids": [
+      58
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 5670,
+    "courier_id": 7,
+    "order_ids": [
+      58
+    ],
+    "bundle_size": 1,
+    "has_relay": true
+  },
+  {
+    "time": 6000,
+    "courier_id": 5,
+    "order_ids": [
+      64
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 6240,
+    "courier_id": 3,
+    "order_ids": [
+      61
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 6300,
+    "courier_id": 6,
+    "order_ids": [
+      62,
+      65
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 6330,
+    "courier_id": 0,
+    "order_ids": [
+      67
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 6330,
+    "courier_id": 1,
+    "order_ids": [
+      59,
+      63
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 6360,
+    "courier_id": 2,
+    "order_ids": [
+      68
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 6480,
+    "courier_id": 4,
+    "order_ids": [
+      60,
+      66
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 6570,
+    "courier_id": 5,
+    "order_ids": [
+      69
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 6870,
+    "courier_id": 7,
+    "order_ids": [
+      70,
+      71
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 6960,
+    "courier_id": 3,
+    "order_ids": [
+      72
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 6990,
+    "courier_id": 0,
+    "order_ids": [
+      74
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 7050,
+    "courier_id": 2,
+    "order_ids": [
+      73
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 7290,
+    "courier_id": 5,
+    "order_ids": [
+      75
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 7320,
+    "courier_id": 1,
+    "order_ids": [
+      76
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 7410,
+    "courier_id": 0,
+    "order_ids": [
+      78
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 7410,
+    "courier_id": 6,
+    "order_ids": [
+      77
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 7530,
+    "courier_id": 4,
+    "order_ids": [
+      79
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 7620,
+    "courier_id": 7,
+    "order_ids": [
+      80
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 7740,
+    "courier_id": 0,
+    "order_ids": [
+      82
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 7830,
+    "courier_id": 3,
+    "order_ids": [
+      83,
+      85
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 7950,
+    "courier_id": 2,
+    "order_ids": [
+      86
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8010,
+    "courier_id": 4,
+    "order_ids": [
+      84
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8010,
+    "courier_id": 6,
+    "order_ids": [
+      87
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8160,
+    "courier_id": 0,
+    "order_ids": [
+      89
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8220,
+    "courier_id": 7,
+    "order_ids": [
+      88
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8280,
+    "courier_id": 1,
+    "order_ids": [
+      90
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8310,
+    "courier_id": 5,
+    "order_ids": [
+      81,
+      91
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 8340,
+    "courier_id": 2,
+    "order_ids": [
+      92
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8490,
+    "courier_id": 0,
+    "order_ids": [
+      95
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8490,
+    "courier_id": 3,
+    "order_ids": [
+      94
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8550,
+    "courier_id": 4,
+    "order_ids": [
+      96
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8700,
+    "courier_id": 3,
+    "order_ids": [
+      93
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8910,
+    "courier_id": 0,
+    "order_ids": [
+      104
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8910,
+    "courier_id": 6,
+    "order_ids": [
+      99
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 8970,
+    "courier_id": 7,
+    "order_ids": [
+      107
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9000,
+    "courier_id": 1,
+    "order_ids": [
+      108
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9120,
+    "courier_id": 2,
+    "order_ids": [
+      106
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9240,
+    "courier_id": 4,
+    "order_ids": [
+      109
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9360,
+    "courier_id": 0,
+    "order_ids": [
+      116
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9360,
+    "courier_id": 5,
+    "order_ids": [
+      111,
+      113
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 9390,
+    "courier_id": 3,
+    "order_ids": [
+      100,
+      101,
+      102
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 9480,
+    "courier_id": 2,
+    "order_ids": [
+      117
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9480,
+    "courier_id": 6,
+    "order_ids": [
+      118
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9480,
+    "courier_id": 7,
+    "order_ids": [
+      97,
+      98,
+      103
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 9600,
+    "courier_id": 1,
+    "order_ids": [
+      122
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9750,
+    "courier_id": 0,
+    "order_ids": [
+      125
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9840,
+    "courier_id": 4,
+    "order_ids": [
+      126
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 9870,
+    "courier_id": 6,
+    "order_ids": [
+      120,
+      121,
+      124
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 10050,
+    "courier_id": 2,
+    "order_ids": [
+      131
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10170,
+    "courier_id": 5,
+    "order_ids": [
+      137
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10260,
+    "courier_id": 1,
+    "order_ids": [
+      134,
+      136
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 10320,
+    "courier_id": 3,
+    "order_ids": [
+      138
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10350,
+    "courier_id": 7,
+    "order_ids": [
+      140
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10410,
+    "courier_id": 0,
+    "order_ids": [
+      139
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10530,
+    "courier_id": 2,
+    "order_ids": [
+      142
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10530,
+    "courier_id": 4,
+    "order_ids": [
+      141
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10710,
+    "courier_id": 5,
+    "order_ids": [
+      146,
+      147
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 10770,
+    "courier_id": 6,
+    "order_ids": [
+      148
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10890,
+    "courier_id": 0,
+    "order_ids": [
+      149
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10920,
+    "courier_id": 2,
+    "order_ids": [
+      128,
+      130,
+      135
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 10920,
+    "courier_id": 3,
+    "order_ids": [
+      150
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 10920,
+    "courier_id": 7,
+    "order_ids": [
+      143
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 11010,
+    "courier_id": 4,
+    "order_ids": [
+      151
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 11040,
+    "courier_id": 1,
+    "order_ids": [
+      133
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 11220,
+    "courier_id": 5,
+    "order_ids": [
+      154
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 11340,
+    "courier_id": 6,
+    "order_ids": [
+      160
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 11460,
+    "courier_id": 3,
+    "order_ids": [
+      162
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 11520,
+    "courier_id": 0,
+    "order_ids": [
+      132
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 11520,
+    "courier_id": 7,
+    "order_ids": [
+      129,
+      144,
+      145
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 11760,
+    "courier_id": 1,
+    "order_ids": [
+      161,
+      164
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 11790,
+    "courier_id": 5,
+    "order_ids": [
+      156,
+      159
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 11820,
+    "courier_id": 6,
+    "order_ids": [
+      158,
+      163
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 11850,
+    "courier_id": 2,
+    "order_ids": [
+      152,
+      153,
+      166
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 11850,
+    "courier_id": 4,
+    "order_ids": [
+      157,
+      165,
+      167
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 11970,
+    "courier_id": 3,
+    "order_ids": [
+      168
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 12150,
+    "courier_id": 0,
+    "order_ids": [
+      174
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 12360,
+    "courier_id": 3,
+    "order_ids": [
+      177,
+      178
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 12360,
+    "courier_id": 7,
+    "order_ids": [
+      172,
+      173
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 12510,
+    "courier_id": 5,
+    "order_ids": [
+      181,
+      183
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 12570,
+    "courier_id": 1,
+    "order_ids": [
+      184
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 12600,
+    "courier_id": 6,
+    "order_ids": [
+      179,
+      182
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 12720,
+    "courier_id": 0,
+    "order_ids": [
+      155,
+      171
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 12840,
+    "courier_id": 2,
+    "order_ids": [
+      186
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 12990,
+    "courier_id": 4,
+    "order_ids": [
+      185,
+      187,
+      189
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 12990,
+    "courier_id": 7,
+    "order_ids": [
+      175,
+      188
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 13020,
+    "courier_id": 3,
+    "order_ids": [
+      169,
+      170,
+      176
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 13110,
+    "courier_id": 1,
+    "order_ids": [
+      191
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 13110,
+    "courier_id": 2,
+    "order_ids": [
+      192
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 13140,
+    "courier_id": 5,
+    "order_ids": [
+      180,
+      190
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 13410,
+    "courier_id": 0,
+    "order_ids": [
+      197
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 13410,
+    "courier_id": 6,
+    "order_ids": [
+      196
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 13590,
+    "courier_id": 1,
+    "order_ids": [
+      199,
+      202
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 13590,
+    "courier_id": 2,
+    "order_ids": [
+      205,
+      207
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 13680,
+    "courier_id": 7,
+    "order_ids": [
+      193,
+      195,
+      201
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 13830,
+    "courier_id": 0,
+    "order_ids": [
+      211
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 14010,
+    "courier_id": 4,
+    "order_ids": [
+      210,
+      212
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 14160,
+    "courier_id": 0,
+    "order_ids": [
+      203,
+      206,
+      208
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 14160,
+    "courier_id": 3,
+    "order_ids": [
+      213,
+      214
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 14160,
+    "courier_id": 6,
+    "order_ids": [
+      198,
+      200,
+      204
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 14340,
+    "courier_id": 1,
+    "order_ids": [
+      219
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 14370,
+    "courier_id": 5,
+    "order_ids": [
+      215
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 14400,
+    "courier_id": 2,
+    "order_ids": [
+      218
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 14490,
+    "courier_id": 7,
+    "order_ids": [
+      220
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 14580,
+    "courier_id": 5,
+    "order_ids": [
+      222
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 14640,
+    "courier_id": 3,
+    "order_ids": [
+      209,
+      217
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 14790,
+    "courier_id": 4,
+    "order_ids": [
+      226
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 14820,
+    "courier_id": 1,
+    "order_ids": [
+      224,
+      227
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 14910,
+    "courier_id": 6,
+    "order_ids": [
+      229
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 14910,
+    "courier_id": 7,
+    "order_ids": [
+      225
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15030,
+    "courier_id": 4,
+    "order_ids": [
+      231
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15120,
+    "courier_id": 0,
+    "order_ids": [
+      232
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15210,
+    "courier_id": 1,
+    "order_ids": [
+      230,
+      233
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 15210,
+    "courier_id": 2,
+    "order_ids": [
+      228
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15390,
+    "courier_id": 5,
+    "order_ids": [
+      234
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15420,
+    "courier_id": 7,
+    "order_ids": [
+      237
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15480,
+    "courier_id": 0,
+    "order_ids": [
+      238
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15510,
+    "courier_id": 6,
+    "order_ids": [
+      235,
+      236
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 15540,
+    "courier_id": 4,
+    "order_ids": [
+      216,
+      221,
+      223
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 15750,
+    "courier_id": 3,
+    "order_ids": [
+      242
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15780,
+    "courier_id": 2,
+    "order_ids": [
+      244
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15900,
+    "courier_id": 5,
+    "order_ids": [
+      246
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 15990,
+    "courier_id": 1,
+    "order_ids": [
+      251
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 16020,
+    "courier_id": 7,
+    "order_ids": [
+      254
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 16110,
+    "courier_id": 0,
+    "order_ids": [
+      255
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 16140,
+    "courier_id": 2,
+    "order_ids": [
+      256
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 16260,
+    "courier_id": 3,
+    "order_ids": [
+      259
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 16350,
+    "courier_id": 5,
+    "order_ids": [
+      263
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 16410,
+    "courier_id": 0,
+    "order_ids": [
+      243,
+      247
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 16440,
+    "courier_id": 6,
+    "order_ids": [
+      262,
+      264
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 16530,
+    "courier_id": 1,
+    "order_ids": [
+      248
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 16590,
+    "courier_id": 2,
+    "order_ids": [
+      261
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 16740,
+    "courier_id": 3,
+    "order_ids": [
+      265
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 16770,
+    "courier_id": 5,
+    "order_ids": [
+      239,
+      249,
+      253
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 16770,
+    "courier_id": 7,
+    "order_ids": [
+      241,
+      258,
+      266
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 17040,
+    "courier_id": 1,
+    "order_ids": [
+      267
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 17070,
+    "courier_id": 2,
+    "order_ids": [
+      271,
+      272
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 17070,
+    "courier_id": 4,
+    "order_ids": [
+      269
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 17190,
+    "courier_id": 3,
+    "order_ids": [
+      273
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 17220,
+    "courier_id": 0,
+    "order_ids": [
+      274
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 17220,
+    "courier_id": 6,
+    "order_ids": [
+      275
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 17580,
+    "courier_id": 1,
+    "order_ids": [
+      278
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 17610,
+    "courier_id": 3,
+    "order_ids": [
+      281
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 17670,
+    "courier_id": 4,
+    "order_ids": [
+      279
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 17820,
+    "courier_id": 7,
+    "order_ids": [
+      270,
+      280
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 17850,
+    "courier_id": 2,
+    "order_ids": [
+      277,
+      282
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 17940,
+    "courier_id": 6,
+    "order_ids": [
+      276,
+      283
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 17970,
+    "courier_id": 0,
+    "order_ids": [
+      284
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 18000,
+    "courier_id": 1,
+    "order_ids": [
+      260,
+      268
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 18090,
+    "courier_id": 5,
+    "order_ids": [
+      286
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 18180,
+    "courier_id": 3,
+    "order_ids": [
+      287
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 18240,
+    "courier_id": 4,
+    "order_ids": [
+      285
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 18540,
+    "courier_id": 0,
+    "order_ids": [
+      290
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 18660,
+    "courier_id": 6,
+    "order_ids": [
+      294,
+      296
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 18690,
+    "courier_id": 5,
+    "order_ids": [
+      300
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 18720,
+    "courier_id": 3,
+    "order_ids": [
+      295,
+      297
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 18720,
+    "courier_id": 7,
+    "order_ids": [
+      291,
+      301
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 18750,
+    "courier_id": 2,
+    "order_ids": [
+      288,
+      292,
+      299
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 18900,
+    "courier_id": 0,
+    "order_ids": [
+      289
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19140,
+    "courier_id": 4,
+    "order_ids": [
+      305
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19230,
+    "courier_id": 5,
+    "order_ids": [
+      304
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19230,
+    "courier_id": 6,
+    "order_ids": [
+      306
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19260,
+    "courier_id": 1,
+    "order_ids": [
+      307
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19350,
+    "courier_id": 3,
+    "order_ids": [
+      308
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19440,
+    "courier_id": 7,
+    "order_ids": [
+      303
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19620,
+    "courier_id": 5,
+    "order_ids": [
+      310
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19650,
+    "courier_id": 4,
+    "order_ids": [
+      309
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19680,
+    "courier_id": 1,
+    "order_ids": [
+      314
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19710,
+    "courier_id": 0,
+    "order_ids": [
+      313
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 19800,
+    "courier_id": 2,
+    "order_ids": [
+      293,
+      298,
+      302
+    ],
+    "bundle_size": 3,
+    "has_relay": false
+  },
+  {
+    "time": 19830,
+    "courier_id": 3,
+    "order_ids": [
+      311,
+      312
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 20040,
+    "courier_id": 5,
+    "order_ids": [
+      315,
+      316
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 20070,
+    "courier_id": 6,
+    "order_ids": [
+      317
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 20160,
+    "courier_id": 1,
+    "order_ids": [
+      318
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 20220,
+    "courier_id": 4,
+    "order_ids": [
+      319
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 20370,
+    "courier_id": 7,
+    "order_ids": [
+      320
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 20430,
+    "courier_id": 0,
+    "order_ids": [
+      321
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 20610,
+    "courier_id": 1,
+    "order_ids": [
+      324
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 20880,
+    "courier_id": 6,
+    "order_ids": [
+      325
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 20940,
+    "courier_id": 5,
+    "order_ids": [
+      322,
+      326
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 21030,
+    "courier_id": 1,
+    "order_ids": [
+      328
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 21090,
+    "courier_id": 3,
+    "order_ids": [
+      330
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 21120,
+    "courier_id": 4,
+    "order_ids": [
+      329,
+      331
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 21180,
+    "courier_id": 2,
+    "order_ids": [
+      323,
+      327
+    ],
+    "bundle_size": 2,
+    "has_relay": false
+  },
+  {
+    "time": 21270,
+    "courier_id": 0,
+    "order_ids": [
+      333
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 21270,
+    "courier_id": 6,
+    "order_ids": [
+      332
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 21330,
+    "courier_id": 7,
+    "order_ids": [
+      335
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  },
+  {
+    "time": 21360,
+    "courier_id": 3,
+    "order_ids": [
+      334
+    ],
+    "bundle_size": 1,
+    "has_relay": false
+  }
+]

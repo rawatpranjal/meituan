@@ -17,7 +17,27 @@
 **URL**: https://arxiv.org/pdf/2407.19078.pdf
 **Summary**: End-to-end machine learning and optimization procedure to automate budget decision-making for cities where Uber operates, combining causal inference with optimization.
 
-### 4. UC Davis Dissertation - RL-based Pricing (FAILED DOWNLOAD)
+### 4. arXiv (2024) - Order Pooling via GNN Optimization (DEPLOYED AT MEITUAN)
+**File**: `meituan-order-pooling-gnn-2024.pdf` (18 MB)
+**URL**: https://arxiv.org/abs/2406.14635
+**Summary**: Harvesting efficient on-demand order pooling from skilled couriers using graph neural networks. **This system is currently deployed in Meituan's dispatch system**, achieving 45-55% efficiency boost in real-world operations.
+
+### 5. arXiv (2024) - GRASP Algorithm for Meal Delivery Routing
+**File**: `grasp-meal-delivery-routing-2024.pdf` (567 KB)
+**URL**: https://arxiv.org/abs/2408.06353
+**Summary**: Greedy Randomized Adaptive Search Procedure (GRASP) metaheuristic for the meal delivery routing problem, addressing vehicle routing with time windows and capacity constraints.
+
+### 6. MDPI (2025) - Pricing for Online Food Service with Green Awareness
+**File**: `mdpi-pricing-green-awareness-2025.pdf` (25 MB)
+**URL**: https://www.mdpi.com/2079-9292/14/1/147
+**Summary**: Pricing strategies for online food service platforms considering environmental sustainability and green consumer awareness.
+
+### 7. Frontiers (2022) - Delivery Fee Pricing Factors
+**File**: `frontiers-delivery-fee-factors-2022.pdf` (810 KB)
+**URL**: https://www.frontiersin.org/journals/future-transportation/articles/10.3389/ffutr.2022.1031021/full
+**Summary**: Empirical analysis of factors affecting delivery fee pricing: distance, waiting time, order day, product type. Data from Brazilian food delivery platforms.
+
+### 8. UC Davis Dissertation - RL-based Pricing (FAILED DOWNLOAD)
 **File**: `uc-davis-rl-food-delivery-pricing.pdf` (0 bytes - needs re-download)
 **URL**: https://escholarship.org/content/qt07h3d59m/qt07h3d59m.pdf
 **Summary**: Formulates and solves dynamic, zone-based pricing for online food delivery services using reinforcement learning in San Francisco.
@@ -38,12 +58,7 @@
    - Note: Requires institutional access or purchase
    - Topics: Pricing strategies for platform equilibrium manipulation
 
-3. **Frontiers - Delivery Fee Pricing Factors** (2022)
-   - URL: https://www.frontiersin.org/journals/future-transportation/articles/10.3389/ffutr.2022.1031021/full
-   - Topics: Distance, waiting time, order day, product type effects on delivery fees
-   - Data: Brazilian platforms
-
-4. **ScienceDirect - Service Pricing Strategy of Food Delivery Platform**
+3. **ScienceDirect - Service Pricing Strategy of Food Delivery Platform**
    - URL: https://www.sciencedirect.com/science/article/abs/pii/S2210539522001250
    - Topics: Quality differentiation models in multi-sided markets
 

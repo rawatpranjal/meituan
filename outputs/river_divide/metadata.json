@@ -1,0 +1,111 @@
+{
+  "scenario": {
+    "name": "river_divide",
+    "description": "Geographic bottleneck to test network intelligence",
+    "duration_hours": 3,
+    "random_seed": 42
+  },
+  "physics": {
+    "map_size_m": 5000,
+    "distance_metric": "manhattan",
+    "courier_speed_kmh": 30,
+    "pickup_service_time_s": 90,
+    "dropoff_service_time_s": 45,
+    "meal_prep_time_s": 300,
+    "order_expiration_minutes": 30,
+    "batch_interval_s": 60
+  },
+  "restaurants": {
+    "count": 6,
+    "layout": "divided",
+    "divided": {
+      "river_position": 2500,
+      "side": "south"
+    }
+  },
+  "couriers": {
+    "count": 15,
+    "layout": "zonal",
+    "zonal": {
+      "zones": {
+        "south": 10,
+        "north": 5
+      },
+      "boundary_y": 2500
+    }
+  },
+  "demand": {
+    "total_orders": 300,
+    "profile": "steady_high",
+    "steady_high": {
+      "rate": 1.67,
+      "customer_constraint": "north_only"
+    }
+  },
+  "geography": {
+    "river_y_position": 2500,
+    "bridges": [
+      [
+        1500,
+        2500
+      ],
+      [
+        3500,
+        2500
+      ]
+    ]
+  },
+  "algorithms": {
+    "bundling": {
+      "max_bundle_size": 3
+    },
+    "anticipated": {
+      "lookahead_window_s": 900,
+      "alpha_penalty": 0.5,
+      "beta_penalty": 0.3
+    }
+  },
+  "visualization": {
+    "frames": 180,
+    "fps": 2,
+    "sample_interval_s": 60,
+    "features": {
+      "show_downtown_box": false,
+      "show_river": true,
+      "show_burst_indicator": false
+    }
+  },
+  "run_timestamp": "2025-11-04T14:07:28.103864",
+  "results": {
+    "greedy": {
+      "orders_delivered": 155,
+      "total_distance": 742.07,
+      "bundles_created": 170,
+      "avg_delivery_time": 35.8
+    },
+    "hungarian": {
+      "orders_delivered": 182,
+      "total_distance": 734.48,
+      "bundles_created": 197,
+      "avg_delivery_time": 25.7
+    },
+    "simple_bundling": {
+      "orders_delivered": 196,
+      "total_distance": 717.46,
+      "bundles_created": 181,
+      "avg_delivery_time": 27.2
+    },
+    "network_bundling": {
+      "orders_delivered": 203,
+      "total_distance": 704.22,
+      "bundles_created": 159,
+      "avg_delivery_time": 28.3
+    },
+    "anticipated_bundling": {
+      "orders_delivered": 230,
+      "total_distance": 541.95,
+      "bundles_created": 106,
+      "avg_delivery_time": 29.1
+    }
+  }
+}
