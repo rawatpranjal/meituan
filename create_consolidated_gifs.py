@@ -66,7 +66,8 @@ def draw_visualization(ax, snapshot, restaurants, total_duration):
 
     # Clear axis
     ax.clear()
-    ax.set_xlim(0, GRID_SIZE)
+    zoom_margin = 0.1  # Tight crop on central map area
+    ax.set_xlim(-zoom_margin, GRID_SIZE + zoom_margin)
     ax.set_ylim(-0.95, GRID_SIZE + 0.5)  # Extra space for title and 3-row dashboard
     ax.set_aspect('equal')
     ax.axis('off')
@@ -375,6 +376,7 @@ def create_consolidated_gif(algo_name, scenario, output_path, logs_dir='logs'):
 
     # Create figure (taller to accommodate 3-row dashboard)
     fig, ax = plt.subplots(figsize=(12, 14))
+    plt.tight_layout(pad=0.5)  # Minimize whitespace
     restaurants = list(state.restaurants.values())
 
     def update(idx):
@@ -401,7 +403,7 @@ def create_consolidated_gif(algo_name, scenario, output_path, logs_dir='logs'):
     # Save GIF
     print(f"  💾 Saving to {output_path}...")
     writer = PillowWriter(fps=FPS)
-    anim.save(output_path, writer=writer, dpi=100)
+    anim.save(output_path, writer=writer, dpi=100, savefig_kwargs={'bbox_inches': 'tight', 'pad_inches': 0.1})
     plt.close(fig)
 
     print(f"  ✅ Saved! {len(sampled_indices)} frames @ {FPS} fps = {len(sampled_indices)/FPS:.0f} seconds")
