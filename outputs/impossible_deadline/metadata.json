@@ -1,0 +1,108 @@
+{
+  "scenario": {
+    "name": "impossible_deadline",
+    "description": "Logistical trap requiring foresight to solve",
+    "duration_hours": 1,
+    "random_seed": 42
+  },
+  "physics": {
+    "map_size_m": 5000,
+    "distance_metric": "manhattan",
+    "courier_speed_kmh": 20,
+    "pickup_service_time_s": 150,
+    "dropoff_service_time_s": 120,
+    "meal_prep_time_s": 600,
+    "order_expiration_minutes": 20,
+    "batch_interval_s": 60
+  },
+  "restaurants": {
+    "count": 1,
+    "layout": "explicit",
+    "locations": [
+      [
+        4.0,
+        3.0
+      ]
+    ]
+  },
+  "couriers": {
+    "count": 1,
+    "layout": "explicit",
+    "locations": [
+      [
+        3.0,
+        2.0
+      ]
+    ]
+  },
+  "demand": {
+    "total_orders": 1,
+    "profile": "manual",
+    "manual": {
+      "orders": [
+        {
+          "restaurant_index": 0,
+          "customer_location": [
+            8.0,
+            6.0
+          ],
+          "placement_time": 300,
+          "meal_prep_time": 600
+        }
+      ]
+    }
+  },
+  "algorithms": {
+    "bundling": {
+      "max_bundle_size": 3
+    },
+    "anticipated": {
+      "lookahead_window_s": 900,
+      "alpha_penalty": 0.1,
+      "beta_penalty": 0.15
+    }
+  },
+  "visualization": {
+    "frames": 60,
+    "fps": 2,
+    "sample_interval_s": 60,
+    "features": {
+      "show_downtown_box": false,
+      "show_river": false,
+      "show_burst_indicator": false
+    }
+  },
+  "run_timestamp": "2025-11-05T10:02:55.659358",
+  "results": {
+    "greedy": {
+      "orders_delivered": 0,
+      "total_distance": 0.0,
+      "bundles_created": 0,
+      "avg_delivery_time": 0.0
+    },
+    "hungarian": {
+      "orders_delivered": 0,
+      "total_distance": 0.0,
+      "bundles_created": 0,
+      "avg_delivery_time": 0.0
+    },
+    "simple_bundling": {
+      "orders_delivered": 0,
+      "total_distance": 0.0,
+      "bundles_created": 0,
+      "avg_delivery_time": 0.0
+    },
+    "network_bundling": {
+      "orders_delivered": 0,
+      "total_distance": 0.0,
+      "bundles_created": 0,
+      "avg_delivery_time": 0.0
+    },
+    "anticipated_bundling": {
+      "orders_delivered": 0,
+      "total_distance": 0.0,
+      "bundles_created": 0,
+      "avg_delivery_time": 0.0
+    }
+  }
+}

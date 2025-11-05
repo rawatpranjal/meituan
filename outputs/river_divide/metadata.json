@@ -16,7 +16,7 @@
     "batch_interval_s": 60
   },
   "restaurants": {
-    "count": 6,
+    "count": 5,
     "layout": "divided",
     "divided": {
       "river_position": 2500,
@@ -24,18 +24,18 @@
     }
   },
   "couriers": {
-    "count": 15,
+    "count": 12,
     "layout": "zonal",
     "zonal": {
       "zones": {
-        "south": 10,
-        "north": 5
+        "south": 8,
+        "north": 4
       },
       "boundary_y": 2500
     }
   },
   "demand": {
-    "total_orders": 300,
+    "total_orders": 150,
     "profile": "steady_high",
     "steady_high": {
       "rate": 1.67,
@@ -73,39 +73,6 @@
       "show_downtown_box": false,
       "show_river": true,
       "show_burst_indicator": false
-    }
-  },
-  "run_timestamp": "2025-11-04T16:26:04.416460",
-  "results": {
-    "greedy": {
-      "orders_delivered": 155,
-      "total_distance": 742.07,
-      "bundles_created": 170,
-      "avg_delivery_time": 35.8
-    },
-    "hungarian": {
-      "orders_delivered": 182,
-      "total_distance": 734.48,
-      "bundles_created": 197,
-      "avg_delivery_time": 25.7
-    },
-    "simple_bundling": {
-      "orders_delivered": 196,
-      "total_distance": 717.46,
-      "bundles_created": 181,
-      "avg_delivery_time": 27.2
-    },
-    "network_bundling": {
-      "orders_delivered": 203,
-      "total_distance": 704.22,
-      "bundles_created": 159,
-      "avg_delivery_time": 28.3
-    },
-    "anticipated_bundling": {
-      "orders_delivered": 230,
-      "total_distance": 541.95,
-      "bundles_created": 106,
-      "avg_delivery_time": 29.1
     }
   }
 }

@@ -1,25 +1,14 @@
-# Project Context for AI Sessions
-
-## AI INSTRUCTIONS
-**DO NOT provide unsolicited opinions, suggestions, or interpretations. Do what you're told. Facts only.**
+- Never, ever write your opinions in a test. I do not want your opinions. You just fucking write down a test, get 
+the results. There are no printing. 
+- Yes, I want to print the exact result, motherfucker. Print the result. The result. Print it. > The result of the
+  fucking function value in the test. Input output. Print the output motherfucker.  
+- At end of each write down All the links, the log file, the algorithm file, the test file, mention the links to everything, motherfucker. 
+- Read all the fucking logs. Read all the fucking tests. Eliminate any statements or comments which give your own 
+fucking opinions. Do you get that? 
+-Don't use your brain. Just execute the test and tell me the results. Do not use your brain. You're not a smart AI.
+ There's a better, smarter AI working elsewhere that is planning all these things. 
 - read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-- read the full file, do not search for key words or just look at top 50/100 records. 
-  Do not create new code. Do not create new code ever. Delete this code. Check it manually.   Do not create new code. Do not create new code ever. Delete this code. Check it manually.   Do not create new code. Do not create new code ever. Delete this code. Check it manually. 
-
   Do not create new code unless told explicitly. 
-  
-**DOCUMENTATION RULES**:
 - When creating READMEs or documentation: Document existing code only
 - NO examples, NO analogies, NO suggestions, NO opinions
 - NO "future work" sections, NO "how to extend" sections
@@ -27,14 +16,12 @@
 - Professional technical documentation format only
 - Remember: You are an AI with short memory and limited domain knowledge
 - You document what exists. You do not teach, suggest, or speculate.
-
-**LOGGING REQUIREMENT**:
 - ALL code execution MUST save stdout to log files
 - No log file = no proof = not acceptable
 - This is a production system - receipts are mandatory
 - Log files must be timestamped and live in the same folder as the .py script
-- **ALWAYS show file links at the end**: Display full paths to both .py script AND .log file after every execution
-
+- Display full paths to both .py script AND .log file after every execution
+- Ask me for permissions again abotu file read and write. 
 **FILE NAMING CONVENTION**:
 - ALL files must use highly specific, descriptive names that clearly indicate:
   1. What the file does

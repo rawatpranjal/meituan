@@ -100,6 +100,59 @@ def get_travel_time(loc1: Tuple[float, float], loc2: Tuple[float, float]) -> flo
     return distance_m / _courier_speed_m_per_s
 
 
+def calculate_predicted_delivery_time(courier, order_ids: List[int],
+                                      state) -> float:
+    """
+    Calculate the estimated delivery completion time for a bundle.
+
+    This function enforces the deadline feasibility constraint by predicting
+    when the courier will complete delivery of ALL orders in the bundle.
+
+    Args:
+        courier: Courier object with current_location
+        order_ids: List of order IDs to be assigned
+        state: SimulationState with current_time and orders
+
+    Returns:
+        Timestamp (float) when the LAST order in the bundle will be delivered.
+
+    The calculation accounts for:
+        - Travel time to restaurant(s)
+        - Waiting for food to be ready
+        - Pickup service times (150s per restaurant)
+        - TSP-optimized delivery route
+        - Dropoff service times (120s per customer)
+    """
+    if not order_ids:
+        return state.current_time
+
+    try:
+        # Lazy import to avoid circular dependency
+        # (assignment_algorithms imports from simulator_core)
+        from assignment_algorithms import calculate_route_duration
+
+        # Calculate full route duration using existing helper function
+        # This handles all complexities: multi-restaurant, TSP, service times, waiting
+        route_duration = calculate_route_duration(
+            courier.current_location,
+            order_ids,
+            state,
+            use_tsp_optimization=(len(order_ids) > 1),
+            include_service_times=True
+        )
+
+        return state.current_time + route_duration
+    except Exception as e:
+        # If calculation fails, log error and return a very large time
+        # This will cause the assignment to be rejected (conservative approach)
+        state.log_event('DEADLINE_CALCULATION_ERROR',
+                       f'Error calculating predicted delivery time: {e}',
+                       courier_id=courier.id,
+                       order_ids=order_ids,
+                       error=str(e))
+        return float('inf')  # Infinite time = guaranteed rejection
+
+
 # ============================================================================
 # CORE CLASSES
 # ============================================================================
@@ -721,7 +774,7 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
                     courier.current_location = courier.next_destination
 
                     # Update distance traveled
-                    distance = euclidean_distance(prev_location, courier.current_location)
+                    distance = get_distance(prev_location, courier.current_location)
                     courier.total_distance_traveled += distance
 
                     if courier.state == "DRIVING_TO_PICKUP":
@@ -845,8 +898,8 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
                                     state.metrics['relay_handoffs'] += 1
 
                                     # Calculate distance saved
-                                    direct_distance = euclidean_distance(relay_order.restaurant_location, relay_order.diner_location)
-                                    relay_distance = euclidean_distance(relay_order.restaurant_location, relay_order.relay_handoff_location)
+                                    direct_distance = get_distance(relay_order.restaurant_location, relay_order.diner_location)
+                                    relay_distance = get_distance(relay_order.restaurant_location, relay_order.relay_handoff_location)
                                     state.metrics['relay_distance_saved'] += direct_distance - relay_distance
 
                                     state.log_event('HANDOFF_COMPLETE',
@@ -921,11 +974,26 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
         # 4. RUN BATCH ASSIGNMENT at regular intervals
         if t >= next_batch_time:
             idle_couriers = state.get_idle_couriers()
+
+            # ========================================================================
+            # ALGORITHM-SPECIFIC INPUT: Differentiate based on algorithm capability
+            # ========================================================================
+            # Anticipated algorithms need to see ALL orders (including PENDING) to
+            # exercise their lookahead capability. Reactive algorithms only see READY orders.
+
+            if algorithm_name == 'anticipated_bundling':
+                # Anticipatory algorithm: pass ALL orders, it filters internally
+                orders_for_assignment = list(state.orders.values())
+            else:
+                # Reactive algorithms: only see orders that are already READY
+                orders_for_assignment = state.get_ready_orders()
+
+            # For backward compatibility, keep ready_orders for validation logic
             ready_orders = state.get_ready_orders()
 
-            if idle_couriers and ready_orders:
-                # Run assignment algorithm
-                assignments = assignment_algorithm(state, idle_couriers, ready_orders)
+            if idle_couriers and orders_for_assignment:
+                # Run assignment algorithm with appropriate order list
+                assignments = assignment_algorithm(state, idle_couriers, orders_for_assignment)
 
                 # Process assignments
                 for assignment in assignments:
@@ -953,16 +1021,26 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
                         continue  # Skip this invalid assignment
 
                     # ============================================================
-                    # VALIDATION 2: Verify all orders are ready and unassigned
+                    # VALIDATION 2: Verify order states are valid for this algorithm
                     # ============================================================
-                    ready_order_ids = [o.id for o in ready_orders]
                     invalid_orders = []
                     for oid in order_ids:
                         order = state.orders[oid]
-                        if oid not in ready_order_ids:
-                            invalid_orders.append((oid, 'not in ready_orders'))
-                        elif order.state != "READY":
-                            invalid_orders.append((oid, f'state is {order.state}'))
+
+                        # Algorithm-specific validation rules
+                        if algorithm_name == 'anticipated_bundling':
+                            # Anticipatory: allow PENDING or READY, but must be unassigned
+                            if order.state not in ["PENDING", "READY"]:
+                                invalid_orders.append((oid, f'state is {order.state}, expected PENDING or READY'))
+                            elif order.state == "ASSIGNED":
+                                invalid_orders.append((oid, 'already assigned to another courier'))
+                        else:
+                            # Reactive: must be in ready_orders list and state READY
+                            ready_order_ids = [o.id for o in ready_orders]
+                            if oid not in ready_order_ids:
+                                invalid_orders.append((oid, 'not in ready_orders'))
+                            elif order.state != "READY":
+                                invalid_orders.append((oid, f'state is {order.state}'))
 
                     if invalid_orders:
                         state.log_event('INVALID_ORDER_ASSIGNMENT_REJECTED',
@@ -974,6 +1052,41 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
                         continue  # Skip this invalid assignment
 
                     courier = state.couriers[courier_id]
+
+                    # ============================================================
+                    # VALIDATION 4: DEADLINE FEASIBILITY GATEKEEPER
+                    # ============================================================
+                    # THE HARD CONSTRAINT: Never assign an order you cannot deliver on time.
+                    # This validation enforces the business rule centrally for ALL algorithms.
+
+                    # Calculate predicted delivery time for this bundle
+                    predicted_delivery_time = calculate_predicted_delivery_time(
+                        courier, order_ids, state
+                    )
+
+                    # Find the strictest deadline in the bundle
+                    # (All orders must be delivered before their deadline expires)
+                    strictest_deadline = min(
+                        state.orders[oid].ready_time + state.orders[oid].expiration_time
+                        for oid in order_ids
+                    )
+
+                    if predicted_delivery_time > strictest_deadline:
+                        # Assignment is IMPOSSIBLE - the courier cannot deliver on time
+                        # Reject this assignment to prevent order expiration
+                        state.log_event(
+                            'DEADLINE_INFEASIBLE_ASSIGNMENT_REJECTED',
+                            f'Algorithm proposed impossible assignment for courier {courier_id}. '
+                            f'Predicted delivery @ t={predicted_delivery_time:.0f}s exceeds '
+                            f'strictest deadline @ t={strictest_deadline:.0f}s. '
+                            f'Orders: {order_ids}. Assignment rejected.',
+                            courier_id=courier_id,
+                            order_ids=order_ids,
+                            predicted_delivery=predicted_delivery_time,
+                            strictest_deadline=strictest_deadline,
+                            margin=predicted_delivery_time - strictest_deadline
+                        )
+                        continue  # Skip this impossible assignment
 
                     # ============================================================
                     # VALIDATION 3: Final safety check on courier state

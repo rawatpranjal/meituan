@@ -1,0 +1,314 @@
+================================================================================
+COMPLETE FILE-BY-FILE ANALYSIS
+Food Delivery Simulation System
+================================================================================
+
+ROOT DIRECTORY PYTHON FILES
+================================================================================
+
+ACTIVE CORE FILES (3 files) - These must stay, form the backbone
+├─ run_scenario.py (254 lines, executable)
+│  STATUS: ✓ ACTIVE - Main entry point
+│  IMPORTS FROM: config_loader, scenario_generators
+│  IMPORTED BY: None (entry point)
+│  CALLS: subprocess create_consolidated_gifs.py, create_focused_gifs.py
+│  GIT: tracked
+│
+├─ simulator_core.py (1,063 lines)
+│  STATUS: ✓ ACTIVE - Simulation engine
+│  IMPORTS FROM: distance_metrics, assignment_algorithms
+│  IMPORTED BY: run_scenario.py, assignment_algorithms.py, create_consolidated_gifs.py,
+│               create_focused_gifs.py, all test files
+│  CONTAINS: SimulationState, Order, Courier, Restaurant classes
+│  DEPRECATED: generate_gauntlet_scenario(), generate_scenario_legacy(),
+│              generate_asymmetric_scenario() [NOT CALLED]
+│  GIT: tracked
+│
+└─ assignment_algorithms.py (991 lines)
+   STATUS: ✓ ACTIVE - All 5 algorithms are used
+   IMPORTS FROM: simulator_core, scipy, ortools
+   IMPORTED BY: run_scenario.py, create_consolidated_gifs.py, create_focused_gifs.py,
+                all test files
+   CONTAINS: assign_greedy(), assign_hungarian(), assign_simple_bundling(),
+             assign_network_bundling(), assign_anticipated_bundling()
+   GIT: tracked
+
+SUPPORT LIBRARIES (2 files) - Required by core
+├─ config_loader.py (211 lines)
+│  STATUS: ✓ ACTIVE
+│  IMPORTS FROM: yaml
+│  IMPORTED BY: run_scenario.py
+│  UNUSED FUNCTION: compare_metrics() (line ~75)
+│  GIT: tracked
+│
+└─ distance_metrics.py (91 lines)
+   STATUS: ✓ ACTIVE
+   IMPORTS FROM: numpy
+   IMPORTED BY: simulator_core.py, assignment_algorithms.py
+   GIT: tracked
+
+VISUALIZATION PIPELINE (3 files) - Called as subprocesses by run_scenario.py
+├─ create_consolidated_gifs.py
+│  STATUS: ✓ USED - Called by run_scenario.py (line 189)
+│  IMPORTS FROM: simulator_core, assignment_algorithms, export_detailed_logs
+│  PURPOSE: Generate 60-frame animated GIFs for all 5 algorithms
+│  GIT: tracked
+│
+├─ create_focused_gifs.py
+│  STATUS: ✓ USED - Called by run_scenario.py (line 207)
+│  IMPORTS FROM: simulator_core, assignment_algorithms, export_detailed_logs
+│  PURPOSE: Generate 7-frame key moment GIFs
+│  NOTES: Requires analysis/top_distinct_batches.json (conditional execution)
+│  GIT: tracked
+│
+└─ export_detailed_logs.py
+   STATUS: ✓ USED - Called by both GIF creation scripts
+   IMPORTS FROM: None (utilities only)
+   EXPORTED TO: create_consolidated_gifs.py, create_focused_gifs.py
+   PURPOSE: Convert simulation events log to human-readable text
+   GIT: tracked
+
+UNUSED/DEPRECATED SCRIPTS (4 files) - Not integrated into current pipeline
+├─ analyze_batch_distinctness.py (9.6 KB)
+│  STATUS: ✗ UNUSED
+│  CALLED BY: run_small_town_simulation.py (line 27 in SCRIPTS array)
+│  PURPOSE: Identify batches with distinct algorithm decisions
+│  PROBLEM: References analysis/event_data/bundles_*.json which is never generated
+│           by current pipeline (old "Small Town" workflow only)
+│  GIT: tracked (committed)
+│  RECOMMENDATION: Archive to archive/old_simulation_files/
+│
+├─ create_results_table.py (9.9 KB)
+│  STATUS: ✗ UNUSED
+│  CALLED BY: run_small_town_simulation.py (line 29 in SCRIPTS array)
+│  PURPOSE: Generate performance comparison table
+│  PROBLEM: Parses old-style logs from logs/*.txt
+│           Current system uses outputs/{scenario}/metadata.json
+│  GIT: tracked (committed)
+│  RECOMMENDATION: Archive to archive/old_simulation_files/
+│
+├─ run_small_town_simulation.py (3.4 KB, executable)
+│  STATUS: ✗ DEPRECATED
+│  ENTRY POINT: None (was manual entry, superseded by run_scenario.py)
+│  CALLS: create_consolidated_gifs.py
+│          analyze_batch_distinctness.py
+│          create_focused_gifs.py
+│          create_results_table.py
+│  PURPOSE: Orchestration for old "Small Town Lunch Rush" scenario
+│  PROBLEM: Has been replaced by run_scenario.py + config-based system
+│  GIT: tracked (committed)
+│  RECOMMENDATION: Archive to archive/old_simulation_files/
+│
+└─ [export_detailed_logs.py - see Visualization Pipeline above]
+   NOTE: While listed as standalone, it IS used by visualization pipeline
+
+DEBUG/TEST SCRIPTS (2 files) - Never committed to git (?? status)
+├─ debug_simple_bundling.py (6.4 KB)
+│  STATUS: ✗ UNTRACKED
+│  GIT: ?? (never committed)
+│  PURPOSE: Debug tracing script for simple bundling algorithm
+│  IMPORTS: simulator_core, assignment_algorithms
+│  CALLED BY: None
+│  PROBLEM: Manual debugging script, not integrated
+│  RECOMMENDATION: Delete or archive (never integrated)
+│
+└─ test_simple_bundling_final.py (11.7 KB)
+   STATUS: ✗ UNTRACKED
+   GIT: ?? (never committed)
+   PURPOSE: Advanced test suite for simple bundling (corrected version)
+   IMPORTS: assignment_algorithms, simulator_core
+   CALLED BY: None
+   PROBLEM: Duplicates functionality of tests/test_simple_bundling_algorithm.py
+            Never integrated into main test suite
+   RECOMMENDATION: Delete or archive (functionality in tests/ directory)
+
+================================================================================
+SCENARIO GENERATORS DIRECTORY (4 files, 951 lines)
+================================================================================
+
+scenario_generators/__init__.py (26 lines)
+├─ STATUS: ✓ ACTIVE
+├─ IMPORTS FROM: demand_generators, layout_generators, scenario_factory
+├─ IMPORTED BY: run_scenario.py
+├─ CONTAINS: ScenarioFactory class definition
+└─ GIT: tracked
+
+scenario_generators/scenario_factory.py (124 lines)
+├─ STATUS: ✓ ACTIVE
+├─ IMPORTS FROM: demand_generators, layout_generators
+├─ IMPORTED BY: __init__.py
+├─ CONTAINS: ScenarioFactory.create_scenario() main method
+└─ GIT: tracked
+
+scenario_generators/demand_generators.py (483 lines)
+├─ STATUS: ✓ ACTIVE
+├─ IMPORTS FROM: numpy, dataclasses
+├─ IMPORTED BY: scenario_factory.py
+├─ CONTAINS: Order generation logic for 3 scenarios (Downtown Crush, River Divide, Popup Problem)
+└─ GIT: tracked
+
+scenario_generators/layout_generators.py (318 lines)
+├─ STATUS: ✓ ACTIVE
+├─ IMPORTS FROM: numpy, dataclasses
+├─ IMPORTED BY: scenario_factory.py
+├─ CONTAINS: Restaurant/courier placement logic for 3 scenarios
+└─ GIT: tracked
+
+================================================================================
+TEST SUITE DIRECTORY (7 files, ~260 test functions)
+================================================================================
+
+tests/test_greedy_algorithm.py (38 KB)
+├─ STATUS: ✓ ACTIVE
+├─ TEST COUNT: 20 test functions
+├─ TESTS: assign_greedy() algorithm
+├─ GIT: tracked
+└─ RECOMMENDED: Keep (comprehensive test coverage)
+
+tests/test_hungarian_algorithm.py (72 KB)
+├─ STATUS: ✓ ACTIVE
+├─ TEST COUNT: 48 test functions
+├─ TESTS: assign_hungarian() algorithm
+├─ GIT: tracked
+├─ NOTE: Largest test file due to comprehensive coverage
+└─ RECOMMENDED: Keep (extensive edge case coverage)
+
+tests/test_simple_bundling_algorithm.py (19 KB)
+├─ STATUS: ✓ ACTIVE
+├─ TEST COUNT: 6 test functions
+├─ TESTS: assign_simple_bundling() algorithm
+├─ GIT: tracked
+├─ MODIFIED: Nov 5 05:07 (recent update)
+└─ RECOMMENDED: Keep (core algorithm test)
+
+tests/test_network_bundling_algorithm.py (52 KB)
+├─ STATUS: ✓ ACTIVE
+├─ TEST COUNT: 28 test functions
+├─ TESTS: assign_network_bundling() algorithm (comprehensive unit tests)
+├─ GIT: tracked
+├─ PURPOSE: "Ruthless Test Suite" - covers all edge cases
+└─ RECOMMENDED: Keep (comprehensive tests)
+
+tests/test_network_bundling.py (14 KB)
+├─ STATUS: ✓ ACTIVE
+├─ TEST COUNT: 4 test functions
+├─ TESTS: assign_network_bundling() vs assign_simple_bundling() (comparative)
+├─ GIT: tracked
+├─ MODIFIED: Nov 5 05:28 (very recent update)
+├─ PURPOSE: Comparative/diagnostic tests, different from above
+└─ RECOMMENDED: Keep (comparative analysis, different purpose)
+
+tests/test_anticipated_bundling.py (41 KB)
+├─ STATUS: ✓ ACTIVE
+├─ TEST COUNT: 20 test functions
+├─ TESTS: assign_anticipated_bundling() algorithm
+├─ GIT: tracked
+└─ RECOMMENDED: Keep (comprehensive test coverage)
+
+tests/diagnose_network_vs_simple.py (5.7 KB)
+├─ STATUS: ✓ ACTIVE
+├─ PURPOSE: Diagnostic script comparing network vs simple bundling
+├─ GIT: tracked
+└─ RECOMMENDED: Keep (diagnostic utility)
+
+================================================================================
+CONFIGURATION FILES (YAML SCENARIOS)
+================================================================================
+
+scenarios/downtown_crush.yaml ✓ ACTIVE - 400 orders, 3 hours
+scenarios/popup_problem.yaml ✓ ACTIVE - 350 orders, 4 hours
+scenarios/river_divide.yaml ✓ ACTIVE - 300 orders, 3 hours
+
+All 3 scenarios are actively used with run_scenario.py
+
+================================================================================
+ARCHIVE FOLDER (462 MB, 66 Python files)
+================================================================================
+
+STATUS: ✓ Properly separated from active code
+
+Contents:
+archive/data/ - Original Meituan dataset (non-commercial academic license)
+  └─ all_waybill_info_meituan_0322.csv (654K rows, 116 MB) [NOT UNZIPPED per notes]
+  └─ courier_wave_info_meituan.csv (207K rows, 12 MB)
+  └─ dispatch_rider_meituan.csv (62K rows, 4 MB)
+  └─ dispatch_waybill_meituan.csv (16K rows, 0.5 MB)
+  └─ TSL-Meituan papers and background docs
+
+archive/eda/ - Exploratory Data Analysis (6 files)
+  └─ 01_initial_data_verification_full_eda.py
+  └─ 02_comprehensive_journey_analysis.py
+  └─ 03_debugging_and_investigations.py
+  └─ 04_knowledge_gaps_assessment.py
+  └─ 05_simulation_matching_model.py
+  └─ demand_supply_analysis.py
+
+archive/models/ - Old batch assignment models
+  └─ 01_tier1_bipartite_distance_to_pickup.py (Tier 1)
+  └─ 03_tier3_online_greedy_distance_to_pickup.py (Tier 3)
+  └─ legacy/02_tier2_batch_vrp_distance_to_pickup.py (Tier 2)
+  └─ cost/ - Cost function abstraction layer
+  └─ strategies/ - Assignment strategies
+  └─ simulator/ - Old simulation framework
+  └─ evaluation/ - Old evaluation scripts
+  └─ logs/ - Analysis scripts for old models
+  └─ run.py - Old orchestration
+
+archive/old_simulation_files/ - Legacy visualization system
+  └─ Various GIF generation approaches (~15 files)
+  └─ Legacy analysis scripts
+  └─ relay_bundling_algorithm.py (old algorithm implementation)
+
+RECOMMENDATION: Archive folder is properly organized and separated.
+                No changes needed. Keep for historical reference and 
+                to show evolution of the system.
+
+================================================================================
+DEPENDENCY SUMMARY
+================================================================================
+
+FILES THAT CANNOT BE REMOVED (hardcoded dependencies):
+├─ run_scenario.py (entry point)
+├─ simulator_core.py (core engine)
+├─ assignment_algorithms.py (all 5 algorithms actively used)
+├─ config_loader.py (config loading)
+├─ distance_metrics.py (distance calculations)
+├─ scenario_generators/ (all 4 modules)
+├─ create_consolidated_gifs.py (called by run_scenario.py)
+├─ create_focused_gifs.py (called by run_scenario.py)
+└─ export_detailed_logs.py (called by GIF scripts)
+
+FILES THAT CAN BE SAFELY REMOVED/ARCHIVED:
+├─ analyze_batch_distinctness.py (no active callers, old pipeline)
+├─ create_results_table.py (no active callers, old pipeline)
+├─ run_small_town_simulation.py (superseded by run_scenario.py)
+├─ debug_simple_bundling.py (manual debug script, untracked)
+└─ test_simple_bundling_final.py (duplicate of tests/ version, untracked)
+
+DEPRECATED FUNCTIONS TO REMOVE:
+├─ simulator_core.py:
+│  ├─ generate_gauntlet_scenario() [not called]
+│  ├─ generate_scenario_legacy() [not called]
+│  ├─ generate_asymmetric_scenario() [not called]
+│  └─ generate_scenario alias [backward compat, not needed]
+└─ config_loader.py:
+   └─ compare_metrics() [utility function, never imported]
+
+TEST SUITE: All 7 files are active, no duplicates to remove
+            (test_network_bundling.py is comparative, different purpose than
+             test_network_bundling_algorithm.py which is comprehensive unit tests)
+
+================================================================================
+CLEANUP SUMMARY
+================================================================================
+
+Files to Archive:     4 (analyze_batch, create_results, run_small_town, plus content)
+Files to Delete:      2 (untracked: debug_simple, test_simple_final)
+Functions to Remove:  ~5 (deprecated generators, unused utility)
+Total Lines to Cut:   ~1,000 lines
+Total Space to Save:  ~40 KB (scripts) + reduced archive duplication
+
+No breaking changes if recommendations are followed.
+All active pipeline functionality would remain intact.
+
+================================================================================

@@ -27,18 +27,18 @@ physics:
 
 # Restaurant configuration
 restaurants:
-  count: 8
+  count: 6  # Reduced from 8 for computational tractability
   layout: "clustered"
 
   # Clustered layout parameters
   clustered:
-    downtown_fraction: 0.75  # 6 of 8 restaurants in downtown (75%)
+    downtown_fraction: 0.75  # 4.5 of 6 restaurants in downtown (75%)
     downtown_center: [1.25, 1.25]  # Bottom-left quadrant
     downtown_radius: 0.6  # Tight cluster
 
 # Courier configuration
 couriers:
-  count: 12
+  count: 10  # Reduced from 12 for computational tractability
   layout: "central"
 
   # Central layout parameters
@@ -48,7 +48,7 @@ couriers:
 
 # Demand configuration
 demand:
-  total_orders: 400  # High overall demand
+  total_orders: 200  # Reduced from 400 for computational tractability
   profile: "sustained_peak"
 
   # Sustained peak parameters

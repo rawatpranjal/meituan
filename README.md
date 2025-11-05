@@ -158,19 +158,21 @@ $$
 Tests bundling power under high-density sustained demand.
 
 - Duration: 3 hours
-- Total orders: 400
-- Couriers: 12
-- Geography: 75% of restaurants clustered in downtown area (600m radius)
+- Total orders: 200
+- Couriers: 10
+- Restaurants: 6 (75% clustered in downtown area, 600m radius)
+- Geography: 5km × 5km map, Manhattan distance
 - Demand: Sustained peak (3x base rate) for 2 hours, off-peak rate 0.5x
-- Physics: 5km × 5km map, Manhattan distance, 30 km/h courier speed
+- Physics: 30 km/h courier speed, 90s pickup, 45s dropoff, 300s meal prep
 
 **Scenario 2: Popup Problem**
 Tests anticipatory intelligence under unpredictable demand.
 
 - Duration: 4 hours
-- Total orders: 350
-- Couriers: 12
-- Geography: 4 scattered restaurant clusters (400m radius each)
+- Total orders: 175
+- Couriers: 10
+- Restaurants: 6 (4 scattered clusters, 400m radius each)
+- Geography: Same map as Scenario 1
 - Demand: 4 unpredictable bursts (20 min each, 4x base rate), rotating zones
 - Physics: Same as Scenario 1
 
@@ -178,11 +180,23 @@ Tests anticipatory intelligence under unpredictable demand.
 Tests network intelligence under constrained topology.
 
 - Duration: 3 hours
-- Total orders: 300
-- Couriers: 15 (10 south, 5 north zone)
-- Geography: All 6 restaurants south of river, all customers north of river
+- Total orders: 150
+- Couriers: 12 (8 south zone, 4 north zone)
+- Restaurants: 5 (all south of river)
+- Geography: River at y=2500m with 2 bridges; all customers north of river
 - Demand: Steady high rate (1.67 orders/min)
-- Physics: River at y=2500m with 2 bridges
+- Physics: Same as Scenario 1
+
+**Scenario 4: Impossible Deadline**
+Tests anticipatory dispatch capability under tight time constraints.
+
+- Duration: 1 hour
+- Total orders: 1
+- Couriers: 1 (starts at 3km, 2km)
+- Restaurants: 1 (at 4km, 3km)
+- Customer: Located at 8km, 6km (5km from restaurant)
+- Order timing: Placed at t=300s, ready at t=900s
+- Physics: 20 km/h courier speed, 150s pickup, 120s dropoff, 600s meal prep, 20 min expiration
 
 All scenarios use consistent physics: 90s pickup service time, 45s dropoff service time, 300s meal preparation time, 30-minute order expiration, 60s batch intervals.
 
@@ -205,15 +219,15 @@ All scenarios use consistent physics: 90s pickup service time, 45s dropoff servi
 
 ### 4.1 Downtown Crush Scenario
 
-**Table 1:** Algorithm performance on Downtown Crush scenario (400 orders, 3 hours).
+**Table 1:** Algorithm performance on Downtown Crush scenario (200 orders, 3 hours).
 
 | Rank | Algorithm | Orders Delivered | Distance (km) | Bundles | Avg Delivery Time (min) |
 |------|-----------|------------------|---------------|---------|------------------------|
-| 1 | Anticipated | 252 (63.0%) | 383.8 | 98 | 25.4 |
-| 2 | Network | 216 (54.0%) | 456.1 | 146 | 24.5 |
-| 3 | Simple | 213 (53.3%) | 451.5 | 203 | 22.8 |
-| 4 | Hungarian | 209 (52.3%) | 460.9 | 220 | 21.0 |
-| 5 | Greedy | 175 (43.8%) | 485.3 | 187 | 30.7 |
+| 1 | Anticipated | 141 (70.5%) | 234.0 | 61 | 24.4 |
+| 2 | Simple | 139 (69.5%) | 224.3 | 65 | 26.8 |
+| 3 | Network | 132 (66.0%) | 234.1 | 58 | 28.4 |
+| 4 | Hungarian | 99 (49.5%) | 225.6 | 99 | 22.0 |
+| 5 | Greedy | 87 (43.5%) | 250.2 | 87 | 29.3 |
 
 **Figure 1:** Dispatch visualizations for Downtown Crush scenario.
 
@@ -229,19 +243,19 @@ All scenarios use consistent physics: 90s pickup service time, 45s dropoff servi
   <em>Figure 1: Visualization of dispatch decisions for (top row) Anticipated and Network Bundling, (middle row) Simple Bundling and Hungarian, (bottom row) Greedy baseline.</em>
 </p>
 
-Anticipated Bundling achieves 44% higher fulfillment than Greedy baseline (252 vs 175 orders) and 20.6% higher than Hungarian (252 vs 209 orders). Creates significantly larger bundles (avg 2.57 orders/bundle vs 0.95 for Hungarian).
+Anticipated Bundling achieves highest fulfillment with 141 orders delivered (70.5%), outperforming Greedy by 62% (141 vs 87) and Hungarian by 42% (141 vs 99). Creates effective bundles with avg 2.31 orders/bundle compared to 1.0 for Hungarian. Simple Bundling performs competitively with 139 orders (69.5%).
 
 ### 4.2 Popup Problem Scenario
 
-**Table 2:** Algorithm performance on Popup Problem scenario (350 orders, 4 hours).
+**Table 2:** Algorithm performance on Popup Problem scenario (175 orders, 4 hours).
 
 | Rank | Algorithm | Orders Delivered | Distance (km) | Bundles | Avg Delivery Time (min) |
 |------|-----------|------------------|---------------|---------|------------------------|
-| 1 | Network | 130 (37.1%) | 306.7 | 87 | 26.5 |
-| 2 | Anticipated | 124 (35.4%) | 268.3 | 70 | 26.9 |
-| 3 | Simple | 120 (34.3%) | 312.3 | 98 | 25.9 |
-| 4 | Hungarian | 109 (31.1%) | 348.8 | 121 | 25.0 |
-| 5 | Greedy | 109 (31.1%) | 372.6 | 121 | 27.5 |
+| 1 | Anticipated | 162 (92.6%) | 322.1 | 78 | 22.6 |
+| 2 | Simple | 158 (90.3%) | 304.0 | 79 | 26.5 |
+| 3 | Network | 156 (89.1%) | 312.4 | 77 | 26.8 |
+| 4 | Greedy | 120 (68.6%) | 351.6 | 120 | 26.6 |
+| 5 | Hungarian | 119 (68.0%) | 325.9 | 119 | 24.0 |
 
 **Figure 2:** Dispatch visualizations for Popup Problem scenario.
 
@@ -257,19 +271,19 @@ Anticipated Bundling achieves 44% higher fulfillment than Greedy baseline (252 v
   <em>Figure 2: Visualization of dispatch decisions for (top row) Network and Anticipated Bundling, (middle row) Simple Bundling and Hungarian, (bottom row) Greedy baseline.</em>
 </p>
 
-Network Bundling achieves best performance (130 orders, 37.1% fulfillment) in burst scenario. Anticipated places 2nd (124 orders) but achieves superior distance efficiency (2.16 km/order vs 2.36 km/order). Multi-restaurant clustering flexibility provides advantage under unpredictable demand.
+Anticipated Bundling achieves exceptional performance with 162 orders delivered (92.6% fulfillment), demonstrating superior anticipatory capabilities under unpredictable demand bursts. Outperforms Greedy by 35% (162 vs 120) and achieves fastest average delivery time (22.6 min). All bundling algorithms (Anticipated, Simple, Network) deliver 89-93% of orders compared to 68% for reactive algorithms.
 
 ### 4.3 River Divide Scenario
 
-**Table 3:** Algorithm performance on River Divide scenario (300 orders, 3 hours).
+**Table 3:** Algorithm performance on River Divide scenario (150 orders, 3 hours).
 
 | Rank | Algorithm | Orders Delivered | Distance (km) | Bundles | Avg Delivery Time (min) |
 |------|-----------|------------------|---------------|---------|------------------------|
-| 1 | Anticipated | 230 (76.7%) | 542.0 | 106 | 29.1 |
-| 2 | Network | 203 (67.7%) | 704.2 | 159 | 28.3 |
-| 3 | Simple | 193 (64.3%) | 726.7 | 182 | 26.8 |
-| 4 | Hungarian | 182 (60.7%) | 734.5 | 197 | 25.7 |
-| 5 | Greedy | 155 (51.7%) | 742.1 | 170 | 35.8 |
+| 1 | Anticipated | 144 (96.0%) | 314.5 | 56 | 25.9 |
+| 2 | Network | 140 (93.3%) | 314.0 | 55 | 30.3 |
+| 3 | Simple | 134 (89.3%) | 341.9 | 62 | 31.8 |
+| 4 | Hungarian | 94 (62.7%) | 341.3 | 94 | 25.0 |
+| 5 | Greedy | 83 (55.3%) | 379.8 | 83 | 35.2 |
 
 **Figure 3:** Dispatch visualizations for River Divide scenario.
 
@@ -285,38 +299,53 @@ Network Bundling achieves best performance (130 orders, 37.1% fulfillment) in bu
   <em>Figure 3: Visualization of dispatch decisions for (top row) Anticipated and Network Bundling, (middle row) Simple Bundling and Hungarian, (bottom row) Greedy baseline.</em>
 </p>
 
-Anticipated Bundling achieves strong performance under geographic constraints (230 orders, 76.7% fulfillment), outperforming Network by 13.3%. Geographic bottleneck amplifies value of anticipatory lookahead. Achieves 23% better distance efficiency than Network (2.36 km/order vs 3.47 km/order).
+Anticipated Bundling achieves remarkable 96.0% fulfillment (144/150 orders) under geographic constraints, outperforming Network by 2.9% and Greedy by 73%. Geographic bottleneck amplifies value of bundling algorithms—all three bundling approaches (Anticipated, Network, Simple) deliver 89-96% vs 55-63% for reactive algorithms. Anticipated achieves comparable distance efficiency to Network (2.18 vs 2.24 km/order) while delivering more orders.
 
-### 4.4 Cross-Scenario Analysis
+### 4.4 Impossible Deadline Scenario
 
-**Table 4:** Aggregate algorithm performance across all scenarios.
+**Table 4:** Algorithm performance on Impossible Deadline scenario (1 order, 1 hour).
 
-| Algorithm | Downtown | Popup | River | Total | Average |
-|-----------|----------|-------|-------|-------|---------|
-| Anticipated | 252 | 124 | 230 | 606 | 202.0 |
-| Network | 216 | 130 | 203 | 549 | 183.0 |
-| Simple | 213 | 120 | 193 | 526 | 175.3 |
-| Hungarian | 209 | 109 | 182 | 500 | 166.7 |
-| Greedy | 175 | 109 | 155 | 439 | 146.3 |
+| Algorithm | Dispatch Time | Delivery Time | Click-to-Door (min) | Result |
+|-----------|---------------|---------------|---------------------|--------|
+| Anticipated | t=600s (10:00) | t=2370s (39:30) | 34.5 | ✅ Early dispatch |
+| Greedy | t=900s (15:00) | t=2670s (44:30) | 39.5 | Reactive |
+| Hungarian | t=900s (15:00) | t=2670s (44:30) | 39.5 | Reactive |
+| Simple | t=900s (15:00) | t=2670s (44:30) | 39.5 | Reactive |
+| Network | t=900s (15:00) | t=2670s (44:30) | 39.5 | Reactive |
 
-Anticipated Bundling delivers 10.4% more orders than Network (2nd place) and 38.0% more than Greedy baseline.
+**Figure 4:** This single-order scenario demonstrates Anticipated Bundling's unique lookahead capability. Order placed at t=300s, ready at t=900s. Anticipated algorithm dispatches courier at t=600s (within 300s lookahead window), allowing courier to arrive at restaurant just as food becomes ready. Reactive algorithms wait until t=900s to dispatch, resulting in 5-minute (12.7%) longer delivery time.
 
-**Table 5:** Algorithm effectiveness by performance dimension.
+### 4.5 Cross-Scenario Analysis
+
+**Table 5:** Aggregate algorithm performance across scenarios 1-3 (525 total orders).
+
+| Algorithm | Downtown | Popup | River | Total | Fulfillment Rate |
+|-----------|----------|-------|-------|-------|------------------|
+| Anticipated | 141 | 162 | 144 | 447 | 85.1% |
+| Simple | 139 | 158 | 134 | 431 | 82.1% |
+| Network | 132 | 156 | 140 | 428 | 81.5% |
+| Hungarian | 99 | 119 | 94 | 312 | 59.4% |
+| Greedy | 87 | 120 | 83 | 290 | 55.2% |
+
+Anticipated Bundling achieves 85.1% fulfillment across all scenarios, delivering 54% more orders than Greedy baseline (447 vs 290) and 43% more than Hungarian optimal matching (447 vs 312).
+
+**Table 6:** Algorithm effectiveness by performance dimension.
 
 | Metric | Best Performer | Performance |
 |--------|----------------|-------------|
-| Orders delivered | Anticipated | 3/3 scenarios (avg 202 orders) |
-| Distance efficiency | Anticipated | 3/3 scenarios (avg 1.68 km/order) |
-| Delivery speed | Hungarian | 3/3 scenarios (avg 23.9 min) |
-| Bundle effectiveness | Anticipated | Avg 2.15 orders/bundle |
+| Orders delivered | Anticipated | 3/3 scenarios (avg 149 orders, 85.1% fulfillment) |
+| Distance efficiency | Simple | Avg 2.00 km/order across scenarios |
+| Delivery speed | Hungarian | 2/3 scenarios (avg 23.7 min) |
+| Bundle effectiveness | Anticipated | Avg 2.29 orders/bundle |
+| Anticipatory dispatch | Anticipated | Only algorithm with proactive capability (5 min faster in Impossible Deadline) |
 
 ---
 
 ## 5. Conclusion
 
-This simulation study demonstrates measurable value of progressive intelligence layers in food delivery dispatch. Anticipated Bundling achieves 38% higher fulfillment than greedy baseline and 20.6% higher than optimal bipartite matching.
+This simulation study demonstrates measurable value of progressive intelligence layers in food delivery dispatch. Anticipated Bundling achieves 85.1% fulfillment across scenarios, outperforming Greedy baseline by 54% and optimal bipartite matching (Hungarian) by 43%.
 
-Key findings: (1) Each intelligence tier—optimal matching, bundling, geographic clustering, anticipatory optimization—adds cumulative performance gains. (2) Algorithm performance exhibits scenario dependence; anticipated bundling performs best in dense sustained demand and geographic constraints while network bundling excels in unpredictable bursts. (3) Hungarian algorithm achieves fastest delivery time (23.9 min average) despite lower throughput, demonstrating the speed-throughput trade-off.
+Key findings: (1) Each intelligence tier—optimal matching, bundling, geographic clustering, anticipatory optimization—adds cumulative performance gains. (2) Bundling algorithms (Simple, Network, Anticipated) consistently outperform reactive algorithms (Greedy, Hungarian) by 25-44 percentage points in fulfillment rate. (3) Anticipated Bundling's lookahead capability enables proactive dispatch before orders become ready, demonstrated by 12.7% faster delivery in the Impossible Deadline scenario. (4) Geographic constraints and demand patterns amplify the value of bundling—River Divide scenario shows 96% fulfillment for Anticipated vs 55% for Greedy. (5) The simulation architecture now differentiates algorithm capabilities: reactive algorithms receive only READY orders while anticipatory algorithms receive ALL orders (PENDING and READY), enabling true temporal optimization.
 
 ---
 

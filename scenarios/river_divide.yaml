@@ -26,7 +26,7 @@ physics:
 
 # Restaurant configuration
 restaurants:
-  count: 6
+  count: 5  # Reduced from 6 for computational tractability
   layout: "divided"
 
   # Divided layout parameters
@@ -36,19 +36,19 @@ restaurants:
 
 # Courier configuration
 couriers:
-  count: 15  # More couriers needed for longer trips
+  count: 12  # Reduced from 15 for computational tractability
   layout: "zonal"
 
   # Zonal layout parameters
   zonal:
     zones:
-      south: 10  # 67% start south (near restaurants)
-      north: 5   # 33% start north (near customers)
+      south: 8   # 67% start south (near restaurants)
+      north: 4   # 33% start north (near customers)
     boundary_y: 2500  # River position
 
 # Demand configuration
 demand:
-  total_orders: 300
+  total_orders: 150  # Reduced from 300 for computational tractability
   profile: "steady_high"
 
   # Steady high parameters

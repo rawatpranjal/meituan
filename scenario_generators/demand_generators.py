@@ -38,6 +38,8 @@ def generate_demand(config: Dict[str, Any], restaurants: List) -> List[Order]:
         return _generate_poisson(config, restaurants)
     elif profile == 'scripted':
         return _generate_scripted(config, restaurants)
+    elif profile == 'manual':
+        return _generate_manual(config, restaurants)
     else:
         raise ValueError(f"Unknown demand profile: {profile}")
 
@@ -393,6 +395,37 @@ def _generate_scripted(config: Dict[str, Any], restaurants: List) -> List[Order]
             restaurant_location=restaurants[restaurant_id].location,
             diner_location=customer_location,
             placement_time=placement_time
+        )
+        orders.append(order)
+
+    return orders
+
+
+def _generate_manual(config: Dict[str, Any], restaurants: List) -> List[Order]:
+    """
+    Generate manually specified orders with full control over all parameters.
+
+    Supports custom meal prep times and expiration times per order.
+    """
+    demand_config = config['demand']
+    manual_orders = demand_config.get('manual', {}).get('orders', [])
+    physics_config = config['physics']
+    default_meal_prep = physics_config.get('meal_prep_time_s', 300)
+
+    orders = []
+    for i, order_spec in enumerate(manual_orders):
+        restaurant_index = order_spec['restaurant_index']
+        customer_location = tuple(order_spec['customer_location'])
+        placement_time = order_spec['placement_time']
+        meal_prep_time = order_spec.get('meal_prep_time', default_meal_prep)
+
+        order = Order(
+            order_id=i,
+            restaurant_id=restaurant_index,
+            restaurant_location=restaurants[restaurant_index].location,
+            diner_location=customer_location,
+            placement_time=placement_time,
+            meal_prep_time=meal_prep_time
         )
         orders.append(order)
 

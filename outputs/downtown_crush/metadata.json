@@ -16,7 +16,7 @@
     "batch_interval_s": 60
   },
   "restaurants": {
-    "count": 8,
+    "count": 6,
     "layout": "clustered",
     "clustered": {
       "downtown_fraction": 0.75,
@@ -28,7 +28,7 @@
     }
   },
   "couriers": {
-    "count": 12,
+    "count": 10,
     "layout": "central",
     "central": {
       "center": [
@@ -39,7 +39,7 @@
     }
   },
   "demand": {
-    "total_orders": 400,
+    "total_orders": 200,
     "profile": "sustained_peak",
     "sustained_peak": {
       "peak_duration_hours": 2.0,
@@ -69,37 +69,37 @@
       "show_burst_indicator": false
     }
   },
-  "run_timestamp": "2025-11-04T16:16:55.793631",
+  "run_timestamp": "2025-11-05T09:32:54.230605",
   "results": {
     "greedy": {
-      "orders_delivered": 175,
-      "total_distance": 485.28,
-      "bundles_created": 187,
-      "avg_delivery_time": 30.7
+      "orders_delivered": 87,
+      "total_distance": 318.7,
+      "bundles_created": 87,
+      "avg_delivery_time": 29.3
     },
     "hungarian": {
-      "orders_delivered": 209,
-      "total_distance": 460.86,
-      "bundles_created": 220,
-      "avg_delivery_time": 21.0
+      "orders_delivered": 99,
+      "total_distance": 283.64,
+      "bundles_created": 99,
+      "avg_delivery_time": 22.0
     },
     "simple_bundling": {
-      "orders_delivered": 213,
-      "total_distance": 454.0,
-      "bundles_created": 202,
-      "avg_delivery_time": 22.3
+      "orders_delivered": 139,
+      "total_distance": 282.68,
+      "bundles_created": 65,
+      "avg_delivery_time": 26.8
     },
     "network_bundling": {
-      "orders_delivered": 216,
-      "total_distance": 456.05,
-      "bundles_created": 146,
-      "avg_delivery_time": 24.5
+      "orders_delivered": 135,
+      "total_distance": 277.28,
+      "bundles_created": 59,
+      "avg_delivery_time": 28.0
     },
     "anticipated_bundling": {
-      "orders_delivered": 252,
-      "total_distance": 383.83,
-      "bundles_created": 98,
-      "avg_delivery_time": 25.4
+      "orders_delivered": 144,
+      "total_distance": 285.46,
+      "bundles_created": 63,
+      "avg_delivery_time": 23.9
     }
   }
 }

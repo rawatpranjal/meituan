@@ -1,0 +1,155 @@
+================================================================================
+LOG FILES SUMMARY TABLE
+Food Delivery Simulation System - Quick Reference
+================================================================================
+
+QUICK STATS:
+Total log files: 138
+Active logs to keep: 15 files (762 KB)
+Intermediate logs (delete): 28 files (194 KB)
+Deprecated archive logs (delete): 87 files (188 MB)
+Disk saving potential: 188.2 MB
+
+================================================================================
+
+CATEGORY                    | LOCATION                      | COUNT | SIZE    | STATUS  | ACTION
+────────────────────────────────────────────────────────────────────────────────────────────
+Production Scenario Results | outputs/*/logs/*.txt          |  15   | 762 KB  | M (Git) | KEEP - Commit
+Root Intermediate Logs      | logs/*.log                    |  18   | 100 KB  | ?? (Git)| DELETE
+Test Logs (Root)            | tests/*.log (root level)      |   6   | 90 KB   | ?? (Git)| DELETE
+Test Logs (Directory)       | tests/logs/*.log              |  10   | 60 KB   | ?? (Git)| DELETE
+Analysis Documentation      | *.txt (root level)            |   3   | 32 KB   | ?? (Git)| REVIEW
+Analysis Logs               | analysis/logs/                |   1   | 16 KB   | ?? (Git)| REVIEW
+────────────────────────────────────────────────────────────────────────────────────────────
+EDA Logs                    | archive/eda/logs/             |  20   | 156 KB  | NO      | DELETE
+Model Tier Logs             | archive/models/logs/          |  37   | 188 MB  | NO      | DELETE (LARGE!)
+Old Simulation Logs         | archive/old_simulation_files/ |  29   | 240 KB  | NO      | DELETE
+────────────────────────────────────────────────────────────────────────────────────────────
+TOTAL                       |                               | 138   | 189 MB  |         |
+────────────────────────────────────────────────────────────────────────────────────────────
+
+Legend:
+  M = Modified (tracked in git, ready to commit)
+  ?? = Untracked (in working directory, not in git)
+  NO = Not tracked (exists but not in git)
+
+================================================================================
+
+ACTIVE PRODUCTION RESULTS (KEEP)
+════════════════════════════════════════════════════════════════════════════
+
+SCENARIO          | ALGORITHM                        | SIZE   | DATE          | GIT
+──────────────────────────────────────────────────────────────────────────────
+downtown_crush    | anticipated_bundling_network     | 46 KB  | 2025-11-05    | M
+downtown_crush    | greedy_baseline                  | 47 KB  | 2025-11-05    | M
+downtown_crush    | hungarian_route_aware            | 49 KB  | 2025-11-05    | M
+downtown_crush    | network_bundling                 | 49 KB  | 2025-11-05    | M
+downtown_crush    | simple_bundling_route_aware      | 50 KB  | 2025-11-05    | M
+──────────────────────────────────────────────────────────────────────────────
+popup_problem     | anticipated_bundling_network     | 61 KB  | 2025-11-05    | M
+popup_problem     | greedy_baseline                  | 63 KB  | 2025-11-05    | M
+popup_problem     | hungarian_route_aware            | 63 KB  | 2025-11-05    | M
+popup_problem     | network_bundling                 | 63 KB  | 2025-11-05    | M
+popup_problem     | simple_bundling_route_aware      | 60 KB  | 2025-11-05    | M
+──────────────────────────────────────────────────────────────────────────────
+river_divide      | anticipated_bundling_network     | 51 KB  | 2025-11-05    | M
+river_divide      | greedy_baseline                  | 48 KB  | 2025-11-05    | M
+river_divide      | hungarian_route_aware            | 49 KB  | 2025-11-05    | M
+river_divide      | network_bundling                 | 50 KB  | 2025-11-05    | M
+river_divide      | simple_bundling_route_aware      | 50 KB  | 2025-11-05    | M
+──────────────────────────────────────────────────────────────────────────────
+TOTAL: 15 files, 762 KB - Track in git repository
+
+================================================================================
+
+INTERMEDIATE/DEBUG LOGS (DELETE)
+════════════════════════════════════════════════════════════════════════════
+
+Type                          | Count | Size    | Oldest     | Newest     | Action
+───────────────────────────────────────────────────────────────────────────────
+Run Scenario Logs             |   4   | 8 KB    | 2025-11-04 | 2025-11-05 | DELETE
+Regenerate Debug Logs         |   4   | 8 KB    | 2025-11-04 | 2025-11-04 | DELETE
+Empty/Failed Logs             |   2   | 0 KB    | 2025-11-05 | 2025-11-05 | DELETE
+Algorithm Summary Logs        |   5   | 55 KB   | 2025-11-04 | 2025-11-04 | DELETE
+Summary Comparison Text       |   1   | 7.6 KB  | 2025-11-04 | 2025-11-04 | DELETE
+───────────────────────────────────────────────────────────────────────────────
+Test Logs (Root Level)        |   6   | 90 KB   | 2025-11-04 | 2025-11-05 | DELETE
+Test Logs (tests/logs/)       |  10   | 60 KB   | 2025-11-04 | 2025-11-05 | DELETE
+───────────────────────────────────────────────────────────────────────────────
+TOTAL: 32 files, 228 KB - Safe to delete, not referenced
+
+================================================================================
+
+DEPRECATED ARCHIVE LOGS (DELETE)
+════════════════════════════════════════════════════════════════════════════
+
+Source System        | Location                              | Count | Size     | Created     | Status
+──────────────────────────────────────────────────────────────────────────────────────────────────
+EDA                  | archive/eda/logs/                     |  20   | 156 KB   | Oct 27-Nov2 | DEPRECATED
+Model Tier System    | archive/models/logs/                  |  37   | 188 MB   | Oct 27-29   | DEPRECATED
+Old Simulation       | archive/old_simulation_files/old_logs/|  29   | 240 KB   | Nov 2-3     | DEPRECATED
+────────────────────────────────────────────────────────────────────────────────────────────────────
+TOTAL: 86 files, 188.4 MB - Code replaced by new architecture
+
+Note: Models logs (188 MB) are largest - safe to delete but verify no dependencies
+
+================================================================================
+
+GIT STAGED DELETIONS (Pending Commit)
+════════════════════════════════════════════════════════════════════════════
+
+These files are marked " D" in git status - ready to be committed as deletions
+
+Directory                              | Type      | Count | Size
+────────────────────────────────────────────────────────────────────────────
+downtown_crush_before_fixes/           | GIFs+Logs |  16   | ~3 MB
+downtown_crush_v2_after_anticipated/   | GIFs+Logs |  16   | ~3 MB
+popup_problem_before_fixes/            | GIFs+Logs |  16   | ~3 MB
+popup_problem_v2_after_anticipated/    | GIFs+Logs |  16   | ~3 MB
+river_divide_before_fixes/             | GIFs+Logs |  ?    | ?
+river_divide_v2_after_anticipated/     | GIFs+Logs |  ?    | ?
+────────────────────────────────────────────────────────────────────────────────
+TOTAL: ~90 files marked for deletion - Just need: git commit
+
+================================================================================
+
+RECOMMENDED GIT ACTIONS (In Order)
+════════════════════════════════════════════════════════════════════════════
+
+1. Commit Modified Production Results
+   git add outputs/*/logs/*.txt
+   git commit -m "Update: Final scenario results with improved algorithms"
+
+2. Finalize Staged Deletions
+   git status  # Verify " D" entries
+   git commit -m "Cleanup: Remove intermediate versions and debug logs"
+
+3. Optional: Add Test Logs to .gitignore (so they don't clutter git status)
+   echo "tests/logs/*.log" >> .gitignore
+   echo "tests/*.log" >> .gitignore
+   echo "logs/*.log" >> .gitignore
+   git add .gitignore
+   git commit -m "Config: Add log files to gitignore for cleaner working tree"
+
+================================================================================
+
+NEXT STEPS
+════════════════════════════════════════════════════════════════════════════
+
+1. Use LOG_ANALYSIS_REPORT.txt for detailed findings
+2. Use LOG_SUMMARY_TABLE.txt (this file) for quick reference
+3. Follow "RECOMMENDED GIT ACTIONS" to finalize commits
+4. Delete deprecated archives if comfortable with space savings:
+   rm -rf archive/eda/logs/*
+   rm -rf archive/models/logs/*
+   rm -rf archive/old_simulation_files/old_logs/*
+5. Clean up intermediate logs:
+   rm logs/*.log
+   rm tests/logs/*.log
+   rm tests/*.log
+
+════════════════════════════════════════════════════════════════════════════
+Report generated: 2025-11-05 06:00 UTC
+Files analyzed: 138 total log files
+Repository path: /Users/pranjal/Code/meituan/
+════════════════════════════════════════════════════════════════════════════

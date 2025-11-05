@@ -26,7 +26,7 @@ physics:
 
 # Restaurant configuration
 restaurants:
-  count: 8
+  count: 6  # Reduced from 8 for computational tractability
   layout: "scattered"
 
   # Scattered layout parameters
@@ -36,7 +36,7 @@ restaurants:
 
 # Courier configuration
 couriers:
-  count: 12
+  count: 10  # Reduced from 12 for computational tractability
   layout: "central"
 
   # Central layout parameters
@@ -46,7 +46,7 @@ couriers:
 
 # Demand configuration
 demand:
-  total_orders: 350
+  total_orders: 175  # Reduced from 350 for computational tractability
   profile: "unpredictable_bursts"
 
   # Unpredictable bursts parameters

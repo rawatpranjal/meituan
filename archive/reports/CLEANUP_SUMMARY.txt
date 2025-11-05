@@ -1,0 +1,178 @@
+================================================================================
+CODEBASE CLEANUP SUMMARY
+================================================================================
+Date: November 5, 2025
+Action: Moved redundant files to archive and deleted stale logs
+
+================================================================================
+REDUNDANT PYTHON FILES MOVED TO ARCHIVE
+================================================================================
+
+Destination: /Users/pranjal/Code/meituan/archive/deprecated_scripts/
+
+Files Moved (5 total):
+1. analyze_batch_distinctness.py (9.4 KB)
+   - Only called by deprecated run_small_town_simulation.py
+   - References non-existent analysis/event_data/ files
+   - Git status: Tracked → Moved
+
+2. create_results_table.py (9.7 KB)
+   - Only called by deprecated run_small_town_simulation.py
+   - Parses old log format (current system uses metadata.json)
+   - Git status: Tracked → Moved
+
+3. run_small_town_simulation.py (3.3 KB)
+   - Old orchestration script, superseded by run_scenario.py
+   - Git status: Tracked → Moved
+
+4. debug_simple_bundling.py (6.2 KB)
+   - Manual debugging script, never integrated
+   - Git status: Untracked → Moved
+
+5. test_simple_bundling_final.py (11 KB)
+   - Duplicates tests/test_simple_bundling_algorithm.py
+   - Git status: Untracked → Moved
+
+Total: 39.6 KB moved to archive
+
+================================================================================
+LOG FILES DELETED
+================================================================================
+
+Intermediate/Debug Logs Deleted:
+- logs/*.log (16 files, ~50 KB)
+  - Fixed scenario logs
+  - Regenerate logs
+  - Run logs
+
+- tests/logs/*.log (10 files, ~60 KB)
+  - Test execution logs
+  - Network bundling test logs
+  - Simple bundling test logs
+
+- Root level: test_simple_bundling_final_20251105.log (~4 KB)
+
+Subtotal: 28 files, 114 KB
+
+Deprecated Archive Logs Deleted:
+- archive/eda/logs/* (20 files, 156 KB)
+- archive/models/logs/* (280 files, 188 MB) ← LARGEST CLEANUP
+- archive/old_simulation_files/old_logs/* (29 files, 240 KB)
+
+Subtotal: 329 files, 188.4 MB
+
+TOTAL DELETED: 357 log files, 188.5 MB recovered
+
+================================================================================
+ACTIVE FILES PRESERVED (20 files)
+================================================================================
+
+Core Pipeline (3 files):
+- run_scenario.py
+- simulator_core.py
+- assignment_algorithms.py
+
+Support Libraries (2 files):
+- config_loader.py
+- distance_metrics.py
+
+Scenario Generators (4 files):
+- scenario_generators/downtown_crush_generator.py
+- scenario_generators/popup_problem_generator.py
+- scenario_generators/river_divide_generator.py
+- scenario_generators/__init__.py
+
+Visualization (3 files):
+- create_consolidated_gifs.py
+- create_focused_gifs.py
+- export_detailed_logs.py
+
+Test Suite (7 files):
+- tests/test_*.py
+
+Configuration (3 files):
+- scenarios/downtown_crush.yaml
+- scenarios/popup_problem.yaml
+- scenarios/river_divide.yaml
+
+================================================================================
+PRODUCTION OUTPUTS PRESERVED
+================================================================================
+
+Active Scenario Results (15 files, 762 KB):
+- outputs/downtown_crush/logs/*.txt (5 files)
+- outputs/popup_problem/logs/*.txt (5 files)
+- outputs/river_divide/logs/*.txt (5 files)
+
+Each scenario contains logs for 5 algorithms:
+1. greedy_baseline
+2. hungarian_route_aware
+3. simple_bundling_route_aware
+4. network_bundling
+5. anticipated_bundling_network
+
+Git Status: Modified (M) - ready to commit
+
+================================================================================
+GIT STATUS CHANGES
+================================================================================
+
+Files Moved (tracked → git mv):
+R100  analyze_batch_distinctness.py → archive/deprecated_scripts/analyze_batch_distinctness.py
+R100  create_results_table.py → archive/deprecated_scripts/create_results_table.py
+R100  run_small_town_simulation.py → archive/deprecated_scripts/run_small_town_simulation.py
+
+Files Already Staged for Deletion:
+D     outputs/downtown_crush_before_fixes/* (~90 files)
+D     outputs/downtown_crush_v2_after_anticipated_fix/*
+D     outputs/popup_problem_before_fixes/*
+D     outputs/popup_problem_v2_after_anticipated_fix/*
+
+Action Required: git commit to finalize staged deletions
+
+================================================================================
+STORAGE IMPACT
+================================================================================
+
+Before Cleanup:
+- Root Python files: 13 files
+- Log files: 357 files (189 MB)
+- Total: 189 MB
+
+After Cleanup:
+- Root Python files: 8 files (5 moved to archive)
+- Log files: 15 files (762 KB production logs)
+- Total: 762 KB
+
+Net Reduction:
+- Files: 357 files deleted, 5 moved
+- Storage: 188.5 MB freed (99.6% reduction)
+- Root directory: 38% fewer Python files
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. Review this cleanup summary
+
+2. Commit the changes:
+   git status
+   git commit -m "Cleanup: Move deprecated scripts to archive and delete stale logs"
+
+3. Finalize staged deletions:
+   git commit -m "Remove intermediate scenario versions"
+
+4. Optional: Push to remote
+   git push
+
+================================================================================
+NOTES
+================================================================================
+
+- All active production code is preserved
+- All current scenario outputs are preserved
+- Archive folder structure maintained (data, eda, models, etc.)
+- Deprecated scripts can be restored from archive if needed
+- Cleanup does not affect any functionality of the current simulation system
+
+================================================================================

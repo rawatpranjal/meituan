@@ -1,0 +1,394 @@
+================================================================================
+CONSOLIDATED LOGS - IMPOSSIBLE DEADLINE SCENARIO
+================================================================================
+All 5 algorithms consolidated into single file for comparison
+Scenario: Logistical trap requiring foresight to solve
+Duration: 1 hour, 1 order, 1 courier, 1 restaurant
+Manhattan Distance Metric
+
+================================================================================
+
+================================================================================
+ALGORITHM: GREEDY BASELINE
+================================================================================
+
+====================================================================================================
+DETAILED SIMULATION LOG: GREEDY
+AI-Readable Assignment History and Decision Trace
+====================================================================================================
+
+Simulation Parameters:
+  - Duration: 3600s (1.0 hours)
+  - Couriers: 1
+  - Restaurants: 1
+  - Total Orders: 1
+  - Algorithm: greedy
+
+====================================================================================================
+BATCH ASSIGNMENT HISTORY
+====================================================================================================
+
+
+====================================================================================================
+BATCH 4 @ t=900s (00:15:00)
+====================================================================================================
+
+AVAILABLE COURIERS (0):
+
+READY ORDERS (0):
+
+ASSIGNMENTS MADE (1):
+
+✓ Courier 0 ← Orders [0] (Bundle size: 1)
+  - Order 0: (4.00, 3.00) → (8.00, 6.00)
+
+BATCH SUMMARY:
+  - Orders assigned this batch: 1
+  - Orders in transit: 1
+  - Orders still waiting: 0
+  - Orders delivered so far: 0
+
+
+====================================================================================================
+DELIVERY COMPLETION LOG
+====================================================================================================
+
+✓ Order 0 delivered by Courier 0 @ t=2670s (00:44:30)
+  - Click-to-door: 39.5 minutes
+  - Ready-to-door (freshness): 29.5 minutes
+  - Route: (4.00, 3.00) → (8.00, 6.00)
+
+
+====================================================================================================
+FINAL SIMULATION SUMMARY
+====================================================================================================
+
+TIER 1 - Mission-Critical:
+  - Fulfillment Rate: 100.0%
+  - Avg Click-to-Door: 39.5 minutes
+  - P90 Click-to-Door: 39.5 minutes
+
+TIER 2 - Operational Efficiency:
+  - System Throughput: 1.0 orders/hr
+  - Orders/Courier-Hour: 1.00
+  - Freshness: 29.5 minutes
+
+TIER 3 - Diagnostic:
+  - Avg Bundle Size: 1.00
+  - Courier Utilization: 74.2%
+  - Total Distance: 6.4 km
+
+Orders Breakdown:
+  - Delivered: 1
+  - In Transit: 0
+  - Unassigned: 0
+  - Out of Scope: 0
+
+
+================================================================================
+ALGORITHM: HUNGARIAN ROUTE AWARE
+================================================================================
+
+====================================================================================================
+DETAILED SIMULATION LOG: HUNGARIAN
+AI-Readable Assignment History and Decision Trace
+====================================================================================================
+
+Simulation Parameters:
+  - Duration: 3600s (1.0 hours)
+  - Couriers: 1
+  - Restaurants: 1
+  - Total Orders: 1
+  - Algorithm: hungarian
+
+====================================================================================================
+BATCH ASSIGNMENT HISTORY
+====================================================================================================
+
+
+====================================================================================================
+BATCH 4 @ t=900s (00:15:00)
+====================================================================================================
+
+AVAILABLE COURIERS (0):
+
+READY ORDERS (0):
+
+ASSIGNMENTS MADE (1):
+
+✓ Courier 0 ← Orders [0] (Bundle size: 1)
+  - Order 0: (4.00, 3.00) → (8.00, 6.00)
+
+BATCH SUMMARY:
+  - Orders assigned this batch: 1
+  - Orders in transit: 1
+  - Orders still waiting: 0
+  - Orders delivered so far: 0
+
+
+====================================================================================================
+DELIVERY COMPLETION LOG
+====================================================================================================
+
+✓ Order 0 delivered by Courier 0 @ t=2670s (00:44:30)
+  - Click-to-door: 39.5 minutes
+  - Ready-to-door (freshness): 29.5 minutes
+  - Route: (4.00, 3.00) → (8.00, 6.00)
+
+
+====================================================================================================
+FINAL SIMULATION SUMMARY
+====================================================================================================
+
+TIER 1 - Mission-Critical:
+  - Fulfillment Rate: 100.0%
+  - Avg Click-to-Door: 39.5 minutes
+  - P90 Click-to-Door: 39.5 minutes
+
+TIER 2 - Operational Efficiency:
+  - System Throughput: 1.0 orders/hr
+  - Orders/Courier-Hour: 1.00
+  - Freshness: 29.5 minutes
+
+TIER 3 - Diagnostic:
+  - Avg Bundle Size: 1.00
+  - Courier Utilization: 74.2%
+  - Total Distance: 6.4 km
+
+Orders Breakdown:
+  - Delivered: 1
+  - In Transit: 0
+  - Unassigned: 0
+  - Out of Scope: 0
+
+
+================================================================================
+ALGORITHM: SIMPLE BUNDLING ROUTE AWARE
+================================================================================
+
+====================================================================================================
+DETAILED SIMULATION LOG: SIMPLE_BUNDLING
+AI-Readable Assignment History and Decision Trace
+====================================================================================================
+
+Simulation Parameters:
+  - Duration: 3600s (1.0 hours)
+  - Couriers: 1
+  - Restaurants: 1
+  - Total Orders: 1
+  - Algorithm: simple_bundling
+
+====================================================================================================
+BATCH ASSIGNMENT HISTORY
+====================================================================================================
+
+
+====================================================================================================
+BATCH 4 @ t=900s (00:15:00)
+====================================================================================================
+
+AVAILABLE COURIERS (0):
+
+READY ORDERS (0):
+
+ASSIGNMENTS MADE (1):
+
+✓ Courier 0 ← Orders [0] (Bundle size: 1)
+  - Order 0: (4.00, 3.00) → (8.00, 6.00)
+
+BATCH SUMMARY:
+  - Orders assigned this batch: 1
+  - Orders in transit: 1
+  - Orders still waiting: 0
+  - Orders delivered so far: 0
+
+
+====================================================================================================
+DELIVERY COMPLETION LOG
+====================================================================================================
+
+✓ Order 0 delivered by Courier 0 @ t=2670s (00:44:30)
+  - Click-to-door: 39.5 minutes
+  - Ready-to-door (freshness): 29.5 minutes
+  - Route: (4.00, 3.00) → (8.00, 6.00)
+
+
+====================================================================================================
+FINAL SIMULATION SUMMARY
+====================================================================================================
+
+TIER 1 - Mission-Critical:
+  - Fulfillment Rate: 100.0%
+  - Avg Click-to-Door: 39.5 minutes
+  - P90 Click-to-Door: 39.5 minutes
+
+TIER 2 - Operational Efficiency:
+  - System Throughput: 1.0 orders/hr
+  - Orders/Courier-Hour: 1.00
+  - Freshness: 29.5 minutes
+
+TIER 3 - Diagnostic:
+  - Avg Bundle Size: 1.00
+  - Courier Utilization: 74.2%
+  - Total Distance: 6.4 km
+
+Orders Breakdown:
+  - Delivered: 1
+  - In Transit: 0
+  - Unassigned: 0
+  - Out of Scope: 0
+
+
+================================================================================
+ALGORITHM: NETWORK BUNDLING
+================================================================================
+
+====================================================================================================
+DETAILED SIMULATION LOG: NETWORK_BUNDLING
+AI-Readable Assignment History and Decision Trace
+====================================================================================================
+
+Simulation Parameters:
+  - Duration: 3600s (1.0 hours)
+  - Couriers: 1
+  - Restaurants: 1
+  - Total Orders: 1
+  - Algorithm: network_bundling
+
+====================================================================================================
+BATCH ASSIGNMENT HISTORY
+====================================================================================================
+
+
+====================================================================================================
+BATCH 4 @ t=900s (00:15:00)
+====================================================================================================
+
+AVAILABLE COURIERS (0):
+
+READY ORDERS (0):
+
+ASSIGNMENTS MADE (1):
+
+✓ Courier 0 ← Orders [0] (Bundle size: 1)
+  - Order 0: (4.00, 3.00) → (8.00, 6.00)
+
+BATCH SUMMARY:
+  - Orders assigned this batch: 1
+  - Orders in transit: 1
+  - Orders still waiting: 0
+  - Orders delivered so far: 0
+
+
+====================================================================================================
+DELIVERY COMPLETION LOG
+====================================================================================================
+
+✓ Order 0 delivered by Courier 0 @ t=2670s (00:44:30)
+  - Click-to-door: 39.5 minutes
+  - Ready-to-door (freshness): 29.5 minutes
+  - Route: (4.00, 3.00) → (8.00, 6.00)
+
+
+====================================================================================================
+FINAL SIMULATION SUMMARY
+====================================================================================================
+
+TIER 1 - Mission-Critical:
+  - Fulfillment Rate: 100.0%
+  - Avg Click-to-Door: 39.5 minutes
+  - P90 Click-to-Door: 39.5 minutes
+
+TIER 2 - Operational Efficiency:
+  - System Throughput: 1.0 orders/hr
+  - Orders/Courier-Hour: 1.00
+  - Freshness: 29.5 minutes
+
+TIER 3 - Diagnostic:
+  - Avg Bundle Size: 1.00
+  - Courier Utilization: 74.2%
+  - Total Distance: 6.4 km
+
+Orders Breakdown:
+  - Delivered: 1
+  - In Transit: 0
+  - Unassigned: 0
+  - Out of Scope: 0
+
+
+================================================================================
+ALGORITHM: ANTICIPATED BUNDLING NETWORK
+================================================================================
+
+====================================================================================================
+DETAILED SIMULATION LOG: ANTICIPATED_BUNDLING
+AI-Readable Assignment History and Decision Trace
+====================================================================================================
+
+Simulation Parameters:
+  - Duration: 3600s (1.0 hours)
+  - Couriers: 1
+  - Restaurants: 1
+  - Total Orders: 1
+  - Algorithm: anticipated_bundling
+
+====================================================================================================
+BATCH ASSIGNMENT HISTORY
+====================================================================================================
+
+
+====================================================================================================
+BATCH 3 @ t=600s (00:10:00)
+====================================================================================================
+
+AVAILABLE COURIERS (0):
+
+READY ORDERS (0):
+
+ASSIGNMENTS MADE (1):
+
+✓ Courier 0 ← Orders [0] (Bundle size: 1)
+  - Order 0: (4.00, 3.00) → (8.00, 6.00)
+
+BATCH SUMMARY:
+  - Orders assigned this batch: 1
+  - Orders in transit: 1
+  - Orders still waiting: 0
+  - Orders delivered so far: 0
+
+
+====================================================================================================
+DELIVERY COMPLETION LOG
+====================================================================================================
+
+✓ Order 0 delivered by Courier 0 @ t=2370s (00:39:30)
+  - Click-to-door: 34.5 minutes
+  - Ready-to-door (freshness): 24.5 minutes
+  - Route: (4.00, 3.00) → (8.00, 6.00)
+
+
+====================================================================================================
+FINAL SIMULATION SUMMARY
+====================================================================================================
+
+TIER 1 - Mission-Critical:
+  - Fulfillment Rate: 100.0%
+  - Avg Click-to-Door: 34.5 minutes
+  - P90 Click-to-Door: 34.5 minutes
+
+TIER 2 - Operational Efficiency:
+  - System Throughput: 1.0 orders/hr
+  - Orders/Courier-Hour: 1.00
+  - Freshness: 24.5 minutes
+
+TIER 3 - Diagnostic:
+  - Avg Bundle Size: 1.00
+  - Courier Utilization: 65.8%
+  - Total Distance: 6.4 km
+
+Orders Breakdown:
+  - Delivered: 1
+  - In Transit: 0
+  - Unassigned: 0
+  - Out of Scope: 0
+

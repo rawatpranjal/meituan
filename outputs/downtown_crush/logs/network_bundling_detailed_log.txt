@@ -5,9 +5,9 @@ AI-Readable Assignment History and Decision Trace
 
 Simulation Parameters:
   - Duration: 10800s (3.0 hours)
-  - Couriers: 12
-  - Restaurants: 8
-  - Total Orders: 382
+  - Couriers: 10
+  - Restaurants: 6
+  - Total Orders: 200
   - Algorithm: network_bundling
 
 ====================================================================================================
@@ -19,7 +19,7 @@ BATCH ASSIGNMENT HISTORY
 BATCH 3 @ t=600s (00:10:00)
 ====================================================================================================
 
-AVAILABLE COURIERS (12):
+AVAILABLE COURIERS (10):
   - Courier 0 @ (1.94, 1.63) - IDLE
   - Courier 1 @ (2.07, 1.35) - IDLE
   - Courier 2 @ (2.32, 1.40) - IDLE
@@ -30,15 +30,13 @@ AVAILABLE COURIERS (12):
   - Courier 7 @ (2.31, 2.04) - IDLE
   - Courier 8 @ (2.00, 1.62) - IDLE
   - Courier 9 @ (1.66, 0.85) - IDLE
-  - Courier 10 @ (1.60, 1.73) - IDLE
-  - Courier 11 @ (2.20, 1.06) - IDLE
 
 READY ORDERS (0):
 
 ASSIGNMENTS MADE (1):
 
-✓ Courier 9 ← Orders [0] (Bundle size: 1)
-  - Order 0: (1.23, 1.23) → (0.32, 0.10)
+✓ Courier 0 ← Orders [0] (Bundle size: 1)
+  - Order 0: (1.74, 1.44) → (0.16, 1.08)
 
 BATCH SUMMARY:
   - Orders assigned this batch: 1
@@ -50,8 +48,7 @@ BATCH SUMMARY:
 BATCH 4 @ t=900s (00:15:00)
 ====================================================================================================
 
-AVAILABLE COURIERS (11):
-  - Courier 0 @ (1.94, 1.63) - IDLE
+AVAILABLE COURIERS (9):
   - Courier 1 @ (2.07, 1.35) - IDLE
   - Courier 2 @ (2.32, 1.40) - IDLE
   - Courier 3 @ (2.39, 2.05) - IDLE
@@ -60,21 +57,17 @@ AVAILABLE COURIERS (11):
   - Courier 6 @ (2.00, 1.69) - IDLE
   - Courier 7 @ (2.31, 2.04) - IDLE
   - Courier 8 @ (2.00, 1.62) - IDLE
-  - Courier 10 @ (1.60, 1.73) - IDLE
-  - Courier 11 @ (2.20, 1.06) - IDLE
+  - Courier 9 @ (1.66, 0.85) - IDLE
 
 READY ORDERS (0):
 
-ASSIGNMENTS MADE (2):
+ASSIGNMENTS MADE (1):
 
-✓ Courier 10 ← Orders [1] (Bundle size: 1)
-  - Order 1: (0.85, 1.65) → (0.10, 3.31)
-
-✓ Courier 2 ← Orders [2] (Bundle size: 1)
-  - Order 2: (3.83, 1.35) → (2.42, 1.41)
+✓ Courier 9 ← Orders [1] (Bundle size: 1)
+  - Order 1: (1.21, 0.89) → (0.37, 0.10)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 2
+  - Orders assigned this batch: 1
   - Orders in transit: 1
   - Orders still waiting: 0
   - Orders delivered so far: 0
@@ -85,39 +78,30 @@ BATCH 5 @ t=1200s (00:20:00)
 
 AVAILABLE COURIERS (8):
   - Courier 1 @ (2.07, 1.35) - IDLE
+  - Courier 2 @ (2.32, 1.40) - IDLE
   - Courier 3 @ (2.39, 2.05) - IDLE
   - Courier 4 @ (2.12, 2.46) - IDLE
   - Courier 5 @ (2.31, 1.41) - IDLE
   - Courier 6 @ (2.00, 1.69) - IDLE
   - Courier 7 @ (2.31, 2.04) - IDLE
   - Courier 8 @ (2.00, 1.62) - IDLE
-  - Courier 11 @ (2.20, 1.06) - IDLE
 
 READY ORDERS (0):
 
-ASSIGNMENTS MADE (6):
+ASSIGNMENTS MADE (3):
 
-✓ Courier 0 ← Orders [3] (Bundle size: 1)
-  - Order 3: (0.85, 1.65) → (0.10, 2.33)
+✓ Courier 1 ← Orders [2] (Bundle size: 1)
+  - Order 2: (1.30, 1.33) → (0.10, 2.11)
 
-✓ Courier 1 ← Orders [4] (Bundle size: 1)
-  - Order 4: (1.74, 1.44) → (3.38, 1.70)
+✓ Courier 8 ← Orders [3] (Bundle size: 1)
+  - Order 3: (1.74, 1.44) → (0.23, 1.49)
 
-✓ Courier 5 ← Orders [5] (Bundle size: 1)
-  - Order 5: (3.83, 1.35) → (2.41, 2.67)
-
-✓ Courier 11 ← Orders [6] (Bundle size: 1)
-  - Order 6: (1.23, 1.23) → (1.91, 3.07)
-
-✓ Courier 6 ← Orders [7] (Bundle size: 1)
-  - Order 7: (1.83, 1.33) → (1.96, 0.22)
-
-✓ Courier 8 ← Orders [8] (Bundle size: 1)
-  - Order 8: (1.21, 0.89) → (0.37, 2.40)
+✓ Courier 4 ← Orders [4] (Bundle size: 1)
+  - Order 4: (2.90, 3.33) → (4.23, 2.38)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 6
-  - Orders in transit: 4
+  - Orders assigned this batch: 3
+  - Orders in transit: 2
   - Orders still waiting: 0
   - Orders delivered so far: 0
 
@@ -125,171 +109,163 @@ BATCH SUMMARY:
 BATCH 6 @ t=1500s (00:25:00)
 ====================================================================================================
 
-AVAILABLE COURIERS (3):
+AVAILABLE COURIERS (6):
+  - Courier 0 @ (0.16, 1.08) - IDLE
+  - Courier 2 @ (2.32, 1.40) - IDLE
   - Courier 3 @ (2.39, 2.05) - IDLE
-  - Courier 4 @ (2.12, 2.46) - IDLE
-  - Courier 9 @ (0.32, 0.10) - IDLE
+  - Courier 5 @ (2.31, 1.41) - IDLE
+  - Courier 7 @ (2.31, 2.04) - IDLE
+  - Courier 9 @ (0.37, 0.10) - IDLE
 
 READY ORDERS (0):
 
 ASSIGNMENTS MADE (3):
 
-✓ Courier 7 ← Orders [9] (Bundle size: 1)
-  - Order 9: (1.23, 1.23) → (1.17, 0.10)
+✓ Courier 6 ← Orders [5, 6] (Bundle size: 2)
+  - Order 5: (1.21, 0.89) → (2.13, 1.81)
+  - Order 6: (1.74, 1.44) → (1.58, 0.10)
 
-✓ Courier 3 ← Orders [10] (Bundle size: 1)
-  - Order 10: (1.23, 1.23) → (2.03, 0.10)
+✓ Courier 3 ← Orders [7] (Bundle size: 1)
+  - Order 7: (2.90, 3.33) → (1.58, 2.21)
 
-✓ Courier 2 ← Orders [11] (Bundle size: 1)
-  - Order 11: (1.23, 1.23) → (0.19, 1.29)
+✓ Courier 0 ← Orders [8] (Bundle size: 1)
+  - Order 8: (1.21, 0.89) → (0.17, 2.30)
 
 BATCH SUMMARY:
   - Orders assigned this batch: 3
-  - Orders in transit: 9
+  - Orders in transit: 5
   - Orders still waiting: 0
-  - Orders delivered so far: 1
+  - Orders delivered so far: 2
 
 ====================================================================================================
 BATCH 7 @ t=1800s (00:30:00)
 ====================================================================================================
 
-AVAILABLE COURIERS (5):
-  - Courier 0 @ (0.10, 2.33) - IDLE
-  - Courier 1 @ (3.38, 1.70) - IDLE
-  - Courier 4 @ (2.12, 2.46) - IDLE
-  - Courier 9 @ (0.32, 0.10) - IDLE
-  - Courier 10 @ (0.10, 3.31) - IDLE
+AVAILABLE COURIERS (6):
+  - Courier 1 @ (0.10, 2.11) - IDLE
+  - Courier 2 @ (2.32, 1.40) - IDLE
+  - Courier 5 @ (2.31, 1.41) - IDLE
+  - Courier 7 @ (2.31, 2.04) - IDLE
+  - Courier 8 @ (0.23, 1.49) - IDLE
+  - Courier 9 @ (0.37, 0.10) - IDLE
 
 READY ORDERS (0):
 
-ASSIGNMENTS MADE (2):
+ASSIGNMENTS MADE (5):
 
-✓ Courier 0 ← Orders [12, 14] (Bundle size: 2)
-  - Order 12: (0.85, 1.65) → (1.76, 0.49)
-  - Order 14: (0.85, 1.65) → (0.10, 1.33)
+✓ Courier 8 ← Orders [9] (Bundle size: 1)
+  - Order 9: (0.85, 1.65) → (0.10, 2.60)
 
-✓ Courier 1 ← Orders [13] (Bundle size: 1)
-  - Order 13: (3.83, 1.35) → (2.25, 2.17)
+✓ Courier 2 ← Orders [10] (Bundle size: 1)
+  - Order 10: (1.30, 1.33) → (1.88, 3.18)
+
+✓ Courier 1 ← Orders [11] (Bundle size: 1)
+  - Order 11: (0.58, 4.38) → (0.10, 4.49)
+
+✓ Courier 7 ← Orders [12, 14] (Bundle size: 2)
+  - Order 12: (0.85, 1.65) → (1.06, 0.62)
+  - Order 14: (1.21, 0.89) → (1.52, 0.10)
+
+✓ Courier 9 ← Orders [13] (Bundle size: 1)
+  - Order 13: (0.58, 4.38) → (1.77, 4.90)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 2
-  - Orders in transit: 7
+  - Orders assigned this batch: 5
+  - Orders in transit: 5
   - Orders still waiting: 0
-  - Orders delivered so far: 5
+  - Orders delivered so far: 4
 
 ====================================================================================================
 BATCH 8 @ t=2100s (00:35:00)
 ====================================================================================================
 
-AVAILABLE COURIERS (8):
-  - Courier 4 @ (2.12, 2.46) - IDLE
-  - Courier 5 @ (2.41, 2.67) - IDLE
-  - Courier 6 @ (1.96, 0.22) - IDLE
-  - Courier 7 @ (1.17, 0.10) - IDLE
-  - Courier 8 @ (0.37, 2.40) - IDLE
-  - Courier 9 @ (0.32, 0.10) - IDLE
-  - Courier 10 @ (0.10, 3.31) - IDLE
-  - Courier 11 @ (1.91, 3.07) - IDLE
+AVAILABLE COURIERS (1):
+  - Courier 4 @ (4.23, 2.38) - IDLE
 
 READY ORDERS (0):
 
-ASSIGNMENTS MADE (2):
+ASSIGNMENTS MADE (1):
 
-✓ Courier 2 ← Orders [15, 16] (Bundle size: 2)
-  - Order 15: (1.30, 1.33) → (2.92, 0.55)
-  - Order 16: (1.74, 1.44) → (2.81, 2.46)
-
-✓ Courier 8 ← Orders [17] (Bundle size: 1)
-  - Order 17: (0.85, 1.65) → (0.10, 1.94)
+✓ Courier 5 ← Orders [15] (Bundle size: 1)
+  - Order 15: (0.85, 1.65) → (0.10, 1.79)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 2
-  - Orders in transit: 5
+  - Orders assigned this batch: 1
+  - Orders in transit: 10
   - Orders still waiting: 0
-  - Orders delivered so far: 10
+  - Orders delivered so far: 6
 
 ====================================================================================================
 BATCH 9 @ t=2400s (00:40:00)
 ====================================================================================================
 
-AVAILABLE COURIERS (8):
-  - Courier 3 @ (2.03, 0.10) - IDLE
-  - Courier 4 @ (2.12, 2.46) - IDLE
-  - Courier 5 @ (2.41, 2.67) - IDLE
-  - Courier 6 @ (1.96, 0.22) - IDLE
-  - Courier 7 @ (1.17, 0.10) - IDLE
-  - Courier 9 @ (0.32, 0.10) - IDLE
-  - Courier 10 @ (0.10, 3.31) - IDLE
-  - Courier 11 @ (1.91, 3.07) - IDLE
+AVAILABLE COURIERS (5):
+  - Courier 0 @ (0.17, 2.30) - IDLE
+  - Courier 3 @ (1.58, 2.21) - IDLE
+  - Courier 4 @ (4.23, 2.38) - IDLE
+  - Courier 6 @ (2.13, 1.81) - IDLE
+  - Courier 8 @ (0.10, 2.60) - IDLE
 
 READY ORDERS (0):
 
-ASSIGNMENTS MADE (4):
+ASSIGNMENTS MADE (3):
 
-✓ Courier 7 ← Orders [18, 19] (Bundle size: 2)
-  - Order 18: (1.23, 1.23) → (2.80, 1.73)
-  - Order 19: (0.91, 1.00) → (2.06, 0.10)
+✓ Courier 2 ← Orders [18] (Bundle size: 1)
+  - Order 18: (2.90, 3.33) → (1.65, 3.11)
 
-✓ Courier 1 ← Orders [23] (Bundle size: 1)
-  - Order 23: (0.85, 1.65) → (2.04, 1.57)
+✓ Courier 5 ← Orders [16] (Bundle size: 1)
+  - Order 16: (0.85, 1.65) → (0.26, 3.41)
 
-✓ Courier 6 ← Orders [20, 21, 22] (Bundle size: 3)
-  - Order 20: (1.30, 1.33) → (1.10, 0.10)
-  - Order 21: (1.83, 1.33) → (0.48, 0.80)
-  - Order 22: (1.21, 0.89) → (1.35, 0.10)
-
-✓ Courier 9 ← Orders [24] (Bundle size: 1)
-  - Order 24: (0.91, 1.00) → (0.59, 0.10)
+✓ Courier 6 ← Orders [17] (Bundle size: 1)
+  - Order 17: (1.74, 1.44) → (3.18, 0.82)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 4
+  - Orders assigned this batch: 3
   - Orders in transit: 6
   - Orders still waiting: 0
-  - Orders delivered so far: 12
+  - Orders delivered so far: 10
 
 ====================================================================================================
 BATCH 10 @ t=2700s (00:45:00)
 ====================================================================================================
 
-AVAILABLE COURIERS (4):
-  - Courier 4 @ (2.12, 2.46) - IDLE
-  - Courier 5 @ (2.41, 2.67) - IDLE
-  - Courier 10 @ (0.10, 3.31) - IDLE
-  - Courier 11 @ (1.91, 3.07) - IDLE
+AVAILABLE COURIERS (2):
+  - Courier 4 @ (4.23, 2.38) - IDLE
+  - Courier 8 @ (0.10, 2.60) - IDLE
 
 READY ORDERS (0):
 
 ASSIGNMENTS MADE (7):
 
-✓ Courier 3 ← Orders [25, 26, 27] (Bundle size: 3)
-  - Order 25: (1.30, 1.33) → (0.99, 0.10)
-  - Order 26: (1.83, 1.33) → (1.48, 0.14)
-  - Order 27: (1.83, 1.33) → (0.86, 0.70)
+✓ Courier 0 ← Orders [19] (Bundle size: 1)
+  - Order 19: (0.85, 1.65) → (0.10, 1.25)
 
-✓ Courier 4 ← Orders [28] (Bundle size: 1)
-  - Order 28: (1.74, 1.44) → (2.03, 2.63)
+✓ Courier 1 ← Orders [21] (Bundle size: 1)
+  - Order 21: (0.58, 4.38) → (0.10, 3.25)
 
-✓ Courier 8 ← Orders [29] (Bundle size: 1)
-  - Order 29: (1.21, 0.89) → (0.25, 2.21)
+✓ Courier 3 ← Orders [20, 22] (Bundle size: 2)
+  - Order 20: (1.74, 1.44) → (2.53, 2.95)
+  - Order 22: (1.30, 1.33) → (2.61, 0.10)
 
-✓ Courier 5 ← Orders [35] (Bundle size: 1)
-  - Order 35: (1.83, 1.33) → (2.14, 2.32)
+✓ Courier 8 ← Orders [23] (Bundle size: 1)
+  - Order 23: (1.74, 1.44) → (1.53, 0.10)
 
-✓ Courier 10 ← Orders [31, 33, 34] (Bundle size: 3)
-  - Order 31: (1.21, 0.89) → (0.81, 2.31)
-  - Order 33: (0.91, 1.00) → (0.54, 2.84)
-  - Order 34: (0.91, 1.00) → (2.00, 2.43)
+✓ Courier 7 ← Orders [24] (Bundle size: 1)
+  - Order 24: (1.21, 0.89) → (1.66, 2.79)
 
-✓ Courier 11 ← Orders [30, 32] (Bundle size: 2)
-  - Order 30: (1.30, 1.33) → (0.20, 0.10)
-  - Order 32: (1.21, 0.89) → (1.72, 0.10)
+✓ Courier 4 ← Orders [25, 26, 28] (Bundle size: 3)
+  - Order 25: (1.30, 1.33) → (1.44, 2.68)
+  - Order 26: (1.74, 1.44) → (3.11, 1.48)
+  - Order 28: (1.21, 0.89) → (1.75, 2.59)
 
-✓ Courier 0 ← Orders [36] (Bundle size: 1)
-  - Order 36: (1.23, 1.23) → (2.19, 0.10)
+✓ Courier 9 ← Orders [29, 31, 32] (Bundle size: 3)
+  - Order 29: (1.30, 1.33) → (2.34, 1.78)
+  - Order 31: (1.21, 0.89) → (0.54, 0.10)
+  - Order 32: (1.30, 1.33) → (0.10, 0.36)
 
 BATCH SUMMARY:
   - Orders assigned this batch: 7
-  - Orders in transit: 14
+  - Orders in transit: 9
   - Orders still waiting: 0
   - Orders delivered so far: 14
 
@@ -299,31 +275,43 @@ BATCH 11 @ t=3000s (00:50:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (7):
-  - Order 37: Restaurant @ (0.85, 1.65) → Customer @ (2.20, 2.61) [Ready since 00:48:19]
-  - Order 38: Restaurant @ (1.30, 1.33) → Customer @ (3.23, 0.92) [Ready since 00:49:01]
-  - Order 39: Restaurant @ (1.21, 0.89) → Customer @ (0.35, 0.10) [Ready since 00:49:03]
-  - Order 40: Restaurant @ (0.91, 1.00) → Customer @ (1.75, 0.38) [Ready since 00:49:05]
-  - Order 41: Restaurant @ (1.74, 1.44) → Customer @ (0.51, 1.42) [Ready since 00:49:19]
-  - Order 42: Restaurant @ (1.30, 1.33) → Customer @ (1.89, 0.10) [Ready since 00:49:28]
-  - Order 43: Restaurant @ (1.21, 0.89) → Customer @ (1.00, 0.10) [Ready since 00:49:55]
+READY ORDERS (4):
+  - Order 27: Restaurant @ (0.58, 4.38) → Customer @ (1.06, 2.70) [Ready since 00:47:29]
+  - Order 30: Restaurant @ (0.85, 1.65) → Customer @ (0.80, 3.08) [Ready since 00:48:27]
+  - Order 33: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.09) [Ready since 00:49:31]
+  - Order 34: Restaurant @ (1.30, 1.33) → Customer @ (1.15, 2.88) [Ready since 00:49:33]
 
-ASSIGNMENTS MADE (3):
+ASSIGNMENTS MADE (5):
 
-✓ Courier 1 ← Orders [48] (Bundle size: 1)
-  - Order 48: (1.30, 1.33) → (3.19, 1.91)
+✓ Courier 1 ← Orders [27, 39, 40] (Bundle size: 3)
+  - Order 27: (0.58, 4.38) → (1.06, 2.70)
+  - Order 39: (0.58, 4.38) → (0.10, 4.27)
+  - Order 40: (0.58, 4.38) → (0.56, 3.33)
 
-✓ Courier 9 ← Orders [47] (Bundle size: 1)
-  - Order 47: (0.85, 1.65) → (0.10, 2.09)
+✓ Courier 2 ← Orders [33, 37, 41] (Bundle size: 3)
+  - Order 33: (0.85, 1.65) → (0.10, 2.09)
+  - Order 37: (0.85, 1.65) → (0.10, 1.08)
+  - Order 41: (0.85, 1.65) → (0.10, 1.82)
 
-✓ Courier 2 ← Orders [51] (Bundle size: 1)
-  - Order 51: (3.83, 1.35) → (4.15, 0.10)
+✓ Courier 0 ← Orders [30, 34, 43] (Bundle size: 3)
+  - Order 30: (0.85, 1.65) → (0.80, 3.08)
+  - Order 34: (1.30, 1.33) → (1.15, 2.88)
+  - Order 43: (1.30, 1.33) → (0.20, 2.29)
+
+✓ Courier 5 ← Orders [36, 38, 44] (Bundle size: 3)
+  - Order 36: (0.85, 1.65) → (0.10, 0.50)
+  - Order 38: (1.30, 1.33) → (0.10, 0.10)
+  - Order 44: (0.85, 1.65) → (1.82, 0.63)
+
+✓ Courier 6 ← Orders [35, 42] (Bundle size: 2)
+  - Order 35: (1.74, 1.44) → (2.11, 2.50)
+  - Order 42: (1.74, 1.44) → (2.82, 0.72)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 3
-  - Orders in transit: 20
-  - Orders still waiting: 7
-  - Orders delivered so far: 17
+  - Orders assigned this batch: 5
+  - Orders in transit: 15
+  - Orders still waiting: 4
+  - Orders delivered so far: 16
 
 ====================================================================================================
 BATCH 12 @ t=3300s (00:55:00)
@@ -331,47 +319,29 @@ BATCH 12 @ t=3300s (00:55:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (15):
-  - Order 37: Restaurant @ (0.85, 1.65) → Customer @ (2.20, 2.61) [Ready since 00:48:19]
-  - Order 38: Restaurant @ (1.30, 1.33) → Customer @ (3.23, 0.92) [Ready since 00:49:01]
-  - Order 39: Restaurant @ (1.21, 0.89) → Customer @ (0.35, 0.10) [Ready since 00:49:03]
-  - Order 40: Restaurant @ (0.91, 1.00) → Customer @ (1.75, 0.38) [Ready since 00:49:05]
-  - Order 41: Restaurant @ (1.74, 1.44) → Customer @ (0.51, 1.42) [Ready since 00:49:19]
-  - Order 42: Restaurant @ (1.30, 1.33) → Customer @ (1.89, 0.10) [Ready since 00:49:28]
-  - Order 43: Restaurant @ (1.21, 0.89) → Customer @ (1.00, 0.10) [Ready since 00:49:55]
-  - Order 44: Restaurant @ (1.21, 0.89) → Customer @ (0.10, 1.47) [Ready since 00:50:00]
-  - Order 45: Restaurant @ (1.30, 1.33) → Customer @ (0.62, 0.17) [Ready since 00:50:11]
-  - Order 46: Restaurant @ (1.21, 0.89) → Customer @ (1.71, 0.10) [Ready since 00:50:12]
-  ... and 5 more orders
+READY ORDERS (4):
+  - Order 45: Restaurant @ (1.21, 0.89) → Customer @ (1.71, 0.10) [Ready since 00:53:45]
+  - Order 46: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.09) [Ready since 00:54:04]
+  - Order 47: Restaurant @ (1.30, 1.33) → Customer @ (3.19, 1.91) [Ready since 00:54:18]
+  - Order 48: Restaurant @ (1.21, 0.89) → Customer @ (0.30, 0.10) [Ready since 00:54:50]
 
-ASSIGNMENTS MADE (6):
+ASSIGNMENTS MADE (2):
 
-✓ Courier 4 ← Orders [55] (Bundle size: 1)
-  - Order 55: (0.85, 1.65) → (0.94, 2.93)
+✓ Courier 7 ← Orders [45, 50, 53] (Bundle size: 3)
+  - Order 45: (1.21, 0.89) → (1.71, 0.10)
+  - Order 50: (1.21, 0.89) → (2.36, 1.09)
+  - Order 53: (1.21, 0.89) → (2.09, 0.14)
 
-✓ Courier 5 ← Orders [62] (Bundle size: 1)
-  - Order 62: (0.91, 1.00) → (0.71, 2.80)
-
-✓ Courier 7 ← Orders [63] (Bundle size: 1)
-  - Order 63: (3.83, 1.35) → (2.24, 0.61)
-
-✓ Courier 0 ← Orders [66] (Bundle size: 1)
-  - Order 66: (1.30, 1.33) → (0.28, 0.54)
-
-✓ Courier 6 ← Orders [43, 44, 45] (Bundle size: 3)
-  - Order 43: (1.21, 0.89) → (1.00, 0.10)
-  - Order 44: (1.21, 0.89) → (0.10, 1.47)
-  - Order 45: (1.30, 1.33) → (0.62, 0.17)
-
-✓ Courier 8 ← Orders [64, 65] (Bundle size: 2)
-  - Order 64: (1.30, 1.33) → (3.17, 1.21)
-  - Order 65: (0.85, 1.65) → (1.72, 2.37)
+✓ Courier 8 ← Orders [54, 56, 57] (Bundle size: 3)
+  - Order 54: (1.21, 0.89) → (2.53, 1.84)
+  - Order 56: (1.21, 0.89) → (2.06, 0.10)
+  - Order 57: (1.21, 0.89) → (2.65, 0.42)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 6
-  - Orders in transit: 16
-  - Orders still waiting: 15
-  - Orders delivered so far: 25
+  - Orders assigned this batch: 2
+  - Orders in transit: 23
+  - Orders still waiting: 4
+  - Orders delivered so far: 22
 
 ====================================================================================================
 BATCH 13 @ t=3600s (01:00:00)
@@ -380,40 +350,30 @@ BATCH 13 @ t=3600s (01:00:00)
 AVAILABLE COURIERS (0):
 
 READY ORDERS (23):
-  - Order 37: Restaurant @ (0.85, 1.65) → Customer @ (2.20, 2.61) [Ready since 00:48:19]
-  - Order 38: Restaurant @ (1.30, 1.33) → Customer @ (3.23, 0.92) [Ready since 00:49:01]
-  - Order 39: Restaurant @ (1.21, 0.89) → Customer @ (0.35, 0.10) [Ready since 00:49:03]
-  - Order 40: Restaurant @ (0.91, 1.00) → Customer @ (1.75, 0.38) [Ready since 00:49:05]
-  - Order 41: Restaurant @ (1.74, 1.44) → Customer @ (0.51, 1.42) [Ready since 00:49:19]
-  - Order 42: Restaurant @ (1.30, 1.33) → Customer @ (1.89, 0.10) [Ready since 00:49:28]
-  - Order 46: Restaurant @ (1.21, 0.89) → Customer @ (1.71, 0.10) [Ready since 00:50:12]
-  - Order 49: Restaurant @ (1.21, 0.89) → Customer @ (0.30, 0.10) [Ready since 00:51:17]
-  - Order 50: Restaurant @ (0.91, 1.00) → Customer @ (0.10, 1.47) [Ready since 00:51:46]
-  - Order 52: Restaurant @ (1.74, 1.44) → Customer @ (2.20, 2.80) [Ready since 00:53:35]
+  - Order 46: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.09) [Ready since 00:54:04]
+  - Order 47: Restaurant @ (1.30, 1.33) → Customer @ (3.19, 1.91) [Ready since 00:54:18]
+  - Order 48: Restaurant @ (1.21, 0.89) → Customer @ (0.30, 0.10) [Ready since 00:54:50]
+  - Order 49: Restaurant @ (1.30, 1.33) → Customer @ (1.17, 3.08) [Ready since 00:55:19]
+  - Order 51: Restaurant @ (1.74, 1.44) → Customer @ (2.29, 3.10) [Ready since 00:55:57]
+  - Order 52: Restaurant @ (1.30, 1.33) → Customer @ (3.24, 1.54) [Ready since 00:56:02]
+  - Order 55: Restaurant @ (1.21, 0.89) → Customer @ (0.65, 2.00) [Ready since 00:56:21]
+  - Order 58: Restaurant @ (1.21, 0.89) → Customer @ (0.10, 1.56) [Ready since 00:57:37]
+  - Order 59: Restaurant @ (0.85, 1.65) → Customer @ (1.98, 0.19) [Ready since 00:57:38]
+  - Order 60: Restaurant @ (1.74, 1.44) → Customer @ (2.78, 1.58) [Ready since 00:57:50]
   ... and 13 more orders
 
-ASSIGNMENTS MADE (5):
+ASSIGNMENTS MADE (1):
 
-✓ Courier 3 ← Orders [74] (Bundle size: 1)
-  - Order 74: (1.21, 0.89) → (2.88, 1.62)
-
-✓ Courier 9 ← Orders [72] (Bundle size: 1)
-  - Order 72: (0.85, 1.65) → (0.10, 3.04)
-
-✓ Courier 1 ← Orders [76] (Bundle size: 1)
-  - Order 76: (1.23, 1.23) → (0.42, 2.77)
-
-✓ Courier 2 ← Orders [79] (Bundle size: 1)
-  - Order 79: (1.74, 1.44) → (0.76, 1.86)
-
-✓ Courier 11 ← Orders [80] (Bundle size: 1)
-  - Order 80: (1.74, 1.44) → (2.72, 2.77)
+✓ Courier 3 ← Orders [63, 64, 66] (Bundle size: 3)
+  - Order 63: (1.30, 1.33) → (2.43, 0.58)
+  - Order 64: (1.21, 0.89) → (2.45, 0.10)
+  - Order 66: (1.21, 0.89) → (2.86, 0.93)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 5
-  - Orders in transit: 17
+  - Orders assigned this batch: 1
+  - Orders in transit: 26
   - Orders still waiting: 23
-  - Orders delivered so far: 32
+  - Orders delivered so far: 25
 
 ====================================================================================================
 BATCH 14 @ t=3900s (01:05:00)
@@ -421,35 +381,41 @@ BATCH 14 @ t=3900s (01:05:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (29):
-  - Order 46: Restaurant @ (1.21, 0.89) → Customer @ (1.71, 0.10) [Ready since 00:50:12]
-  - Order 49: Restaurant @ (1.21, 0.89) → Customer @ (0.30, 0.10) [Ready since 00:51:17]
-  - Order 50: Restaurant @ (0.91, 1.00) → Customer @ (0.10, 1.47) [Ready since 00:51:46]
-  - Order 52: Restaurant @ (1.74, 1.44) → Customer @ (2.20, 2.80) [Ready since 00:53:35]
-  - Order 53: Restaurant @ (1.83, 1.33) → Customer @ (3.47, 1.78) [Ready since 00:53:37]
-  - Order 54: Restaurant @ (1.83, 1.33) → Customer @ (3.77, 1.69) [Ready since 00:54:34]
-  - Order 56: Restaurant @ (1.83, 1.33) → Customer @ (2.85, 2.08) [Ready since 00:55:30]
-  - Order 57: Restaurant @ (1.30, 1.33) → Customer @ (1.66, 0.10) [Ready since 00:55:33]
-  - Order 58: Restaurant @ (1.30, 1.33) → Customer @ (1.06, 2.67) [Ready since 00:55:47]
-  - Order 59: Restaurant @ (1.21, 0.89) → Customer @ (1.89, 2.42) [Ready since 00:55:59]
-  ... and 19 more orders
+READY ORDERS (37):
+  - Order 46: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.09) [Ready since 00:54:04]
+  - Order 47: Restaurant @ (1.30, 1.33) → Customer @ (3.19, 1.91) [Ready since 00:54:18]
+  - Order 48: Restaurant @ (1.21, 0.89) → Customer @ (0.30, 0.10) [Ready since 00:54:50]
+  - Order 49: Restaurant @ (1.30, 1.33) → Customer @ (1.17, 3.08) [Ready since 00:55:19]
+  - Order 51: Restaurant @ (1.74, 1.44) → Customer @ (2.29, 3.10) [Ready since 00:55:57]
+  - Order 52: Restaurant @ (1.30, 1.33) → Customer @ (3.24, 1.54) [Ready since 00:56:02]
+  - Order 55: Restaurant @ (1.21, 0.89) → Customer @ (0.65, 2.00) [Ready since 00:56:21]
+  - Order 58: Restaurant @ (1.21, 0.89) → Customer @ (0.10, 1.56) [Ready since 00:57:37]
+  - Order 59: Restaurant @ (0.85, 1.65) → Customer @ (1.98, 0.19) [Ready since 00:57:38]
+  - Order 60: Restaurant @ (1.74, 1.44) → Customer @ (2.78, 1.58) [Ready since 00:57:50]
+  ... and 27 more orders
 
 ASSIGNMENTS MADE (3):
 
-✓ Courier 4 ← Orders [89] (Bundle size: 1)
-  - Order 89: (1.83, 1.33) → (0.54, 1.22)
+✓ Courier 1 ← Orders [73, 77, 80] (Bundle size: 3)
+  - Order 73: (1.74, 1.44) → (2.17, 3.26)
+  - Order 77: (1.74, 1.44) → (2.72, 2.76)
+  - Order 80: (1.74, 1.44) → (2.53, 2.49)
 
-✓ Courier 7 ← Orders [81] (Bundle size: 1)
-  - Order 81: (3.83, 1.35) → (3.00, 0.10)
+✓ Courier 2 ← Orders [48, 55, 58] (Bundle size: 3)
+  - Order 48: (1.21, 0.89) → (0.30, 0.10)
+  - Order 55: (1.21, 0.89) → (0.65, 2.00)
+  - Order 58: (1.21, 0.89) → (0.10, 1.56)
 
-✓ Courier 5 ← Orders [97] (Bundle size: 1)
-  - Order 97: (1.30, 1.33) → (1.24, 0.10)
+✓ Courier 0 ← Orders [68, 71, 74] (Bundle size: 3)
+  - Order 68: (1.30, 1.33) → (1.39, 0.24)
+  - Order 71: (0.85, 1.65) → (0.21, 0.10)
+  - Order 74: (1.30, 1.33) → (0.69, 0.45)
 
 BATCH SUMMARY:
   - Orders assigned this batch: 3
-  - Orders in transit: 16
-  - Orders still waiting: 29
-  - Orders delivered so far: 39
+  - Orders in transit: 19
+  - Orders still waiting: 37
+  - Orders delivered so far: 35
 
 ====================================================================================================
 BATCH 15 @ t=4200s (01:10:00)
@@ -457,46 +423,41 @@ BATCH 15 @ t=4200s (01:10:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (30):
-  - Order 56: Restaurant @ (1.83, 1.33) → Customer @ (2.85, 2.08) [Ready since 00:55:30]
-  - Order 57: Restaurant @ (1.30, 1.33) → Customer @ (1.66, 0.10) [Ready since 00:55:33]
-  - Order 58: Restaurant @ (1.30, 1.33) → Customer @ (1.06, 2.67) [Ready since 00:55:47]
-  - Order 59: Restaurant @ (1.21, 0.89) → Customer @ (1.89, 2.42) [Ready since 00:55:59]
-  - Order 60: Restaurant @ (1.21, 0.89) → Customer @ (0.25, 0.10) [Ready since 00:55:59]
-  - Order 61: Restaurant @ (1.83, 1.33) → Customer @ (0.36, 0.53) [Ready since 00:56:14]
-  - Order 67: Restaurant @ (0.91, 1.00) → Customer @ (1.27, 0.10) [Ready since 00:59:03]
-  - Order 68: Restaurant @ (1.30, 1.33) → Customer @ (1.39, 0.24) [Ready since 00:59:27]
-  - Order 69: Restaurant @ (1.83, 1.33) → Customer @ (1.50, 0.10) [Ready since 00:59:27]
-  - Order 70: Restaurant @ (1.74, 1.44) → Customer @ (1.12, 0.13) [Ready since 00:59:31]
-  ... and 20 more orders
+READY ORDERS (43):
+  - Order 49: Restaurant @ (1.30, 1.33) → Customer @ (1.17, 3.08) [Ready since 00:55:19]
+  - Order 51: Restaurant @ (1.74, 1.44) → Customer @ (2.29, 3.10) [Ready since 00:55:57]
+  - Order 52: Restaurant @ (1.30, 1.33) → Customer @ (3.24, 1.54) [Ready since 00:56:02]
+  - Order 59: Restaurant @ (0.85, 1.65) → Customer @ (1.98, 0.19) [Ready since 00:57:38]
+  - Order 60: Restaurant @ (1.74, 1.44) → Customer @ (2.78, 1.58) [Ready since 00:57:50]
+  - Order 61: Restaurant @ (1.30, 1.33) → Customer @ (1.76, 2.44) [Ready since 00:57:53]
+  - Order 62: Restaurant @ (1.30, 1.33) → Customer @ (0.26, 1.55) [Ready since 00:58:08]
+  - Order 65: Restaurant @ (0.58, 4.38) → Customer @ (1.09, 2.51) [Ready since 00:58:34]
+  - Order 67: Restaurant @ (1.30, 1.33) → Customer @ (0.10, 1.92) [Ready since 00:59:00]
+  - Order 69: Restaurant @ (1.21, 0.89) → Customer @ (0.88, 0.10) [Ready since 00:59:02]
+  ... and 33 more orders
 
-ASSIGNMENTS MADE (5):
+ASSIGNMENTS MADE (3):
 
-✓ Courier 0 ← Orders [99] (Bundle size: 1)
-  - Order 99: (1.21, 0.89) → (0.40, 0.10)
+✓ Courier 6 ← Orders [92, 94, 98] (Bundle size: 3)
+  - Order 92: (0.85, 1.65) → (0.10, 2.08)
+  - Order 94: (1.21, 0.89) → (0.10, 2.32)
+  - Order 98: (1.30, 1.33) → (0.25, 1.50)
 
-✓ Courier 3 ← Orders [100] (Bundle size: 1)
-  - Order 100: (3.83, 1.35) → (2.76, 1.80)
+✓ Courier 4 ← Orders [70, 76, 78] (Bundle size: 3)
+  - Order 70: (1.74, 1.44) → (0.18, 0.37)
+  - Order 76: (1.74, 1.44) → (0.41, 1.46)
+  - Order 78: (1.21, 0.89) → (1.04, 0.10)
 
-✓ Courier 9 ← Orders [94, 96, 98] (Bundle size: 3)
-  - Order 94: (0.85, 1.65) → (2.55, 1.93)
-  - Order 96: (0.85, 1.65) → (0.90, 2.78)
-  - Order 98: (0.85, 1.65) → (2.02, 2.63)
-
-✓ Courier 10 ← Orders [69, 70, 71] (Bundle size: 3)
-  - Order 69: (1.83, 1.33) → (1.50, 0.10)
-  - Order 70: (1.74, 1.44) → (1.12, 0.13)
-  - Order 71: (1.30, 1.33) → (1.49, 0.24)
-
-✓ Courier 6 ← Orders [110, 111] (Bundle size: 2)
-  - Order 110: (1.30, 1.33) → (2.06, 0.45)
-  - Order 111: (1.30, 1.33) → (2.32, 1.59)
+✓ Courier 5 ← Orders [81, 84, 86] (Bundle size: 3)
+  - Order 81: (1.74, 1.44) → (3.35, 1.08)
+  - Order 84: (1.74, 1.44) → (3.10, 1.86)
+  - Order 86: (1.21, 0.89) → (2.13, 2.26)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 5
-  - Orders in transit: 12
-  - Orders still waiting: 30
-  - Orders delivered so far: 46
+  - Orders assigned this batch: 3
+  - Orders in transit: 21
+  - Orders still waiting: 43
+  - Orders delivered so far: 45
 
 ====================================================================================================
 BATCH 16 @ t=4500s (01:15:00)
@@ -504,59 +465,41 @@ BATCH 16 @ t=4500s (01:15:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (28):
-  - Order 73: Restaurant @ (0.85, 1.65) → Customer @ (2.18, 0.30) [Ready since 01:00:06]
-  - Order 75: Restaurant @ (1.74, 1.44) → Customer @ (0.26, 0.56) [Ready since 01:01:17]
-  - Order 77: Restaurant @ (1.21, 0.89) → Customer @ (0.60, 0.10) [Ready since 01:01:38]
-  - Order 78: Restaurant @ (1.83, 1.33) → Customer @ (0.35, 0.39) [Ready since 01:01:41]
-  - Order 82: Restaurant @ (0.91, 1.00) → Customer @ (0.10, 2.31) [Ready since 01:04:02]
-  - Order 83: Restaurant @ (1.74, 1.44) → Customer @ (1.37, 0.30) [Ready since 01:04:09]
-  - Order 84: Restaurant @ (1.21, 0.89) → Customer @ (1.12, 0.10) [Ready since 01:04:22]
-  - Order 85: Restaurant @ (1.83, 1.33) → Customer @ (2.27, 2.98) [Ready since 01:04:27]
-  - Order 86: Restaurant @ (1.21, 0.89) → Customer @ (2.32, 1.37) [Ready since 01:04:33]
-  - Order 87: Restaurant @ (0.91, 1.00) → Customer @ (1.73, 1.63) [Ready since 01:04:34]
-  ... and 18 more orders
+READY ORDERS (27):
+  - Order 82: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.68) [Ready since 01:02:49]
+  - Order 89: Restaurant @ (1.74, 1.44) → Customer @ (1.49, 2.44) [Ready since 01:04:43]
+  - Order 90: Restaurant @ (1.30, 1.33) → Customer @ (0.10, 2.18) [Ready since 01:04:44]
+  - Order 96: Restaurant @ (1.30, 1.33) → Customer @ (2.60, 1.61) [Ready since 01:06:28]
+  - Order 97: Restaurant @ (1.74, 1.44) → Customer @ (1.48, 0.22) [Ready since 01:07:39]
+  - Order 99: Restaurant @ (0.58, 4.38) → Customer @ (1.74, 3.52) [Ready since 01:07:55]
+  - Order 100: Restaurant @ (1.30, 1.33) → Customer @ (0.25, 0.50) [Ready since 01:07:57]
+  - Order 101: Restaurant @ (1.74, 1.44) → Customer @ (0.84, 0.89) [Ready since 01:08:18]
+  - Order 102: Restaurant @ (0.85, 1.65) → Customer @ (0.55, 0.41) [Ready since 01:08:29]
+  - Order 103: Restaurant @ (1.21, 0.89) → Customer @ (0.62, 2.78) [Ready since 01:08:44]
+  ... and 17 more orders
 
-ASSIGNMENTS MADE (8):
+ASSIGNMENTS MADE (3):
 
-✓ Courier 1 ← Orders [115] (Bundle size: 1)
-  - Order 115: (1.21, 0.89) → (2.23, 0.72)
+✓ Courier 7 ← Orders [79, 83, 85] (Bundle size: 3)
+  - Order 79: (1.21, 0.89) → (0.26, 0.10)
+  - Order 83: (1.74, 1.44) → (0.50, 0.45)
+  - Order 85: (1.21, 0.89) → (2.03, 0.10)
 
-✓ Courier 2 ← Orders [112, 114, 116] (Bundle size: 3)
-  - Order 112: (0.85, 1.65) → (0.10, 0.13)
-  - Order 114: (1.21, 0.89) → (0.10, 0.94)
-  - Order 116: (0.85, 1.65) → (0.10, 1.04)
+✓ Courier 8 ← Orders [91, 93, 95] (Bundle size: 3)
+  - Order 91: (1.21, 0.89) → (2.78, 1.98)
+  - Order 93: (1.74, 1.44) → (2.31, 0.23)
+  - Order 95: (1.74, 1.44) → (3.04, 0.44)
 
-✓ Courier 4 ← Orders [117] (Bundle size: 1)
-  - Order 117: (1.21, 0.89) → (2.24, 0.45)
-
-✓ Courier 8 ← Orders [113] (Bundle size: 1)
-  - Order 113: (3.83, 1.35) → (4.79, 0.69)
-
-✓ Courier 11 ← Orders [104, 105, 109] (Bundle size: 3)
-  - Order 104: (1.30, 1.33) → (0.10, 0.74)
-  - Order 105: (0.91, 1.00) → (0.87, 0.10)
-  - Order 109: (0.91, 1.00) → (0.10, 0.51)
-
-✓ Courier 0 ← Orders [118, 119] (Bundle size: 2)
-  - Order 118: (0.91, 1.00) → (2.24, 0.10)
-  - Order 119: (0.91, 1.00) → (1.38, 0.10)
-
-✓ Courier 3 ← Orders [91, 93, 95] (Bundle size: 3)
-  - Order 91: (0.85, 1.65) → (0.10, 2.08)
-  - Order 93: (1.83, 1.33) → (0.57, 2.76)
-  - Order 95: (1.83, 1.33) → (0.95, 3.09)
-
-✓ Courier 5 ← Orders [83, 84, 86] (Bundle size: 3)
-  - Order 83: (1.74, 1.44) → (1.37, 0.30)
-  - Order 84: (1.21, 0.89) → (1.12, 0.10)
-  - Order 86: (1.21, 0.89) → (2.32, 1.37)
+✓ Courier 9 ← Orders [75, 87, 88] (Bundle size: 3)
+  - Order 75: (0.58, 4.38) → (0.10, 4.90)
+  - Order 87: (0.58, 4.38) → (0.51, 4.90)
+  - Order 88: (0.58, 4.38) → (2.47, 4.88)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 8
-  - Orders in transit: 17
-  - Orders still waiting: 28
-  - Orders delivered so far: 51
+  - Orders assigned this batch: 3
+  - Orders in transit: 29
+  - Orders still waiting: 27
+  - Orders delivered so far: 52
 
 ====================================================================================================
 BATCH 17 @ t=4800s (01:20:00)
@@ -564,37 +507,31 @@ BATCH 17 @ t=4800s (01:20:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (12):
-  - Order 90: Restaurant @ (1.21, 0.89) → Customer @ (2.78, 1.98) [Ready since 01:06:27]
-  - Order 92: Restaurant @ (1.74, 1.44) → Customer @ (2.31, 0.23) [Ready since 01:06:59]
-  - Order 101: Restaurant @ (0.91, 1.00) → Customer @ (0.10, 0.88) [Ready since 01:10:22]
-  - Order 102: Restaurant @ (1.30, 1.33) → Customer @ (0.65, 0.10) [Ready since 01:10:40]
-  - Order 103: Restaurant @ (1.21, 0.89) → Customer @ (0.66, 2.51) [Ready since 01:11:20]
-  - Order 106: Restaurant @ (1.21, 0.89) → Customer @ (1.83, 2.23) [Ready since 01:11:42]
-  - Order 107: Restaurant @ (0.91, 1.00) → Customer @ (1.81, 2.17) [Ready since 01:11:52]
-  - Order 108: Restaurant @ (0.85, 1.65) → Customer @ (0.68, 2.69) [Ready since 01:12:30]
-  - Order 120: Restaurant @ (0.85, 1.65) → Customer @ (1.56, 2.39) [Ready since 01:19:00]
-  - Order 121: Restaurant @ (0.91, 1.00) → Customer @ (0.10, 1.82) [Ready since 01:19:18]
-  ... and 2 more orders
+READY ORDERS (43):
+  - Order 96: Restaurant @ (1.30, 1.33) → Customer @ (2.60, 1.61) [Ready since 01:06:28]
+  - Order 97: Restaurant @ (1.74, 1.44) → Customer @ (1.48, 0.22) [Ready since 01:07:39]
+  - Order 99: Restaurant @ (0.58, 4.38) → Customer @ (1.74, 3.52) [Ready since 01:07:55]
+  - Order 100: Restaurant @ (1.30, 1.33) → Customer @ (0.25, 0.50) [Ready since 01:07:57]
+  - Order 101: Restaurant @ (1.74, 1.44) → Customer @ (0.84, 0.89) [Ready since 01:08:18]
+  - Order 102: Restaurant @ (0.85, 1.65) → Customer @ (0.55, 0.41) [Ready since 01:08:29]
+  - Order 103: Restaurant @ (1.21, 0.89) → Customer @ (0.62, 2.78) [Ready since 01:08:44]
+  - Order 104: Restaurant @ (1.30, 1.33) → Customer @ (2.90, 1.37) [Ready since 01:09:06]
+  - Order 105: Restaurant @ (1.74, 1.44) → Customer @ (0.85, 0.79) [Ready since 01:09:13]
+  - Order 106: Restaurant @ (0.85, 1.65) → Customer @ (1.83, 2.95) [Ready since 01:09:14]
+  ... and 33 more orders
 
-ASSIGNMENTS MADE (3):
+ASSIGNMENTS MADE (1):
 
-✓ Courier 7 ← Orders [124] (Bundle size: 1)
-  - Order 124: (1.83, 1.33) → (2.05, 2.85)
-
-✓ Courier 4 ← Orders [106, 107, 108] (Bundle size: 3)
-  - Order 106: (1.21, 0.89) → (1.83, 2.23)
-  - Order 107: (0.91, 1.00) → (1.81, 2.17)
-  - Order 108: (0.85, 1.65) → (0.68, 2.69)
-
-✓ Courier 8 ← Orders [135] (Bundle size: 1)
-  - Order 135: (1.83, 1.33) → (1.69, 2.72)
+✓ Courier 3 ← Orders [135, 140, 143] (Bundle size: 3)
+  - Order 135: (1.74, 1.44) → (2.51, 3.11)
+  - Order 140: (1.74, 1.44) → (3.17, 2.59)
+  - Order 143: (1.74, 1.44) → (2.80, 1.34)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 3
-  - Orders in transit: 26
-  - Orders still waiting: 12
-  - Orders delivered so far: 59
+  - Orders assigned this batch: 1
+  - Orders in transit: 24
+  - Orders still waiting: 43
+  - Orders delivered so far: 57
 
 ====================================================================================================
 BATCH 18 @ t=5100s (01:25:00)
@@ -602,38 +539,51 @@ BATCH 18 @ t=5100s (01:25:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (26):
-  - Order 101: Restaurant @ (0.91, 1.00) → Customer @ (0.10, 0.88) [Ready since 01:10:22]
-  - Order 102: Restaurant @ (1.30, 1.33) → Customer @ (0.65, 0.10) [Ready since 01:10:40]
-  - Order 103: Restaurant @ (1.21, 0.89) → Customer @ (0.66, 2.51) [Ready since 01:11:20]
-  - Order 120: Restaurant @ (0.85, 1.65) → Customer @ (1.56, 2.39) [Ready since 01:19:00]
-  - Order 121: Restaurant @ (0.91, 1.00) → Customer @ (0.10, 1.82) [Ready since 01:19:18]
-  - Order 122: Restaurant @ (1.74, 1.44) → Customer @ (0.32, 1.98) [Ready since 01:19:33]
-  - Order 123: Restaurant @ (0.85, 1.65) → Customer @ (1.61, 2.33) [Ready since 01:19:39]
-  - Order 125: Restaurant @ (1.21, 0.89) → Customer @ (2.35, 0.95) [Ready since 01:20:50]
-  - Order 126: Restaurant @ (1.30, 1.33) → Customer @ (0.10, 2.69) [Ready since 01:20:58]
-  - Order 127: Restaurant @ (1.74, 1.44) → Customer @ (1.89, 3.09) [Ready since 01:21:10]
-  ... and 16 more orders
+READY ORDERS (38):
+  - Order 111: Restaurant @ (1.21, 0.89) → Customer @ (0.76, 2.46) [Ready since 01:10:53]
+  - Order 112: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.24) [Ready since 01:11:53]
+  - Order 113: Restaurant @ (1.74, 1.44) → Customer @ (2.03, 2.75) [Ready since 01:12:50]
+  - Order 114: Restaurant @ (1.74, 1.44) → Customer @ (1.07, 2.99) [Ready since 01:13:05]
+  - Order 115: Restaurant @ (0.58, 4.38) → Customer @ (2.49, 3.92) [Ready since 01:13:05]
+  - Order 116: Restaurant @ (1.30, 1.33) → Customer @ (0.75, 0.42) [Ready since 01:13:26]
+  - Order 117: Restaurant @ (1.30, 1.33) → Customer @ (2.96, 1.70) [Ready since 01:14:03]
+  - Order 118: Restaurant @ (1.21, 0.89) → Customer @ (0.36, 0.15) [Ready since 01:14:14]
+  - Order 119: Restaurant @ (0.85, 1.65) → Customer @ (2.19, 0.24) [Ready since 01:14:54]
+  - Order 120: Restaurant @ (1.30, 1.33) → Customer @ (2.42, 2.84) [Ready since 01:14:56]
+  ... and 28 more orders
 
-ASSIGNMENTS MADE (4):
+ASSIGNMENTS MADE (5):
 
-✓ Courier 1 ← Orders [146] (Bundle size: 1)
-  - Order 146: (1.74, 1.44) → (0.62, 1.51)
+✓ Courier 0 ← Orders [128, 129, 130] (Bundle size: 3)
+  - Order 128: (1.30, 1.33) → (1.76, 0.10)
+  - Order 129: (1.74, 1.44) → (1.35, 0.10)
+  - Order 130: (1.74, 1.44) → (0.58, 0.51)
 
-✓ Courier 6 ← Orders [153] (Bundle size: 1)
-  - Order 153: (1.83, 1.33) → (3.08, 0.21)
+✓ Courier 1 ← Orders [127, 144, 151] (Bundle size: 3)
+  - Order 127: (2.90, 3.33) → (3.89, 3.11)
+  - Order 144: (2.90, 3.33) → (2.79, 1.53)
+  - Order 151: (2.90, 3.33) → (1.87, 1.86)
 
-✓ Courier 2 ← Orders [148] (Bundle size: 1)
-  - Order 148: (3.83, 1.35) → (2.80, 0.10)
+✓ Courier 2 ← Orders [117, 120, 122] (Bundle size: 3)
+  - Order 117: (1.30, 1.33) → (2.96, 1.70)
+  - Order 120: (1.30, 1.33) → (2.42, 2.84)
+  - Order 122: (1.30, 1.33) → (2.70, 1.87)
 
-✓ Courier 10 ← Orders [154] (Bundle size: 1)
-  - Order 154: (1.83, 1.33) → (2.37, 0.36)
+✓ Courier 6 ← Orders [124, 126, 132] (Bundle size: 3)
+  - Order 124: (0.85, 1.65) → (2.25, 1.98)
+  - Order 126: (1.74, 1.44) → (2.88, 1.88)
+  - Order 132: (0.85, 1.65) → (2.01, 1.15)
+
+✓ Courier 4 ← Orders [145, 148, 155] (Bundle size: 3)
+  - Order 145: (1.30, 1.33) → (2.66, 2.60)
+  - Order 148: (1.21, 0.89) → (2.65, 1.15)
+  - Order 155: (1.21, 0.89) → (2.71, 1.56)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 4
-  - Orders in transit: 21
-  - Orders still waiting: 26
-  - Orders delivered so far: 68
+  - Orders assigned this batch: 5
+  - Orders in transit: 20
+  - Orders still waiting: 38
+  - Orders delivered so far: 67
 
 ====================================================================================================
 BATCH 19 @ t=5400s (01:30:00)
@@ -641,37 +591,35 @@ BATCH 19 @ t=5400s (01:30:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (34):
-  - Order 120: Restaurant @ (0.85, 1.65) → Customer @ (1.56, 2.39) [Ready since 01:19:00]
-  - Order 121: Restaurant @ (0.91, 1.00) → Customer @ (0.10, 1.82) [Ready since 01:19:18]
-  - Order 122: Restaurant @ (1.74, 1.44) → Customer @ (0.32, 1.98) [Ready since 01:19:33]
-  - Order 123: Restaurant @ (0.85, 1.65) → Customer @ (1.61, 2.33) [Ready since 01:19:39]
-  - Order 125: Restaurant @ (1.21, 0.89) → Customer @ (2.35, 0.95) [Ready since 01:20:50]
-  - Order 126: Restaurant @ (1.30, 1.33) → Customer @ (0.10, 2.69) [Ready since 01:20:58]
-  - Order 127: Restaurant @ (1.74, 1.44) → Customer @ (1.89, 3.09) [Ready since 01:21:10]
-  - Order 128: Restaurant @ (0.91, 1.00) → Customer @ (0.60, 2.45) [Ready since 01:21:21]
-  - Order 129: Restaurant @ (1.74, 1.44) → Customer @ (2.81, 0.10) [Ready since 01:21:41]
-  - Order 130: Restaurant @ (1.30, 1.33) → Customer @ (2.28, 0.39) [Ready since 01:21:41]
-  ... and 24 more orders
+READY ORDERS (29):
+  - Order 121: Restaurant @ (1.74, 1.44) → Customer @ (0.72, 0.61) [Ready since 01:15:53]
+  - Order 123: Restaurant @ (1.30, 1.33) → Customer @ (0.10, 1.69) [Ready since 01:16:28]
+  - Order 125: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 1.34) [Ready since 01:16:47]
+  - Order 131: Restaurant @ (0.85, 1.65) → Customer @ (1.34, 0.10) [Ready since 01:17:57]
+  - Order 133: Restaurant @ (1.30, 1.33) → Customer @ (0.10, 2.39) [Ready since 01:18:47]
+  - Order 134: Restaurant @ (1.21, 0.89) → Customer @ (2.74, 0.55) [Ready since 01:18:48]
+  - Order 136: Restaurant @ (1.74, 1.44) → Customer @ (3.59, 1.69) [Ready since 01:18:51]
+  - Order 137: Restaurant @ (1.21, 0.89) → Customer @ (1.58, 2.16) [Ready since 01:19:10]
+  - Order 138: Restaurant @ (1.30, 1.33) → Customer @ (1.41, 0.10) [Ready since 01:19:15]
+  - Order 139: Restaurant @ (0.85, 1.65) → Customer @ (1.88, 0.91) [Ready since 01:19:34]
+  ... and 19 more orders
 
-ASSIGNMENTS MADE (4):
+ASSIGNMENTS MADE (2):
 
-✓ Courier 9 ← Orders [160] (Bundle size: 1)
-  - Order 160: (3.83, 1.35) → (4.86, 2.46)
+✓ Courier 7 ← Orders [168, 169, 172] (Bundle size: 3)
+  - Order 168: (1.74, 1.44) → (2.96, 2.12)
+  - Order 169: (1.74, 1.44) → (1.73, 3.29)
+  - Order 172: (1.74, 1.44) → (2.17, 2.73)
 
-✓ Courier 0 ← Orders [161] (Bundle size: 1)
-  - Order 161: (1.30, 1.33) → (2.62, 1.31)
-
-✓ Courier 7 ← Orders [162] (Bundle size: 1)
-  - Order 162: (1.74, 1.44) → (0.12, 1.96)
-
-✓ Courier 1 ← Orders [178] (Bundle size: 1)
-  - Order 178: (1.23, 1.23) → (1.29, 2.30)
+✓ Courier 5 ← Orders [142, 160, 171] (Bundle size: 3)
+  - Order 142: (2.90, 3.33) → (2.13, 2.13)
+  - Order 160: (2.90, 3.33) → (1.26, 2.34)
+  - Order 171: (2.90, 3.33) → (1.41, 3.68)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 4
-  - Orders in transit: 17
-  - Orders still waiting: 34
+  - Orders assigned this batch: 2
+  - Orders in transit: 22
+  - Orders still waiting: 29
   - Orders delivered so far: 77
 
 ====================================================================================================
@@ -680,47 +628,36 @@ BATCH 20 @ t=5700s (01:35:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (47):
-  - Order 125: Restaurant @ (1.21, 0.89) → Customer @ (2.35, 0.95) [Ready since 01:20:50]
-  - Order 126: Restaurant @ (1.30, 1.33) → Customer @ (0.10, 2.69) [Ready since 01:20:58]
-  - Order 127: Restaurant @ (1.74, 1.44) → Customer @ (1.89, 3.09) [Ready since 01:21:10]
-  - Order 128: Restaurant @ (0.91, 1.00) → Customer @ (0.60, 2.45) [Ready since 01:21:21]
-  - Order 129: Restaurant @ (1.74, 1.44) → Customer @ (2.81, 0.10) [Ready since 01:21:41]
-  - Order 130: Restaurant @ (1.30, 1.33) → Customer @ (2.28, 0.39) [Ready since 01:21:41]
-  - Order 131: Restaurant @ (1.21, 0.89) → Customer @ (2.88, 0.83) [Ready since 01:21:51]
-  - Order 132: Restaurant @ (0.91, 1.00) → Customer @ (0.53, 0.10) [Ready since 01:22:58]
-  - Order 133: Restaurant @ (0.85, 1.65) → Customer @ (1.02, 0.10) [Ready since 01:23:02]
-  - Order 134: Restaurant @ (1.21, 0.89) → Customer @ (1.16, 2.27) [Ready since 01:23:02]
-  ... and 37 more orders
+READY ORDERS (31):
+  - Order 141: Restaurant @ (1.30, 1.33) → Customer @ (0.35, 2.64) [Ready since 01:20:07]
+  - Order 146: Restaurant @ (2.90, 3.33) → Customer @ (2.07, 4.77) [Ready since 01:21:00]
+  - Order 147: Restaurant @ (0.85, 1.65) → Customer @ (1.54, 0.36) [Ready since 01:21:45]
+  - Order 149: Restaurant @ (1.74, 1.44) → Customer @ (0.62, 1.51) [Ready since 01:23:58]
+  - Order 150: Restaurant @ (1.74, 1.44) → Customer @ (1.40, 0.11) [Ready since 01:24:15]
+  - Order 152: Restaurant @ (0.85, 1.65) → Customer @ (0.69, 3.55) [Ready since 01:24:27]
+  - Order 153: Restaurant @ (1.30, 1.33) → Customer @ (0.26, 1.47) [Ready since 01:24:42]
+  - Order 154: Restaurant @ (1.74, 1.44) → Customer @ (0.33, 2.83) [Ready since 01:24:53]
+  - Order 156: Restaurant @ (1.21, 0.89) → Customer @ (1.03, 0.10) [Ready since 01:25:47]
+  - Order 157: Restaurant @ (1.74, 1.44) → Customer @ (2.52, 2.20) [Ready since 01:25:49]
+  ... and 21 more orders
 
-ASSIGNMENTS MADE (6):
+ASSIGNMENTS MADE (2):
 
-✓ Courier 3 ← Orders [181] (Bundle size: 1)
-  - Order 181: (3.83, 1.35) → (4.90, 1.62)
+✓ Courier 8 ← Orders [175, 178, 179] (Bundle size: 3)
+  - Order 175: (1.21, 0.89) → (1.85, 1.87)
+  - Order 178: (1.21, 0.89) → (1.83, 0.10)
+  - Order 179: (1.21, 0.89) → (1.66, 0.10)
 
-✓ Courier 5 ← Orders [159] (Bundle size: 1)
-  - Order 159: (3.83, 1.35) → (2.25, 0.75)
-
-✓ Courier 11 ← Orders [182] (Bundle size: 1)
-  - Order 182: (1.21, 0.89) → (2.09, 2.41)
-
-✓ Courier 6 ← Orders [158, 165, 167] (Bundle size: 3)
-  - Order 158: (1.30, 1.33) → (0.10, 1.04)
-  - Order 165: (0.85, 1.65) → (0.10, 0.58)
-  - Order 167: (0.85, 1.65) → (0.10, 2.00)
-
-✓ Courier 8 ← Orders [179, 180] (Bundle size: 2)
-  - Order 179: (1.74, 1.44) → (1.55, 0.10)
-  - Order 180: (1.23, 1.23) → (0.66, 0.10)
-
-✓ Courier 10 ← Orders [186] (Bundle size: 1)
-  - Order 186: (1.21, 0.89) → (0.19, 0.49)
+✓ Courier 9 ← Orders [177, 184, 186] (Bundle size: 3)
+  - Order 177: (0.85, 1.65) → (0.10, 0.36)
+  - Order 184: (0.85, 1.65) → (0.10, 0.63)
+  - Order 186: (0.85, 1.65) → (0.10, 0.82)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 6
-  - Orders in transit: 13
-  - Orders still waiting: 47
-  - Orders delivered so far: 84
+  - Orders assigned this batch: 2
+  - Orders in transit: 23
+  - Orders still waiting: 31
+  - Orders delivered so far: 82
 
 ====================================================================================================
 BATCH 21 @ t=6000s (01:40:00)
@@ -728,47 +665,41 @@ BATCH 21 @ t=6000s (01:40:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (28):
-  - Order 145: Restaurant @ (1.74, 1.44) → Customer @ (0.23, 1.54) [Ready since 01:25:08]
-  - Order 147: Restaurant @ (1.74, 1.44) → Customer @ (1.40, 0.11) [Ready since 01:25:51]
-  - Order 149: Restaurant @ (0.91, 1.00) → Customer @ (0.75, 2.89) [Ready since 01:26:03]
-  - Order 150: Restaurant @ (0.85, 1.65) → Customer @ (2.21, 2.08) [Ready since 01:26:19]
-  - Order 151: Restaurant @ (1.21, 0.89) → Customer @ (0.33, 2.51) [Ready since 01:26:29]
-  - Order 152: Restaurant @ (1.74, 1.44) → Customer @ (1.10, 2.46) [Ready since 01:26:42]
-  - Order 155: Restaurant @ (1.30, 1.33) → Customer @ (0.61, 0.53) [Ready since 01:28:29]
-  - Order 156: Restaurant @ (0.85, 1.65) → Customer @ (1.92, 0.39) [Ready since 01:28:53]
-  - Order 157: Restaurant @ (1.21, 0.89) → Customer @ (2.55, 0.87) [Ready since 01:28:56]
-  - Order 163: Restaurant @ (1.74, 1.44) → Customer @ (3.53, 1.18) [Ready since 01:31:04]
-  ... and 18 more orders
+READY ORDERS (30):
+  - Order 156: Restaurant @ (1.21, 0.89) → Customer @ (1.03, 0.10) [Ready since 01:25:47]
+  - Order 157: Restaurant @ (1.74, 1.44) → Customer @ (2.52, 2.20) [Ready since 01:25:49]
+  - Order 158: Restaurant @ (1.30, 1.33) → Customer @ (0.38, 0.10) [Ready since 01:26:42]
+  - Order 159: Restaurant @ (1.74, 1.44) → Customer @ (2.94, 0.10) [Ready since 01:26:45]
+  - Order 161: Restaurant @ (0.85, 1.65) → Customer @ (2.64, 1.26) [Ready since 01:28:48]
+  - Order 162: Restaurant @ (1.30, 1.33) → Customer @ (2.64, 2.43) [Ready since 01:29:03]
+  - Order 163: Restaurant @ (1.21, 0.89) → Customer @ (1.45, 2.72) [Ready since 01:29:20]
+  - Order 164: Restaurant @ (1.21, 0.89) → Customer @ (1.10, 2.18) [Ready since 01:29:23]
+  - Order 167: Restaurant @ (1.21, 0.89) → Customer @ (2.61, 1.09) [Ready since 01:30:04]
+  - Order 173: Restaurant @ (1.30, 1.33) → Customer @ (0.76, 3.12) [Ready since 01:31:46]
+  ... and 20 more orders
 
-ASSIGNMENTS MADE (5):
+ASSIGNMENTS MADE (3):
 
-✓ Courier 0 ← Orders [188, 191] (Bundle size: 2)
-  - Order 188: (1.83, 1.33) → (0.19, 1.25)
-  - Order 191: (0.91, 1.00) → (0.66, 2.20)
+✓ Courier 3 ← Orders [165, 166, 170] (Bundle size: 3)
+  - Order 165: (1.74, 1.44) → (0.83, 0.12)
+  - Order 166: (1.74, 1.44) → (1.93, 0.10)
+  - Order 170: (1.74, 1.44) → (0.50, 1.35)
 
-✓ Courier 1 ← Orders [189, 190] (Bundle size: 2)
-  - Order 189: (1.83, 1.33) → (2.93, 1.59)
-  - Order 190: (1.21, 0.89) → (2.49, 1.95)
+✓ Courier 0 ← Orders [191, 192, 194] (Bundle size: 3)
+  - Order 191: (1.21, 0.89) → (2.38, 2.18)
+  - Order 192: (1.74, 1.44) → (2.42, 2.18)
+  - Order 194: (1.74, 1.44) → (0.85, 2.54)
 
-✓ Courier 4 ← Orders [171, 174, 175] (Bundle size: 3)
-  - Order 171: (1.74, 1.44) → (2.45, 0.38)
-  - Order 174: (1.30, 1.33) → (2.99, 0.94)
-  - Order 175: (0.85, 1.65) → (1.91, 1.99)
-
-✓ Courier 9 ← Orders [170, 172, 173] (Bundle size: 3)
-  - Order 170: (0.91, 1.00) → (0.10, 0.74)
-  - Order 172: (1.74, 1.44) → (0.21, 1.91)
-  - Order 173: (1.30, 1.33) → (0.10, 0.47)
-
-✓ Courier 7 ← Orders [187] (Bundle size: 1)
-  - Order 187: (0.91, 1.00) → (1.89, 0.68)
+✓ Courier 6 ← Orders [180, 182, 183] (Bundle size: 3)
+  - Order 180: (1.21, 0.89) → (2.54, 1.91)
+  - Order 182: (1.30, 1.33) → (2.41, 0.78)
+  - Order 183: (1.21, 0.89) → (2.44, 2.11)
 
 BATCH SUMMARY:
-  - Orders assigned this batch: 5
-  - Orders in transit: 15
-  - Orders still waiting: 28
-  - Orders delivered so far: 91
+  - Orders assigned this batch: 3
+  - Orders in transit: 21
+  - Orders still waiting: 30
+  - Orders delivered so far: 93
 
 ====================================================================================================
 BATCH 22 @ t=6300s (01:45:00)
@@ -776,38 +707,37 @@ BATCH 22 @ t=6300s (01:45:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (15):
-  - Order 163: Restaurant @ (1.74, 1.44) → Customer @ (3.53, 1.18) [Ready since 01:31:04]
-  - Order 164: Restaurant @ (1.21, 0.89) → Customer @ (1.99, 2.04) [Ready since 01:31:04]
-  - Order 166: Restaurant @ (1.30, 1.33) → Customer @ (2.52, 2.41) [Ready since 01:31:12]
-  - Order 168: Restaurant @ (1.74, 1.44) → Customer @ (2.17, 2.73) [Ready since 01:31:43]
-  - Order 169: Restaurant @ (0.91, 1.00) → Customer @ (0.45, 2.24) [Ready since 01:32:05]
-  - Order 176: Restaurant @ (1.74, 1.44) → Customer @ (0.84, 0.10) [Ready since 01:33:17]
-  - Order 177: Restaurant @ (1.74, 1.44) → Customer @ (2.43, 2.17) [Ready since 01:33:33]
-  - Order 183: Restaurant @ (0.85, 1.65) → Customer @ (1.13, 2.64) [Ready since 01:36:10]
-  - Order 184: Restaurant @ (1.21, 0.89) → Customer @ (2.52, 0.40) [Ready since 01:36:58]
-  - Order 185: Restaurant @ (1.30, 1.33) → Customer @ (2.80, 1.59) [Ready since 01:37:39]
-  ... and 5 more orders
+READY ORDERS (7):
+  - Order 173: Restaurant @ (1.30, 1.33) → Customer @ (0.76, 3.12) [Ready since 01:31:46]
+  - Order 174: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 3.04) [Ready since 01:32:04]
+  - Order 176: Restaurant @ (1.30, 1.33) → Customer @ (0.10, 1.36) [Ready since 01:32:36]
+  - Order 185: Restaurant @ (2.90, 3.33) → Customer @ (2.77, 2.30) [Ready since 01:35:29]
+  - Order 188: Restaurant @ (2.90, 3.33) → Customer @ (1.35, 3.87) [Ready since 01:36:01]
+  - Order 196: Restaurant @ (1.74, 1.44) → Customer @ (1.72, 0.14) [Ready since 01:38:38]
+  - Order 199: Restaurant @ (0.58, 4.38) → Customer @ (0.10, 4.60) [Ready since 01:39:01]
 
 ASSIGNMENTS MADE (3):
 
-✓ Courier 2 ← Orders [195, 198] (Bundle size: 2)
-  - Order 195: (1.21, 0.89) → (0.10, 1.00)
-  - Order 198: (0.85, 1.65) → (1.37, 0.75)
+✓ Courier 1 ← Orders [190, 193, 195] (Bundle size: 3)
+  - Order 190: (0.85, 1.65) → (0.10, 0.80)
+  - Order 193: (0.85, 1.65) → (0.17, 0.10)
+  - Order 195: (0.85, 1.65) → (0.10, 2.34)
 
-✓ Courier 11 ← Orders [199, 200] (Bundle size: 2)
-  - Order 199: (0.91, 1.00) → (0.73, 0.10)
-  - Order 200: (0.91, 1.00) → (1.09, 0.10)
+✓ Courier 2 ← Orders [181, 189, 198] (Bundle size: 3)
+  - Order 181: (1.21, 0.89) → (0.10, 1.08)
+  - Order 189: (1.21, 0.89) → (1.01, 2.33)
+  - Order 198: (1.21, 0.89) → (0.85, 1.86)
 
-✓ Courier 10 ← Orders [202, 203] (Bundle size: 2)
-  - Order 202: (0.85, 1.65) → (0.10, 2.33)
-  - Order 203: (0.85, 1.65) → (0.23, 2.92)
+✓ Courier 4 ← Orders [167, 187, 197] (Bundle size: 3)
+  - Order 167: (1.21, 0.89) → (2.61, 1.09)
+  - Order 187: (1.21, 0.89) → (2.19, 1.59)
+  - Order 197: (1.21, 0.89) → (2.33, 0.69)
 
 BATCH SUMMARY:
   - Orders assigned this batch: 3
-  - Orders in transit: 22
-  - Orders still waiting: 15
-  - Orders delivered so far: 97
+  - Orders in transit: 28
+  - Orders still waiting: 7
+  - Orders delivered so far: 101
 
 ====================================================================================================
 BATCH 23 @ t=6600s (01:50:00)
@@ -815,1692 +745,689 @@ BATCH 23 @ t=6600s (01:50:00)
 
 AVAILABLE COURIERS (0):
 
-READY ORDERS (17):
-  - Order 183: Restaurant @ (0.85, 1.65) → Customer @ (1.13, 2.64) [Ready since 01:36:10]
-  - Order 184: Restaurant @ (1.21, 0.89) → Customer @ (2.52, 0.40) [Ready since 01:36:58]
-  - Order 185: Restaurant @ (1.30, 1.33) → Customer @ (2.80, 1.59) [Ready since 01:37:39]
-  - Order 192: Restaurant @ (1.30, 1.33) → Customer @ (1.55, 2.39) [Ready since 01:41:06]
-  - Order 193: Restaurant @ (1.74, 1.44) → Customer @ (2.67, 2.70) [Ready since 01:41:59]
-  - Order 194: Restaurant @ (1.74, 1.44) → Customer @ (3.07, 0.28) [Ready since 01:42:48]
-  - Order 196: Restaurant @ (1.83, 1.33) → Customer @ (2.16, 0.10) [Ready since 01:43:38]
-  - Order 197: Restaurant @ (1.23, 1.23) → Customer @ (1.84, 0.10) [Ready since 01:44:15]
-  - Order 201: Restaurant @ (1.23, 1.23) → Customer @ (0.27, 2.69) [Ready since 01:45:37]
-  - Order 204: Restaurant @ (1.83, 1.33) → Customer @ (3.19, 1.79) [Ready since 01:47:18]
-  ... and 7 more orders
-
-ASSIGNMENTS MADE (6):
-
-✓ Courier 8 ← Orders [211, 213] (Bundle size: 2)
-  - Order 211: (1.21, 0.89) → (2.71, 1.29)
-  - Order 213: (1.21, 0.89) → (2.84, 0.10)
-
-✓ Courier 3 ← Orders [197, 206, 207] (Bundle size: 3)
-  - Order 197: (1.23, 1.23) → (1.84, 0.10)
-  - Order 206: (1.74, 1.44) → (1.66, 0.10)
-  - Order 207: (1.83, 1.33) → (0.80, 0.10)
-
-✓ Courier 5 ← Orders [210, 212] (Bundle size: 2)
-  - Order 210: (1.74, 1.44) → (0.33, 1.84)
-  - Order 212: (1.83, 1.33) → (0.82, 2.61)
-
-✓ Courier 7 ← Orders [183, 185, 192] (Bundle size: 3)
-  - Order 183: (0.85, 1.65) → (1.13, 2.64)
-  - Order 185: (1.30, 1.33) → (2.80, 1.59)
-  - Order 192: (1.30, 1.33) → (1.55, 2.39)
-
-✓ Courier 1 ← Orders [194, 196] (Bundle size: 2)
-  - Order 194: (1.74, 1.44) → (3.07, 0.28)
-  - Order 196: (1.83, 1.33) → (2.16, 0.10)
-
-✓ Courier 0 ← Orders [215, 218] (Bundle size: 2)
-  - Order 215: (1.83, 1.33) → (0.48, 1.47)
-  - Order 218: (1.83, 1.33) → (1.61, 3.07)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 6
-  - Orders in transit: 20
-  - Orders still waiting: 17
-  - Orders delivered so far: 105
-
-====================================================================================================
-BATCH 24 @ t=6900s (01:55:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (13):
-  - Order 193: Restaurant @ (1.74, 1.44) → Customer @ (2.67, 2.70) [Ready since 01:41:59]
-  - Order 201: Restaurant @ (1.23, 1.23) → Customer @ (0.27, 2.69) [Ready since 01:45:37]
-  - Order 204: Restaurant @ (1.83, 1.33) → Customer @ (3.19, 1.79) [Ready since 01:47:18]
-  - Order 205: Restaurant @ (1.30, 1.33) → Customer @ (0.75, 2.18) [Ready since 01:47:33]
-  - Order 208: Restaurant @ (1.74, 1.44) → Customer @ (1.65, 3.30) [Ready since 01:48:01]
-  - Order 209: Restaurant @ (1.83, 1.33) → Customer @ (0.29, 2.20) [Ready since 01:48:11]
-  - Order 214: Restaurant @ (1.74, 1.44) → Customer @ (1.91, 2.96) [Ready since 01:53:05]
-  - Order 216: Restaurant @ (0.91, 1.00) → Customer @ (1.58, 1.79) [Ready since 01:53:32]
-  - Order 217: Restaurant @ (0.85, 1.65) → Customer @ (0.70, 2.71) [Ready since 01:53:33]
-  - Order 219: Restaurant @ (1.30, 1.33) → Customer @ (1.14, 0.10) [Ready since 01:54:27]
-  ... and 3 more orders
-
-ASSIGNMENTS MADE (3):
-
-✓ Courier 6 ← Orders [224] (Bundle size: 1)
-  - Order 224: (0.91, 1.00) → (2.28, 0.82)
-
-✓ Courier 2 ← Orders [233] (Bundle size: 1)
-  - Order 233: (1.83, 1.33) → (3.52, 0.94)
-
-✓ Courier 11 ← Orders [234] (Bundle size: 1)
-  - Order 234: (1.21, 0.89) → (0.10, 0.45)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 3
-  - Orders in transit: 25
-  - Orders still waiting: 13
-  - Orders delivered so far: 112
-
-====================================================================================================
-BATCH 25 @ t=7200s (02:00:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (21):
-  - Order 201: Restaurant @ (1.23, 1.23) → Customer @ (0.27, 2.69) [Ready since 01:45:37]
-  - Order 204: Restaurant @ (1.83, 1.33) → Customer @ (3.19, 1.79) [Ready since 01:47:18]
-  - Order 205: Restaurant @ (1.30, 1.33) → Customer @ (0.75, 2.18) [Ready since 01:47:33]
-  - Order 208: Restaurant @ (1.74, 1.44) → Customer @ (1.65, 3.30) [Ready since 01:48:01]
-  - Order 209: Restaurant @ (1.83, 1.33) → Customer @ (0.29, 2.20) [Ready since 01:48:11]
-  - Order 214: Restaurant @ (1.74, 1.44) → Customer @ (1.91, 2.96) [Ready since 01:53:05]
-  - Order 216: Restaurant @ (0.91, 1.00) → Customer @ (1.58, 1.79) [Ready since 01:53:32]
-  - Order 217: Restaurant @ (0.85, 1.65) → Customer @ (0.70, 2.71) [Ready since 01:53:33]
-  - Order 219: Restaurant @ (1.30, 1.33) → Customer @ (1.14, 0.10) [Ready since 01:54:27]
-  - Order 220: Restaurant @ (1.21, 0.89) → Customer @ (0.10, 2.27) [Ready since 01:54:35]
-  ... and 11 more orders
-
-ASSIGNMENTS MADE (3):
-
-✓ Courier 10 ← Orders [235] (Bundle size: 1)
-  - Order 235: (1.21, 0.89) → (0.26, 1.22)
-
-✓ Courier 4 ← Orders [230, 231, 236] (Bundle size: 3)
-  - Order 230: (1.30, 1.33) → (2.90, 1.62)
-  - Order 231: (1.30, 1.33) → (2.63, 2.40)
-  - Order 236: (1.30, 1.33) → (2.00, 0.57)
-
-✓ Courier 8 ← Orders [244] (Bundle size: 1)
-  - Order 244: (1.21, 0.89) → (0.10, 0.98)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 3
-  - Orders in transit: 18
-  - Orders still waiting: 21
-  - Orders delivered so far: 123
-
-====================================================================================================
-BATCH 26 @ t=7500s (02:05:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (26):
-  - Order 214: Restaurant @ (1.74, 1.44) → Customer @ (1.91, 2.96) [Ready since 01:53:05]
-  - Order 216: Restaurant @ (0.91, 1.00) → Customer @ (1.58, 1.79) [Ready since 01:53:32]
-  - Order 217: Restaurant @ (0.85, 1.65) → Customer @ (0.70, 2.71) [Ready since 01:53:33]
-  - Order 219: Restaurant @ (1.30, 1.33) → Customer @ (1.14, 0.10) [Ready since 01:54:27]
-  - Order 220: Restaurant @ (1.21, 0.89) → Customer @ (0.10, 2.27) [Ready since 01:54:35]
-  - Order 221: Restaurant @ (1.83, 1.33) → Customer @ (0.54, 2.04) [Ready since 01:54:49]
-  - Order 222: Restaurant @ (1.30, 1.33) → Customer @ (2.48, 1.06) [Ready since 01:54:55]
-  - Order 223: Restaurant @ (0.85, 1.65) → Customer @ (1.58, 2.44) [Ready since 01:55:24]
-  - Order 225: Restaurant @ (0.91, 1.00) → Customer @ (2.28, 1.87) [Ready since 01:55:40]
-  - Order 226: Restaurant @ (1.83, 1.33) → Customer @ (0.45, 0.47) [Ready since 01:56:10]
-  ... and 16 more orders
-
-ASSIGNMENTS MADE (6):
-
-✓ Courier 5 ← Orders [245] (Bundle size: 1)
-  - Order 245: (3.83, 1.35) → (4.90, 1.98)
-
-✓ Courier 6 ← Orders [239] (Bundle size: 1)
-  - Order 239: (3.83, 1.35) → (2.77, 2.59)
-
-✓ Courier 9 ← Orders [229, 232, 238] (Bundle size: 3)
-  - Order 229: (1.30, 1.33) → (1.36, 0.10)
-  - Order 232: (1.30, 1.33) → (1.71, 0.10)
-  - Order 238: (1.74, 1.44) → (1.66, 0.16)
-
-✓ Courier 1 ← Orders [242, 246, 248] (Bundle size: 3)
-  - Order 242: (1.30, 1.33) → (2.35, 0.10)
-  - Order 246: (1.74, 1.44) → (2.19, 0.10)
-  - Order 248: (1.30, 1.33) → (1.48, 0.10)
-
-✓ Courier 11 ← Orders [265] (Bundle size: 1)
-  - Order 265: (1.74, 1.44) → (1.16, 2.35)
-
-✓ Courier 2 ← Orders [267] (Bundle size: 1)
-  - Order 267: (1.30, 1.33) → (1.63, 0.10)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 6
-  - Orders in transit: 17
-  - Orders still waiting: 26
-  - Orders delivered so far: 133
-
-====================================================================================================
-BATCH 27 @ t=7800s (02:10:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (29):
-  - Order 223: Restaurant @ (0.85, 1.65) → Customer @ (1.58, 2.44) [Ready since 01:55:24]
-  - Order 225: Restaurant @ (0.91, 1.00) → Customer @ (2.28, 1.87) [Ready since 01:55:40]
-  - Order 226: Restaurant @ (1.83, 1.33) → Customer @ (0.45, 0.47) [Ready since 01:56:10]
-  - Order 227: Restaurant @ (1.30, 1.33) → Customer @ (0.49, 0.10) [Ready since 01:56:11]
-  - Order 228: Restaurant @ (0.85, 1.65) → Customer @ (1.94, 1.23) [Ready since 01:56:24]
-  - Order 237: Restaurant @ (1.21, 0.89) → Customer @ (2.89, 1.73) [Ready since 02:00:07]
-  - Order 240: Restaurant @ (1.83, 1.33) → Customer @ (2.51, 2.08) [Ready since 02:01:05]
-  - Order 241: Restaurant @ (1.23, 1.23) → Customer @ (0.55, 2.04) [Ready since 02:02:03]
-  - Order 243: Restaurant @ (1.83, 1.33) → Customer @ (1.68, 2.97) [Ready since 02:02:07]
-  - Order 247: Restaurant @ (1.83, 1.33) → Customer @ (0.93, 2.32) [Ready since 02:02:33]
-  ... and 19 more orders
-
-ASSIGNMENTS MADE (5):
-
-✓ Courier 7 ← Orders [270] (Bundle size: 1)
-  - Order 270: (1.23, 1.23) → (1.22, 2.85)
-
-✓ Courier 3 ← Orders [271, 272] (Bundle size: 2)
-  - Order 271: (0.85, 1.65) → (0.98, 0.14)
-  - Order 272: (0.85, 1.65) → (0.10, 1.29)
-
-✓ Courier 0 ← Orders [266, 268, 269] (Bundle size: 3)
-  - Order 266: (1.83, 1.33) → (0.43, 1.81)
-  - Order 268: (1.30, 1.33) → (0.72, 0.10)
-  - Order 269: (1.30, 1.33) → (1.42, 0.10)
-
-✓ Courier 10 ← Orders [273, 274] (Bundle size: 2)
-  - Order 273: (1.30, 1.33) → (1.83, 0.47)
-  - Order 274: (1.83, 1.33) → (2.17, 0.10)
-
-✓ Courier 8 ← Orders [276] (Bundle size: 1)
-  - Order 276: (1.21, 0.89) → (0.10, 0.10)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 5
-  - Orders in transit: 18
-  - Orders still waiting: 29
-  - Orders delivered so far: 138
-
-====================================================================================================
-BATCH 28 @ t=8100s (02:15:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (24):
-  - Order 237: Restaurant @ (1.21, 0.89) → Customer @ (2.89, 1.73) [Ready since 02:00:07]
-  - Order 240: Restaurant @ (1.83, 1.33) → Customer @ (2.51, 2.08) [Ready since 02:01:05]
-  - Order 241: Restaurant @ (1.23, 1.23) → Customer @ (0.55, 2.04) [Ready since 02:02:03]
-  - Order 243: Restaurant @ (1.83, 1.33) → Customer @ (1.68, 2.97) [Ready since 02:02:07]
-  - Order 247: Restaurant @ (1.83, 1.33) → Customer @ (0.93, 2.32) [Ready since 02:02:33]
-  - Order 249: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.27) [Ready since 02:03:08]
-  - Order 250: Restaurant @ (1.23, 1.23) → Customer @ (1.37, 2.84) [Ready since 02:03:23]
-  - Order 251: Restaurant @ (0.85, 1.65) → Customer @ (2.02, 1.54) [Ready since 02:03:31]
-  - Order 252: Restaurant @ (1.21, 0.89) → Customer @ (2.42, 2.06) [Ready since 02:03:39]
-  - Order 253: Restaurant @ (1.21, 0.89) → Customer @ (1.28, 1.94) [Ready since 02:04:02]
-  ... and 14 more orders
-
-ASSIGNMENTS MADE (3):
-
-✓ Courier 6 ← Orders [283, 285] (Bundle size: 2)
-  - Order 283: (1.21, 0.89) → (2.70, 0.10)
-  - Order 285: (1.23, 1.23) → (2.28, 1.35)
-
-✓ Courier 11 ← Orders [289] (Bundle size: 1)
-  - Order 289: (1.30, 1.33) → (0.10, 0.91)
-
-✓ Courier 9 ← Orders [279, 280, 281] (Bundle size: 3)
-  - Order 279: (1.21, 0.89) → (0.70, 2.06)
-  - Order 280: (1.23, 1.23) → (0.12, 1.10)
-  - Order 281: (1.21, 0.89) → (0.23, 1.67)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 3
-  - Orders in transit: 20
-  - Orders still waiting: 24
-  - Orders delivered so far: 144
-
-====================================================================================================
-BATCH 29 @ t=8400s (02:20:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (24):
-  - Order 255: Restaurant @ (1.83, 1.33) → Customer @ (1.87, 3.30) [Ready since 02:05:37]
-  - Order 256: Restaurant @ (1.30, 1.33) → Customer @ (2.20, 0.31) [Ready since 02:05:41]
-  - Order 257: Restaurant @ (1.23, 1.23) → Customer @ (0.65, 0.10) [Ready since 02:05:48]
-  - Order 258: Restaurant @ (1.83, 1.33) → Customer @ (3.14, 1.62) [Ready since 02:05:50]
-  - Order 259: Restaurant @ (1.83, 1.33) → Customer @ (1.99, 2.32) [Ready since 02:06:03]
-  - Order 260: Restaurant @ (1.74, 1.44) → Customer @ (3.16, 1.76) [Ready since 02:06:08]
-  - Order 261: Restaurant @ (0.91, 1.00) → Customer @ (0.54, 2.36) [Ready since 02:06:11]
-  - Order 262: Restaurant @ (1.21, 0.89) → Customer @ (0.58, 0.10) [Ready since 02:06:38]
-  - Order 263: Restaurant @ (1.30, 1.33) → Customer @ (2.12, 0.49) [Ready since 02:06:47]
-  - Order 264: Restaurant @ (1.74, 1.44) → Customer @ (1.98, 0.10) [Ready since 02:06:56]
-  ... and 14 more orders
-
-ASSIGNMENTS MADE (7):
-
-✓ Courier 2 ← Orders [298] (Bundle size: 1)
-  - Order 298: (1.83, 1.33) → (3.43, 1.94)
-
-✓ Courier 5 ← Orders [296] (Bundle size: 1)
-  - Order 296: (3.83, 1.35) → (2.95, 0.10)
-
-✓ Courier 7 ← Orders [297] (Bundle size: 1)
-  - Order 297: (0.85, 1.65) → (0.10, 1.78)
-
-✓ Courier 4 ← Orders [301] (Bundle size: 1)
-  - Order 301: (1.21, 0.89) → (2.40, 1.42)
-
-✓ Courier 1 ← Orders [300] (Bundle size: 1)
-  - Order 300: (1.30, 1.33) → (0.10, 2.57)
-
-✓ Courier 8 ← Orders [302] (Bundle size: 1)
-  - Order 302: (1.21, 0.89) → (3.13, 1.01)
-
-✓ Courier 10 ← Orders [304] (Bundle size: 1)
-  - Order 304: (0.91, 1.00) → (0.10, 0.49)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 7
-  - Orders in transit: 19
-  - Orders still waiting: 24
-  - Orders delivered so far: 154
-
-====================================================================================================
-BATCH 30 @ t=8700s (02:25:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (20):
-  - Order 275: Restaurant @ (1.30, 1.33) → Customer @ (2.16, 0.10) [Ready since 02:12:55]
-  - Order 277: Restaurant @ (1.30, 1.33) → Customer @ (0.38, 0.10) [Ready since 02:14:38]
-  - Order 278: Restaurant @ (1.74, 1.44) → Customer @ (2.65, 0.80) [Ready since 02:14:45]
-  - Order 282: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 1.60) [Ready since 02:15:55]
-  - Order 284: Restaurant @ (1.83, 1.33) → Customer @ (0.66, 1.35) [Ready since 02:16:23]
-  - Order 286: Restaurant @ (0.85, 1.65) → Customer @ (1.47, 3.18) [Ready since 02:17:17]
-  - Order 287: Restaurant @ (1.23, 1.23) → Customer @ (1.98, 2.14) [Ready since 02:17:30]
-  - Order 288: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.05) [Ready since 02:17:40]
-  - Order 290: Restaurant @ (1.30, 1.33) → Customer @ (0.59, 2.22) [Ready since 02:18:10]
-  - Order 291: Restaurant @ (1.74, 1.44) → Customer @ (0.69, 1.55) [Ready since 02:18:18]
-  ... and 10 more orders
-
-ASSIGNMENTS MADE (3):
-
-✓ Courier 3 ← Orders [320, 321] (Bundle size: 2)
-  - Order 320: (1.21, 0.89) → (2.95, 0.82)
-  - Order 321: (0.91, 1.00) → (2.69, 0.17)
-
-✓ Courier 11 ← Orders [322] (Bundle size: 1)
-  - Order 322: (0.85, 1.65) → (0.10, 2.24)
-
-✓ Courier 7 ← Orders [325] (Bundle size: 1)
-  - Order 325: (1.83, 1.33) → (0.60, 1.86)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 3
-  - Orders in transit: 16
-  - Orders still waiting: 20
-  - Orders delivered so far: 161
-
-====================================================================================================
-BATCH 31 @ t=9000s (02:30:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (37):
-  - Order 282: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 1.60) [Ready since 02:15:55]
-  - Order 286: Restaurant @ (0.85, 1.65) → Customer @ (1.47, 3.18) [Ready since 02:17:17]
-  - Order 287: Restaurant @ (1.23, 1.23) → Customer @ (1.98, 2.14) [Ready since 02:17:30]
-  - Order 288: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.05) [Ready since 02:17:40]
-  - Order 290: Restaurant @ (1.30, 1.33) → Customer @ (0.59, 2.22) [Ready since 02:18:10]
-  - Order 291: Restaurant @ (1.74, 1.44) → Customer @ (0.69, 1.55) [Ready since 02:18:18]
-  - Order 292: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 1.23) [Ready since 02:18:28]
-  - Order 293: Restaurant @ (1.74, 1.44) → Customer @ (1.08, 2.62) [Ready since 02:18:52]
-  - Order 294: Restaurant @ (1.83, 1.33) → Customer @ (0.72, 1.35) [Ready since 02:19:07]
-  - Order 295: Restaurant @ (1.30, 1.33) → Customer @ (1.44, 0.28) [Ready since 02:19:15]
-  ... and 27 more orders
-
-ASSIGNMENTS MADE (7):
-
-✓ Courier 2 ← Orders [284] (Bundle size: 1)
-  - Order 284: (1.83, 1.33) → (0.66, 1.35)
-
-✓ Courier 5 ← Orders [303] (Bundle size: 1)
-  - Order 303: (3.83, 1.35) → (2.98, 3.14)
-
-✓ Courier 0 ← Orders [337] (Bundle size: 1)
-  - Order 337: (1.83, 1.33) → (2.63, 0.24)
-
-✓ Courier 4 ← Orders [342] (Bundle size: 1)
-  - Order 342: (0.91, 1.00) → (0.37, 2.44)
-
-✓ Courier 8 ← Orders [344, 345] (Bundle size: 2)
-  - Order 344: (1.30, 1.33) → (1.24, 0.10)
-  - Order 345: (1.23, 1.23) → (2.01, 0.10)
-
-✓ Courier 9 ← Orders [338, 339, 341] (Bundle size: 3)
-  - Order 338: (0.85, 1.65) → (1.32, 0.10)
-  - Order 339: (0.85, 1.65) → (1.02, 0.10)
-  - Order 341: (1.30, 1.33) → (1.69, 0.30)
-
-✓ Courier 10 ← Orders [312, 318, 319] (Bundle size: 3)
-  - Order 312: (1.21, 0.89) → (0.90, 0.10)
-  - Order 318: (1.21, 0.89) → (0.34, 0.10)
-  - Order 319: (1.21, 0.89) → (0.58, 1.73)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 7
-  - Orders in transit: 13
-  - Orders still waiting: 37
-  - Orders delivered so far: 169
-
-====================================================================================================
-BATCH 32 @ t=9300s (02:35:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (30):
-  - Order 299: Restaurant @ (0.85, 1.65) → Customer @ (1.76, 0.28) [Ready since 02:20:08]
-  - Order 306: Restaurant @ (0.85, 1.65) → Customer @ (0.89, 0.10) [Ready since 02:24:24]
-  - Order 307: Restaurant @ (1.30, 1.33) → Customer @ (1.70, 3.16) [Ready since 02:24:30]
-  - Order 308: Restaurant @ (1.83, 1.33) → Customer @ (2.98, 0.45) [Ready since 02:24:31]
-  - Order 309: Restaurant @ (0.91, 1.00) → Customer @ (0.30, 2.68) [Ready since 02:25:00]
-  - Order 310: Restaurant @ (0.91, 1.00) → Customer @ (2.51, 1.26) [Ready since 02:25:09]
-  - Order 311: Restaurant @ (1.74, 1.44) → Customer @ (3.42, 1.49) [Ready since 02:25:16]
-  - Order 313: Restaurant @ (0.91, 1.00) → Customer @ (2.49, 1.10) [Ready since 02:25:25]
-  - Order 314: Restaurant @ (1.30, 1.33) → Customer @ (1.38, 0.31) [Ready since 02:25:33]
-  - Order 315: Restaurant @ (1.74, 1.44) → Customer @ (1.60, 2.47) [Ready since 02:25:36]
-  ... and 20 more orders
-
-ASSIGNMENTS MADE (5):
-
-✓ Courier 1 ← Orders [348, 349] (Bundle size: 2)
-  - Order 348: (0.91, 1.00) → (0.10, 1.21)
-  - Order 349: (1.30, 1.33) → (0.44, 0.10)
-
-✓ Courier 6 ← Orders [305] (Bundle size: 1)
-  - Order 305: (1.83, 1.33) → (2.05, 2.82)
-
-✓ Courier 11 ← Orders [353] (Bundle size: 1)
-  - Order 353: (1.23, 1.23) → (0.10, 1.14)
-
-✓ Courier 3 ← Orders [362] (Bundle size: 1)
-  - Order 362: (0.91, 1.00) → (0.10, 0.46)
-
-✓ Courier 7 ← Orders [357, 360, 361] (Bundle size: 3)
-  - Order 357: (0.85, 1.65) → (0.10, 0.93)
-  - Order 360: (0.91, 1.00) → (0.25, 2.42)
-  - Order 361: (0.91, 1.00) → (0.10, 1.69)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 5
-  - Orders in transit: 19
-  - Orders still waiting: 30
-  - Orders delivered so far: 177
-
-====================================================================================================
-BATCH 33 @ t=9600s (02:40:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (34):
-  - Order 309: Restaurant @ (0.91, 1.00) → Customer @ (0.30, 2.68) [Ready since 02:25:00]
-  - Order 310: Restaurant @ (0.91, 1.00) → Customer @ (2.51, 1.26) [Ready since 02:25:09]
-  - Order 311: Restaurant @ (1.74, 1.44) → Customer @ (3.42, 1.49) [Ready since 02:25:16]
-  - Order 313: Restaurant @ (0.91, 1.00) → Customer @ (2.49, 1.10) [Ready since 02:25:25]
-  - Order 314: Restaurant @ (1.30, 1.33) → Customer @ (1.38, 0.31) [Ready since 02:25:33]
-  - Order 315: Restaurant @ (1.74, 1.44) → Customer @ (1.60, 2.47) [Ready since 02:25:36]
-  - Order 316: Restaurant @ (1.21, 0.89) → Customer @ (0.10, 2.48) [Ready since 02:25:39]
-  - Order 317: Restaurant @ (1.74, 1.44) → Customer @ (2.97, 1.33) [Ready since 02:25:56]
-  - Order 323: Restaurant @ (1.83, 1.33) → Customer @ (3.61, 2.16) [Ready since 02:27:31]
-  - Order 324: Restaurant @ (1.21, 0.89) → Customer @ (0.10, 0.10) [Ready since 02:27:32]
-  ... and 24 more orders
-
-ASSIGNMENTS MADE (4):
-
-✓ Courier 2 ← Orders [356] (Bundle size: 1)
-  - Order 356: (1.83, 1.33) → (2.52, 0.10)
-
-✓ Courier 0 ← Orders [364] (Bundle size: 1)
-  - Order 364: (1.21, 0.89) → (1.52, 2.72)
-
-✓ Courier 4 ← Orders [346, 347, 350] (Bundle size: 3)
-  - Order 346: (0.85, 1.65) → (2.33, 2.95)
-  - Order 347: (1.74, 1.44) → (3.05, 1.83)
-  - Order 350: (0.85, 1.65) → (2.20, 1.66)
-
-✓ Courier 5 ← Orders [336, 340, 343] (Bundle size: 3)
-  - Order 336: (0.85, 1.65) → (0.10, 2.80)
-  - Order 340: (1.30, 1.33) → (0.10, 2.36)
-  - Order 343: (1.74, 1.44) → (0.79, 2.44)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 4
-  - Orders in transit: 20
-  - Orders still waiting: 34
-  - Orders delivered so far: 182
-
-====================================================================================================
-BATCH 34 @ t=9900s (02:45:00)
-====================================================================================================
-
-AVAILABLE COURIERS (0):
-
-READY ORDERS (11):
-  - Order 334: Restaurant @ (1.83, 1.33) → Customer @ (0.69, 1.36) [Ready since 02:30:08]
-  - Order 335: Restaurant @ (1.21, 0.89) → Customer @ (0.60, 2.37) [Ready since 02:30:19]
-  - Order 351: Restaurant @ (1.21, 0.89) → Customer @ (2.23, 1.16) [Ready since 02:35:15]
-  - Order 352: Restaurant @ (1.83, 1.33) → Customer @ (2.84, 1.74) [Ready since 02:35:22]
-  - Order 354: Restaurant @ (0.91, 1.00) → Customer @ (1.81, 2.34) [Ready since 02:35:38]
-  - Order 355: Restaurant @ (0.85, 1.65) → Customer @ (0.10, 2.46) [Ready since 02:35:54]
-  - Order 358: Restaurant @ (1.21, 0.89) → Customer @ (1.90, 1.74) [Ready since 02:36:29]
-  - Order 359: Restaurant @ (1.21, 0.89) → Customer @ (1.81, 2.22) [Ready since 02:36:50]
-  - Order 363: Restaurant @ (0.91, 1.00) → Customer @ (0.10, 1.24) [Ready since 02:39:12]
-  - Order 365: Restaurant @ (1.21, 0.89) → Customer @ (0.99, 2.21) [Ready since 02:40:02]
-  ... and 1 more orders
-
-ASSIGNMENTS MADE (5):
-
-✓ Courier 6 ← Orders [355, 358, 359] (Bundle size: 3)
-  - Order 355: (0.85, 1.65) → (0.10, 2.46)
-  - Order 358: (1.21, 0.89) → (1.90, 1.74)
-  - Order 359: (1.21, 0.89) → (1.81, 2.22)
-
-✓ Courier 11 ← Orders [367] (Bundle size: 1)
-  - Order 367: (1.23, 1.23) → (2.82, 0.10)
-
-✓ Courier 8 ← Orders [351, 352, 354] (Bundle size: 3)
-  - Order 351: (1.21, 0.89) → (2.23, 1.16)
-  - Order 352: (1.83, 1.33) → (2.84, 1.74)
-  - Order 354: (0.91, 1.00) → (1.81, 2.34)
-
-✓ Courier 9 ← Orders [368] (Bundle size: 1)
-  - Order 368: (0.85, 1.65) → (1.31, 0.33)
-
-✓ Courier 2 ← Orders [363, 365, 366] (Bundle size: 3)
-  - Order 363: (0.91, 1.00) → (0.10, 1.24)
-  - Order 365: (1.21, 0.89) → (0.99, 2.21)
-  - Order 366: (1.23, 1.23) → (0.60, 0.10)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 5
-  - Orders in transit: 18
-  - Orders still waiting: 11
-  - Orders delivered so far: 191
-
-====================================================================================================
-BATCH 35 @ t=10200s (02:50:00)
-====================================================================================================
-
-AVAILABLE COURIERS (1):
-  - Courier 1 @ (0.44, 0.10) - IDLE
-
-READY ORDERS (0):
-
-ASSIGNMENTS MADE (3):
-
-✓ Courier 3 ← Orders [369, 370] (Bundle size: 2)
-  - Order 369: (1.23, 1.23) → (2.47, 1.43)
-  - Order 370: (1.30, 1.33) → (2.52, 1.29)
-
-✓ Courier 10 ← Orders [371] (Bundle size: 1)
-  - Order 371: (0.91, 1.00) → (1.50, 2.08)
-
-✓ Courier 7 ← Orders [372] (Bundle size: 1)
-  - Order 372: (1.21, 0.89) → (0.38, 0.10)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 3
-  - Orders in transit: 22
-  - Orders still waiting: 0
-  - Orders delivered so far: 200
-
-====================================================================================================
-BATCH 36 @ t=10500s (02:55:00)
-====================================================================================================
-
-AVAILABLE COURIERS (1):
-  - Courier 1 @ (0.44, 0.10) - IDLE
-
-READY ORDERS (0):
-
-ASSIGNMENTS MADE (3):
-
-✓ Courier 0 ← Orders [373] (Bundle size: 1)
-  - Order 373: (1.23, 1.23) → (2.07, 0.10)
-
-✓ Courier 1 ← Orders [374] (Bundle size: 1)
-  - Order 374: (0.85, 1.65) → (0.10, 3.00)
-
-✓ Courier 9 ← Orders [375] (Bundle size: 1)
-  - Order 375: (1.21, 0.89) → (0.10, 0.10)
-
-BATCH SUMMARY:
-  - Orders assigned this batch: 3
-  - Orders in transit: 21
-  - Orders still waiting: 0
-  - Orders delivered so far: 204
-
-====================================================================================================
-BATCH 37 @ t=10800s (03:00:00)
-====================================================================================================
-
-AVAILABLE COURIERS (1):
-  - Courier 10 @ (1.50, 2.08) - IDLE
-
-READY ORDERS (0):
+READY ORDERS (4):
+  - Order 185: Restaurant @ (2.90, 3.33) → Customer @ (2.77, 2.30) [Ready since 01:35:29]
+  - Order 188: Restaurant @ (2.90, 3.33) → Customer @ (1.35, 3.87) [Ready since 01:36:01]
+  - Order 196: Restaurant @ (1.74, 1.44) → Customer @ (1.72, 0.14) [Ready since 01:38:38]
+  - Order 199: Restaurant @ (0.58, 4.38) → Customer @ (0.10, 4.60) [Ready since 01:39:01]
 
 ASSIGNMENTS MADE (1):
 
-✓ Courier 11 ← Orders [376] (Bundle size: 1)
-  - Order 376: (3.83, 1.35) → (4.49, 0.12)
+✓ Courier 7 ← Orders [188, 196, 199] (Bundle size: 3)
+  - Order 188: (2.90, 3.33) → (1.35, 3.87)
+  - Order 196: (1.74, 1.44) → (1.72, 0.14)
+  - Order 199: (0.58, 4.38) → (0.10, 4.60)
 
 BATCH SUMMARY:
   - Orders assigned this batch: 1
-  - Orders in transit: 12
-  - Orders still waiting: 0
-  - Orders delivered so far: 216
+  - Orders in transit: 24
+  - Orders still waiting: 4
+  - Orders delivered so far: 105
 
 
 ====================================================================================================
 DELIVERY COMPLETION LOG
 ====================================================================================================
 
-✓ Order 0 delivered by Courier 9 @ t=1334s (00:22:14)
-  - Click-to-door: 19.2 minutes
-  - Ready-to-door (freshness): 9.2 minutes
-  - Route: (1.23, 1.23) → (0.32, 0.10)
-
-✓ Order 1 delivered by Courier 10 @ t=1559s (00:25:59)
-  - Click-to-door: 19.0 minutes
-  - Ready-to-door (freshness): 9.0 minutes
-  - Route: (0.85, 1.65) → (0.10, 3.31)
-
-✓ Order 2 delivered by Courier 2 @ t=1594s (00:26:34)
-  - Click-to-door: 18.6 minutes
-  - Ready-to-door (freshness): 8.6 minutes
-  - Route: (3.83, 1.35) → (2.42, 1.41)
-
-✓ Order 3 delivered by Courier 0 @ t=1656s (00:27:36)
-  - Click-to-door: 18.3 minutes
-  - Ready-to-door (freshness): 8.3 minutes
-  - Route: (0.85, 1.65) → (0.10, 2.33)
-
-✓ Order 4 delivered by Courier 1 @ t=1690s (00:28:10)
-  - Click-to-door: 17.5 minutes
-  - Ready-to-door (freshness): 7.5 minutes
-  - Route: (1.74, 1.44) → (3.38, 1.70)
-
-✓ Order 7 delivered by Courier 6 @ t=1805s (00:30:05)
-  - Click-to-door: 16.9 minutes
-  - Ready-to-door (freshness): 6.9 minutes
-  - Route: (1.83, 1.33) → (1.96, 0.22)
-
-✓ Order 6 delivered by Courier 11 @ t=1971s (00:32:51)
-  - Click-to-door: 20.5 minutes
-  - Ready-to-door (freshness): 10.5 minutes
-  - Route: (1.23, 1.23) → (1.91, 3.07)
-
-✓ Order 9 delivered by Courier 7 @ t=2022s (00:33:42)
-  - Click-to-door: 18.8 minutes
-  - Ready-to-door (freshness): 8.8 minutes
-  - Route: (1.23, 1.23) → (1.17, 0.10)
-
-✓ Order 5 delivered by Courier 5 @ t=2049s (00:34:09)
-  - Click-to-door: 21.9 minutes
-  - Ready-to-door (freshness): 11.9 minutes
-  - Route: (3.83, 1.35) → (2.41, 2.67)
-
-✓ Order 8 delivered by Courier 8 @ t=2055s (00:34:15)
-  - Click-to-door: 20.9 minutes
-  - Ready-to-door (freshness): 10.9 minutes
-  - Route: (1.21, 0.89) → (0.37, 2.40)
-
-✓ Order 11 delivered by Courier 2 @ t=2126s (00:35:26)
-  - Click-to-door: 18.0 minutes
-  - Ready-to-door (freshness): 8.0 minutes
-  - Route: (1.23, 1.23) → (0.19, 1.29)
-
-✓ Order 10 delivered by Courier 3 @ t=2182s (00:36:22)
-  - Click-to-door: 20.8 minutes
-  - Ready-to-door (freshness): 10.8 minutes
-  - Route: (1.23, 1.23) → (2.03, 0.10)
-
-✓ Order 14 delivered by Courier 0 @ t=2491s (00:41:31)
+✓ Order 0 delivered by Courier 0 @ t=1270s (00:21:10)
   - Click-to-door: 18.1 minutes
   - Ready-to-door (freshness): 8.1 minutes
-  - Route: (0.85, 1.65) → (0.10, 1.33)
+  - Route: (1.74, 1.44) → (0.16, 1.08)
 
-✓ Order 13 delivered by Courier 1 @ t=2573s (00:42:53)
-  - Click-to-door: 19.5 minutes
-  - Ready-to-door (freshness): 9.5 minutes
-  - Route: (3.83, 1.35) → (2.25, 2.17)
+✓ Order 1 delivered by Courier 9 @ t=1487s (00:24:47)
+  - Click-to-door: 16.8 minutes
+  - Ready-to-door (freshness): 6.8 minutes
+  - Route: (1.21, 0.89) → (0.37, 0.10)
 
-✓ Order 17 delivered by Courier 8 @ t=2703s (00:45:03)
-  - Click-to-door: 17.8 minutes
-  - Ready-to-door (freshness): 7.8 minutes
-  - Route: (0.85, 1.65) → (0.10, 1.94)
+✓ Order 2 delivered by Courier 1 @ t=1744s (00:29:04)
+  - Click-to-door: 18.2 minutes
+  - Ready-to-door (freshness): 8.2 minutes
+  - Route: (1.30, 1.33) → (0.10, 2.11)
 
-✓ Order 15 delivered by Courier 2 @ t=2796s (00:46:36)
-  - Click-to-door: 20.1 minutes
-  - Ready-to-door (freshness): 10.1 minutes
-  - Route: (1.30, 1.33) → (2.92, 0.55)
+✓ Order 3 delivered by Courier 8 @ t=1773s (00:29:33)
+  - Click-to-door: 17.4 minutes
+  - Ready-to-door (freshness): 7.4 minutes
+  - Route: (1.74, 1.44) → (0.23, 1.49)
 
-✓ Order 12 delivered by Courier 0 @ t=2912s (00:48:32)
-  - Click-to-door: 25.4 minutes
-  - Ready-to-door (freshness): 15.4 minutes
-  - Route: (0.85, 1.65) → (1.76, 0.49)
-
-✓ Order 19 delivered by Courier 7 @ t=3050s (00:50:50)
-  - Click-to-door: 18.9 minutes
-  - Ready-to-door (freshness): 8.9 minutes
-  - Route: (0.91, 1.00) → (2.06, 0.10)
-
-✓ Order 22 delivered by Courier 6 @ t=3096s (00:51:36)
-  - Click-to-door: 19.1 minutes
-  - Ready-to-door (freshness): 9.1 minutes
-  - Route: (1.21, 0.89) → (1.35, 0.10)
-
-✓ Order 23 delivered by Courier 1 @ t=3114s (00:51:54)
-  - Click-to-door: 19.0 minutes
-  - Ready-to-door (freshness): 9.0 minutes
-  - Route: (0.85, 1.65) → (2.04, 1.57)
-
-✓ Order 24 delivered by Courier 9 @ t=3115s (00:51:55)
-  - Click-to-door: 18.3 minutes
-  - Ready-to-door (freshness): 8.3 minutes
-  - Route: (0.91, 1.00) → (0.59, 0.10)
-
-✓ Order 16 delivered by Courier 2 @ t=3159s (00:52:39)
-  - Click-to-door: 25.9 minutes
-  - Ready-to-door (freshness): 15.9 minutes
-  - Route: (1.74, 1.44) → (2.81, 2.46)
-
-✓ Order 27 delivered by Courier 3 @ t=3214s (00:53:34)
-  - Click-to-door: 19.1 minutes
-  - Ready-to-door (freshness): 9.1 minutes
-  - Route: (1.83, 1.33) → (0.86, 0.70)
-
-✓ Order 20 delivered by Courier 6 @ t=3247s (00:54:07)
-  - Click-to-door: 21.9 minutes
-  - Ready-to-door (freshness): 11.9 minutes
-  - Route: (1.30, 1.33) → (1.10, 0.10)
-
-✓ Order 28 delivered by Courier 4 @ t=3259s (00:54:19)
+✓ Order 6 delivered by Courier 6 @ t=1982s (00:33:02)
   - Click-to-door: 18.6 minutes
   - Ready-to-door (freshness): 8.6 minutes
-  - Route: (1.74, 1.44) → (2.03, 2.63)
+  - Route: (1.74, 1.44) → (1.58, 0.10)
 
-✓ Order 35 delivered by Courier 5 @ t=3419s (00:56:59)
-  - Click-to-door: 19.3 minutes
-  - Ready-to-door (freshness): 9.3 minutes
-  - Route: (1.83, 1.33) → (2.14, 2.32)
-
-✓ Order 25 delivered by Courier 3 @ t=3423s (00:57:03)
-  - Click-to-door: 22.8 minutes
-  - Ready-to-door (freshness): 12.8 minutes
-  - Route: (1.30, 1.33) → (0.99, 0.10)
-
-✓ Order 18 delivered by Courier 7 @ t=3456s (00:57:36)
-  - Click-to-door: 26.6 minutes
-  - Ready-to-door (freshness): 16.6 minutes
-  - Route: (1.23, 1.23) → (2.80, 1.73)
-
-✓ Order 36 delivered by Courier 0 @ t=3496s (00:58:16)
-  - Click-to-door: 20.1 minutes
-  - Ready-to-door (freshness): 10.1 minutes
-  - Route: (1.23, 1.23) → (2.19, 0.10)
-
-✓ Order 29 delivered by Courier 8 @ t=3504s (00:58:24)
-  - Click-to-door: 22.3 minutes
-  - Ready-to-door (freshness): 12.3 minutes
-  - Route: (1.21, 0.89) → (0.25, 2.21)
-
-✓ Order 32 delivered by Courier 11 @ t=3510s (00:58:30)
-  - Click-to-door: 21.1 minutes
-  - Ready-to-door (freshness): 11.1 minutes
-  - Route: (1.21, 0.89) → (1.72, 0.10)
-
-✓ Order 21 delivered by Courier 6 @ t=3527s (00:58:47)
-  - Click-to-door: 26.3 minutes
-  - Ready-to-door (freshness): 16.3 minutes
-  - Route: (1.83, 1.33) → (0.48, 0.80)
-
-✓ Order 26 delivered by Courier 3 @ t=3607s (01:00:07)
-  - Click-to-door: 25.8 minutes
-  - Ready-to-door (freshness): 15.8 minutes
-  - Route: (1.83, 1.33) → (1.48, 0.14)
-
-✓ Order 47 delivered by Courier 9 @ t=3631s (01:00:31)
-  - Click-to-door: 20.0 minutes
-  - Ready-to-door (freshness): 10.0 minutes
-  - Route: (0.85, 1.65) → (0.10, 2.09)
-
-✓ Order 48 delivered by Courier 1 @ t=3683s (01:01:23)
-  - Click-to-door: 20.6 minutes
-  - Ready-to-door (freshness): 10.6 minutes
-  - Route: (1.30, 1.33) → (3.19, 1.91)
-
-✓ Order 34 delivered by Courier 10 @ t=3735s (01:02:15)
-  - Click-to-door: 24.7 minutes
-  - Ready-to-door (freshness): 14.7 minutes
-  - Route: (0.91, 1.00) → (2.00, 2.43)
-
-✓ Order 51 delivered by Courier 2 @ t=3775s (01:02:55)
-  - Click-to-door: 21.1 minutes
-  - Ready-to-door (freshness): 11.1 minutes
-  - Route: (3.83, 1.35) → (4.15, 0.10)
-
-✓ Order 30 delivered by Courier 11 @ t=3813s (01:03:33)
-  - Click-to-door: 26.4 minutes
-  - Ready-to-door (freshness): 16.4 minutes
-  - Route: (1.30, 1.33) → (0.20, 0.10)
-
-✓ Order 55 delivered by Courier 4 @ t=3875s (01:04:35)
-  - Click-to-door: 19.8 minutes
-  - Ready-to-door (freshness): 9.8 minutes
-  - Route: (0.85, 1.65) → (0.94, 2.93)
-
-✓ Order 43 delivered by Courier 6 @ t=3909s (01:05:09)
-  - Click-to-door: 25.2 minutes
-  - Ready-to-door (freshness): 15.2 minutes
-  - Route: (1.21, 0.89) → (1.00, 0.10)
-
-✓ Order 31 delivered by Courier 10 @ t=4014s (01:06:54)
-  - Click-to-door: 29.5 minutes
-  - Ready-to-door (freshness): 19.5 minutes
-  - Route: (1.21, 0.89) → (0.81, 2.31)
-
-✓ Order 63 delivered by Courier 7 @ t=4080s (01:08:00)
+✓ Order 4 delivered by Courier 4 @ t=2063s (00:34:23)
   - Click-to-door: 21.3 minutes
   - Ready-to-door (freshness): 11.3 minutes
-  - Route: (3.83, 1.35) → (2.24, 0.61)
+  - Route: (2.90, 3.33) → (4.23, 2.38)
 
-✓ Order 45 delivered by Courier 6 @ t=4084s (01:08:04)
-  - Click-to-door: 27.9 minutes
-  - Ready-to-door (freshness): 17.9 minutes
-  - Route: (1.30, 1.33) → (0.62, 0.17)
-
-✓ Order 65 delivered by Courier 8 @ t=4099s (01:08:19)
-  - Click-to-door: 20.3 minutes
-  - Ready-to-door (freshness): 10.3 minutes
-  - Route: (0.85, 1.65) → (1.72, 2.37)
-
-✓ Order 62 delivered by Courier 5 @ t=4118s (01:08:38)
-  - Click-to-door: 22.2 minutes
-  - Ready-to-door (freshness): 12.2 minutes
-  - Route: (0.91, 1.00) → (0.71, 2.80)
-
-✓ Order 66 delivered by Courier 0 @ t=4163s (01:09:23)
-  - Click-to-door: 21.1 minutes
-  - Ready-to-door (freshness): 11.1 minutes
-  - Route: (1.30, 1.33) → (0.28, 0.54)
-
-✓ Order 72 delivered by Courier 9 @ t=4210s (01:10:10)
-  - Click-to-door: 20.1 minutes
-  - Ready-to-door (freshness): 10.1 minutes
-  - Route: (0.85, 1.65) → (0.10, 3.04)
-
-✓ Order 74 delivered by Courier 3 @ t=4221s (01:10:21)
-  - Click-to-door: 20.0 minutes
-  - Ready-to-door (freshness): 10.0 minutes
-  - Route: (1.21, 0.89) → (2.88, 1.62)
-
-✓ Order 33 delivered by Courier 10 @ t=4231s (01:10:31)
-  - Click-to-door: 33.0 minutes
-  - Ready-to-door (freshness): 23.0 minutes
-  - Route: (0.91, 1.00) → (0.54, 2.84)
-
-✓ Order 44 delivered by Courier 6 @ t=4423s (01:13:43)
-  - Click-to-door: 33.7 minutes
-  - Ready-to-door (freshness): 23.7 minutes
-  - Route: (1.21, 0.89) → (0.10, 1.47)
-
-✓ Order 76 delivered by Courier 1 @ t=4469s (01:14:29)
-  - Click-to-door: 23.0 minutes
-  - Ready-to-door (freshness): 13.0 minutes
-  - Route: (1.23, 1.23) → (0.42, 2.77)
-
-✓ Order 89 delivered by Courier 4 @ t=4516s (01:15:16)
-  - Click-to-door: 20.6 minutes
-  - Ready-to-door (freshness): 10.6 minutes
-  - Route: (1.83, 1.33) → (0.54, 1.22)
-
-✓ Order 64 delivered by Courier 8 @ t=4532s (01:15:32)
-  - Click-to-door: 28.1 minutes
-  - Ready-to-door (freshness): 18.1 minutes
-  - Route: (1.30, 1.33) → (3.17, 1.21)
-
-✓ Order 79 delivered by Courier 2 @ t=4548s (01:15:48)
-  - Click-to-door: 23.4 minutes
-  - Ready-to-door (freshness): 13.4 minutes
-  - Route: (1.74, 1.44) → (0.76, 1.86)
-
-✓ Order 80 delivered by Courier 11 @ t=4614s (01:16:54)
-  - Click-to-door: 24.3 minutes
-  - Ready-to-door (freshness): 14.3 minutes
-  - Route: (1.74, 1.44) → (2.72, 2.77)
-
-✓ Order 97 delivered by Courier 5 @ t=4694s (01:18:14)
-  - Click-to-door: 19.7 minutes
-  - Ready-to-door (freshness): 9.7 minutes
-  - Route: (1.30, 1.33) → (1.24, 0.10)
-
-✓ Order 99 delivered by Courier 0 @ t=4698s (01:18:18)
+✓ Order 9 delivered by Courier 8 @ t=2309s (00:38:29)
   - Click-to-door: 18.3 minutes
   - Ready-to-door (freshness): 8.3 minutes
-  - Route: (1.21, 0.89) → (0.40, 0.10)
+  - Route: (0.85, 1.65) → (0.10, 2.60)
 
-✓ Order 100 delivered by Courier 3 @ t=4738s (01:18:58)
-  - Click-to-door: 18.8 minutes
-  - Ready-to-door (freshness): 8.8 minutes
-  - Route: (3.83, 1.35) → (2.76, 1.80)
-
-✓ Order 81 delivered by Courier 7 @ t=4760s (01:19:20)
-  - Click-to-door: 25.5 minutes
-  - Ready-to-door (freshness): 15.5 minutes
-  - Route: (3.83, 1.35) → (3.00, 0.10)
-
-✓ Order 96 delivered by Courier 9 @ t=4809s (01:20:09)
-  - Click-to-door: 22.0 minutes
-  - Ready-to-door (freshness): 12.0 minutes
-  - Route: (0.85, 1.65) → (0.90, 2.78)
-
-✓ Order 111 delivered by Courier 6 @ t=4907s (01:21:47)
-  - Click-to-door: 17.8 minutes
-  - Ready-to-door (freshness): 7.8 minutes
-  - Route: (1.30, 1.33) → (2.32, 1.59)
-
-✓ Order 116 delivered by Courier 2 @ t=4909s (01:21:49)
-  - Click-to-door: 16.4 minutes
-  - Ready-to-door (freshness): 6.4 minutes
-  - Route: (0.85, 1.65) → (0.10, 1.04)
-
-✓ Order 71 delivered by Courier 10 @ t=4919s (01:21:59)
-  - Click-to-door: 32.3 minutes
-  - Ready-to-door (freshness): 22.3 minutes
-  - Route: (1.30, 1.33) → (1.49, 0.24)
-
-✓ Order 113 delivered by Courier 8 @ t=5002s (01:23:22)
-  - Click-to-door: 19.0 minutes
-  - Ready-to-door (freshness): 9.0 minutes
-  - Route: (3.83, 1.35) → (4.79, 0.69)
-
-✓ Order 117 delivered by Courier 4 @ t=5008s (01:23:28)
-  - Click-to-door: 18.0 minutes
-  - Ready-to-door (freshness): 8.0 minutes
-  - Route: (1.21, 0.89) → (2.24, 0.45)
-
-✓ Order 114 delivered by Courier 2 @ t=5041s (01:24:01)
-  - Click-to-door: 19.2 minutes
-  - Ready-to-door (freshness): 9.2 minutes
-  - Route: (1.21, 0.89) → (0.10, 0.94)
-
-✓ Order 69 delivered by Courier 10 @ t=5058s (01:24:18)
-  - Click-to-door: 34.8 minutes
-  - Ready-to-door (freshness): 24.8 minutes
-  - Route: (1.83, 1.33) → (1.50, 0.10)
-
-✓ Order 98 delivered by Courier 9 @ t=5081s (01:24:41)
-  - Click-to-door: 24.8 minutes
-  - Ready-to-door (freshness): 14.8 minutes
-  - Route: (0.85, 1.65) → (2.02, 2.63)
-
-✓ Order 115 delivered by Courier 1 @ t=5114s (01:25:14)
-  - Click-to-door: 20.2 minutes
-  - Ready-to-door (freshness): 10.2 minutes
-  - Route: (1.21, 0.89) → (2.23, 0.72)
-
-✓ Order 86 delivered by Courier 5 @ t=5189s (01:26:29)
-  - Click-to-door: 31.9 minutes
-  - Ready-to-door (freshness): 21.9 minutes
-  - Route: (1.21, 0.89) → (2.32, 1.37)
-
-✓ Order 110 delivered by Courier 6 @ t=5195s (01:26:35)
-  - Click-to-door: 22.8 minutes
-  - Ready-to-door (freshness): 12.8 minutes
-  - Route: (1.30, 1.33) → (2.06, 0.45)
-
-✓ Order 119 delivered by Courier 0 @ t=5224s (01:27:04)
-  - Click-to-door: 18.7 minutes
-  - Ready-to-door (freshness): 8.7 minutes
-  - Route: (0.91, 1.00) → (1.38, 0.10)
-
-✓ Order 70 delivered by Courier 10 @ t=5228s (01:27:08)
-  - Click-to-door: 37.6 minutes
-  - Ready-to-door (freshness): 27.6 minutes
-  - Route: (1.74, 1.44) → (1.12, 0.13)
-
-✓ Order 112 delivered by Courier 2 @ t=5258s (01:27:38)
-  - Click-to-door: 23.4 minutes
-  - Ready-to-door (freshness): 13.4 minutes
-  - Route: (0.85, 1.65) → (0.10, 0.13)
-
-✓ Order 91 delivered by Courier 3 @ t=5279s (01:27:59)
-  - Click-to-door: 31.2 minutes
-  - Ready-to-door (freshness): 21.2 minutes
-  - Route: (0.85, 1.65) → (0.10, 2.08)
-
-✓ Order 105 delivered by Courier 11 @ t=5314s (01:28:34)
-  - Click-to-door: 26.9 minutes
-  - Ready-to-door (freshness): 16.9 minutes
-  - Route: (0.91, 1.00) → (0.87, 0.10)
-
-✓ Order 94 delivered by Courier 9 @ t=5350s (01:29:10)
-  - Click-to-door: 31.7 minutes
-  - Ready-to-door (freshness): 21.7 minutes
-  - Route: (0.85, 1.65) → (2.55, 1.93)
-
-✓ Order 118 delivered by Courier 0 @ t=5447s (01:30:47)
-  - Click-to-door: 23.4 minutes
-  - Ready-to-door (freshness): 13.4 minutes
-  - Route: (0.91, 1.00) → (2.24, 0.10)
-
-✓ Order 124 delivered by Courier 7 @ t=5448s (01:30:48)
-  - Click-to-door: 21.0 minutes
-  - Ready-to-door (freshness): 11.0 minutes
-  - Route: (1.83, 1.33) → (2.05, 2.85)
-
-✓ Order 93 delivered by Courier 3 @ t=5537s (01:32:17)
-  - Click-to-door: 34.9 minutes
-  - Ready-to-door (freshness): 24.9 minutes
-  - Route: (1.83, 1.33) → (0.57, 2.76)
-
-✓ Order 83 delivered by Courier 5 @ t=5552s (01:32:32)
-  - Click-to-door: 38.4 minutes
-  - Ready-to-door (freshness): 28.4 minutes
-  - Route: (1.74, 1.44) → (1.37, 0.30)
-
-✓ Order 109 delivered by Courier 11 @ t=5576s (01:32:56)
-  - Click-to-door: 29.7 minutes
-  - Ready-to-door (freshness): 19.7 minutes
-  - Route: (0.91, 1.00) → (0.10, 0.51)
-
-✓ Order 107 delivered by Courier 4 @ t=5594s (01:33:14)
-  - Click-to-door: 31.4 minutes
-  - Ready-to-door (freshness): 21.4 minutes
-  - Route: (0.91, 1.00) → (1.81, 2.17)
-
-✓ Order 146 delivered by Courier 1 @ t=5598s (01:33:18)
-  - Click-to-door: 17.7 minutes
-  - Ready-to-door (freshness): 7.7 minutes
-  - Route: (1.74, 1.44) → (0.62, 1.51)
-
-✓ Order 106 delivered by Courier 4 @ t=5724s (01:35:24)
-  - Click-to-door: 33.7 minutes
-  - Ready-to-door (freshness): 23.7 minutes
-  - Route: (1.21, 0.89) → (1.83, 2.23)
-
-✓ Order 104 delivered by Courier 11 @ t=5725s (01:35:25)
-  - Click-to-door: 33.8 minutes
-  - Ready-to-door (freshness): 23.8 minutes
-  - Route: (1.30, 1.33) → (0.10, 0.74)
-
-✓ Order 84 delivered by Courier 5 @ t=5726s (01:35:26)
-  - Click-to-door: 41.1 minutes
-  - Ready-to-door (freshness): 31.1 minutes
-  - Route: (1.21, 0.89) → (1.12, 0.10)
-
-✓ Order 95 delivered by Courier 3 @ t=5743s (01:35:43)
-  - Click-to-door: 37.7 minutes
-  - Ready-to-door (freshness): 27.7 minutes
-  - Route: (1.83, 1.33) → (0.95, 3.09)
-
-✓ Order 153 delivered by Courier 6 @ t=5787s (01:36:27)
-  - Click-to-door: 19.6 minutes
-  - Ready-to-door (freshness): 9.6 minutes
-  - Route: (1.83, 1.33) → (3.08, 0.21)
-
-✓ Order 135 delivered by Courier 8 @ t=5807s (01:36:47)
-  - Click-to-door: 23.7 minutes
-  - Ready-to-door (freshness): 13.7 minutes
-  - Route: (1.83, 1.33) → (1.69, 2.72)
-
-✓ Order 154 delivered by Courier 10 @ t=5839s (01:37:19)
-  - Click-to-door: 19.8 minutes
-  - Ready-to-door (freshness): 9.8 minutes
-  - Route: (1.83, 1.33) → (2.37, 0.36)
-
-✓ Order 160 delivered by Courier 9 @ t=6030s (01:40:30)
-  - Click-to-door: 20.9 minutes
-  - Ready-to-door (freshness): 10.9 minutes
-  - Route: (3.83, 1.35) → (4.86, 2.46)
-
-✓ Order 161 delivered by Courier 0 @ t=6031s (01:40:31)
-  - Click-to-door: 20.3 minutes
-  - Ready-to-door (freshness): 10.3 minutes
-  - Route: (1.30, 1.33) → (2.62, 1.31)
-
-✓ Order 178 delivered by Courier 1 @ t=6032s (01:40:32)
-  - Click-to-door: 16.7 minutes
-  - Ready-to-door (freshness): 6.7 minutes
-  - Route: (1.23, 1.23) → (1.29, 2.30)
-
-✓ Order 108 delivered by Courier 4 @ t=6037s (01:40:37)
-  - Click-to-door: 38.1 minutes
-  - Ready-to-door (freshness): 28.1 minutes
-  - Route: (0.85, 1.65) → (0.68, 2.69)
-
-✓ Order 162 delivered by Courier 7 @ t=6075s (01:41:15)
+✓ Order 8 delivered by Courier 0 @ t=2332s (00:38:52)
   - Click-to-door: 20.7 minutes
   - Ready-to-door (freshness): 10.7 minutes
-  - Route: (1.74, 1.44) → (0.12, 1.96)
+  - Route: (1.21, 0.89) → (0.17, 2.30)
 
-✓ Order 148 delivered by Courier 2 @ t=6298s (01:44:58)
-  - Click-to-door: 28.9 minutes
-  - Ready-to-door (freshness): 18.9 minutes
-  - Route: (3.83, 1.35) → (2.80, 0.10)
-
-✓ Order 179 delivered by Courier 8 @ t=6313s (01:45:13)
-  - Click-to-door: 21.4 minutes
-  - Ready-to-door (freshness): 11.4 minutes
-  - Route: (1.74, 1.44) → (1.55, 0.10)
-
-✓ Order 182 delivered by Courier 11 @ t=6350s (01:45:50)
-  - Click-to-door: 20.1 minutes
-  - Ready-to-door (freshness): 10.1 minutes
-  - Route: (1.21, 0.89) → (2.09, 2.41)
-
-✓ Order 186 delivered by Courier 10 @ t=6405s (01:46:45)
-  - Click-to-door: 18.8 minutes
-  - Ready-to-door (freshness): 8.8 minutes
-  - Route: (1.21, 0.89) → (0.19, 0.49)
-
-✓ Order 188 delivered by Courier 0 @ t=6514s (01:48:34)
-  - Click-to-door: 19.1 minutes
-  - Ready-to-door (freshness): 9.1 minutes
-  - Route: (1.83, 1.33) → (0.19, 1.25)
-
-✓ Order 180 delivered by Courier 8 @ t=6541s (01:49:01)
-  - Click-to-door: 24.8 minutes
-  - Ready-to-door (freshness): 14.8 minutes
-  - Route: (1.23, 1.23) → (0.66, 0.10)
-
-✓ Order 167 delivered by Courier 6 @ t=6543s (01:49:03)
-  - Click-to-door: 27.6 minutes
-  - Ready-to-door (freshness): 17.6 minutes
-  - Route: (0.85, 1.65) → (0.10, 2.00)
-
-✓ Order 190 delivered by Courier 1 @ t=6547s (01:49:07)
-  - Click-to-door: 18.3 minutes
-  - Ready-to-door (freshness): 8.3 minutes
-  - Route: (1.21, 0.89) → (2.49, 1.95)
-
-✓ Order 175 delivered by Courier 4 @ t=6576s (01:49:36)
-  - Click-to-door: 26.4 minutes
-  - Ready-to-door (freshness): 16.4 minutes
-  - Route: (0.85, 1.65) → (1.91, 1.99)
-
-✓ Order 181 delivered by Courier 3 @ t=6626s (01:50:26)
-  - Click-to-door: 24.7 minutes
-  - Ready-to-door (freshness): 14.7 minutes
-  - Route: (3.83, 1.35) → (4.90, 1.62)
-
-✓ Order 187 delivered by Courier 7 @ t=6638s (01:50:38)
-  - Click-to-door: 21.2 minutes
-  - Ready-to-door (freshness): 11.2 minutes
-  - Route: (0.91, 1.00) → (1.89, 0.68)
-
-✓ Order 159 delivered by Courier 5 @ t=6647s (01:50:47)
-  - Click-to-door: 31.3 minutes
-  - Ready-to-door (freshness): 21.3 minutes
-  - Route: (3.83, 1.35) → (2.25, 0.75)
-
-✓ Order 189 delivered by Courier 1 @ t=6762s (01:52:42)
-  - Click-to-door: 23.0 minutes
-  - Ready-to-door (freshness): 13.0 minutes
-  - Route: (1.83, 1.33) → (2.93, 1.59)
-
-✓ Order 198 delivered by Courier 2 @ t=6772s (01:52:52)
-  - Click-to-door: 18.1 minutes
-  - Ready-to-door (freshness): 8.1 minutes
-  - Route: (0.85, 1.65) → (1.37, 0.75)
-
-✓ Order 158 delivered by Courier 6 @ t=6779s (01:52:59)
-  - Click-to-door: 33.5 minutes
-  - Ready-to-door (freshness): 23.5 minutes
-  - Route: (1.30, 1.33) → (0.10, 1.04)
-
-✓ Order 191 delivered by Courier 0 @ t=6804s (01:53:24)
-  - Click-to-door: 22.5 minutes
-  - Ready-to-door (freshness): 12.5 minutes
-  - Route: (0.91, 1.00) → (0.66, 2.20)
-
-✓ Order 174 delivered by Courier 4 @ t=6952s (01:55:52)
-  - Click-to-door: 33.1 minutes
-  - Ready-to-door (freshness): 23.1 minutes
-  - Route: (1.30, 1.33) → (2.99, 0.94)
-
-✓ Order 199 delivered by Courier 11 @ t=6952s (01:55:52)
-  - Click-to-door: 20.6 minutes
-  - Ready-to-door (freshness): 10.6 minutes
-  - Route: (0.91, 1.00) → (0.73, 0.10)
-
-✓ Order 165 delivered by Courier 6 @ t=6954s (01:55:54)
-  - Click-to-door: 34.8 minutes
-  - Ready-to-door (freshness): 24.8 minutes
-  - Route: (0.85, 1.65) → (0.10, 0.58)
-
-✓ Order 202 delivered by Courier 10 @ t=6960s (01:56:00)
-  - Click-to-door: 20.1 minutes
-  - Ready-to-door (freshness): 10.1 minutes
-  - Route: (0.85, 1.65) → (0.10, 2.33)
-
-✓ Order 173 delivered by Courier 9 @ t=7021s (01:57:01)
-  - Click-to-door: 34.5 minutes
-  - Ready-to-door (freshness): 24.5 minutes
-  - Route: (1.30, 1.33) → (0.10, 0.47)
-
-✓ Order 195 delivered by Courier 2 @ t=7074s (01:57:54)
-  - Click-to-door: 24.9 minutes
-  - Ready-to-door (freshness): 14.9 minutes
-  - Route: (1.21, 0.89) → (0.10, 1.00)
-
-✓ Order 200 delivered by Courier 11 @ t=7116s (01:58:36)
-  - Click-to-door: 23.1 minutes
-  - Ready-to-door (freshness): 13.1 minutes
-  - Route: (0.91, 1.00) → (1.09, 0.10)
-
-✓ Order 211 delivered by Courier 8 @ t=7141s (01:59:01)
-  - Click-to-door: 20.3 minutes
-  - Ready-to-door (freshness): 10.3 minutes
-  - Route: (1.21, 0.89) → (2.71, 1.29)
-
-✓ Order 203 delivered by Courier 10 @ t=7167s (01:59:27)
-  - Click-to-door: 22.7 minutes
-  - Ready-to-door (freshness): 12.7 minutes
-  - Route: (0.85, 1.65) → (0.23, 2.92)
-
-✓ Order 210 delivered by Courier 5 @ t=7172s (01:59:32)
-  - Click-to-door: 21.1 minutes
-  - Ready-to-door (freshness): 11.1 minutes
-  - Route: (1.74, 1.44) → (0.33, 1.84)
-
-✓ Order 170 delivered by Courier 9 @ t=7174s (01:59:34)
-  - Click-to-door: 37.4 minutes
-  - Ready-to-door (freshness): 27.4 minutes
-  - Route: (0.91, 1.00) → (0.10, 0.74)
-
-✓ Order 171 delivered by Courier 4 @ t=7205s (02:00:05)
-  - Click-to-door: 37.7 minutes
-  - Ready-to-door (freshness): 27.7 minutes
-  - Route: (1.74, 1.44) → (2.45, 0.38)
-
-✓ Order 183 delivered by Courier 7 @ t=7205s (02:00:05)
-  - Click-to-door: 33.9 minutes
-  - Ready-to-door (freshness): 23.9 minutes
-  - Route: (0.85, 1.65) → (1.13, 2.64)
-
-✓ Order 196 delivered by Courier 1 @ t=7305s (02:01:45)
-  - Click-to-door: 28.1 minutes
-  - Ready-to-door (freshness): 18.1 minutes
-  - Route: (1.83, 1.33) → (2.16, 0.10)
-
-✓ Order 192 delivered by Courier 7 @ t=7405s (02:03:25)
-  - Click-to-door: 32.3 minutes
-  - Ready-to-door (freshness): 22.3 minutes
-  - Route: (1.30, 1.33) → (1.55, 2.39)
-
-✓ Order 215 delivered by Courier 0 @ t=7415s (02:03:35)
-  - Click-to-door: 20.4 minutes
-  - Ready-to-door (freshness): 10.4 minutes
-  - Route: (1.83, 1.33) → (0.48, 1.47)
-
-✓ Order 213 delivered by Courier 8 @ t=7421s (02:03:41)
-  - Click-to-door: 24.5 minutes
-  - Ready-to-door (freshness): 14.5 minutes
-  - Route: (1.21, 0.89) → (2.84, 0.10)
-
-✓ Order 224 delivered by Courier 6 @ t=7443s (02:04:03)
-  - Click-to-door: 18.6 minutes
-  - Ready-to-door (freshness): 8.6 minutes
-  - Route: (0.91, 1.00) → (2.28, 0.82)
-
-✓ Order 212 delivered by Courier 5 @ t=7444s (02:04:04)
-  - Click-to-door: 25.1 minutes
-  - Ready-to-door (freshness): 15.1 minutes
-  - Route: (1.83, 1.33) → (0.82, 2.61)
-
-✓ Order 172 delivered by Courier 9 @ t=7448s (02:04:08)
-  - Click-to-door: 41.7 minutes
-  - Ready-to-door (freshness): 31.7 minutes
-  - Route: (1.74, 1.44) → (0.21, 1.91)
-
-✓ Order 207 delivered by Courier 3 @ t=7485s (02:04:45)
-  - Click-to-door: 26.7 minutes
-  - Ready-to-door (freshness): 16.7 minutes
-  - Route: (1.83, 1.33) → (0.80, 0.10)
-
-✓ Order 194 delivered by Courier 1 @ t=7556s (02:05:56)
-  - Click-to-door: 33.1 minutes
-  - Ready-to-door (freshness): 23.1 minutes
-  - Route: (1.74, 1.44) → (3.07, 0.28)
-
-✓ Order 234 delivered by Courier 11 @ t=7587s (02:06:27)
-  - Click-to-door: 17.6 minutes
-  - Ready-to-door (freshness): 7.6 minutes
-  - Route: (1.21, 0.89) → (0.10, 0.45)
-
-✓ Order 206 delivered by Courier 3 @ t=7709s (02:08:29)
-  - Click-to-door: 30.5 minutes
-  - Ready-to-door (freshness): 20.5 minutes
-  - Route: (1.74, 1.44) → (1.66, 0.10)
-
-✓ Order 233 delivered by Courier 2 @ t=7727s (02:08:47)
-  - Click-to-door: 20.8 minutes
-  - Ready-to-door (freshness): 10.8 minutes
-  - Route: (1.83, 1.33) → (3.52, 0.94)
-
-✓ Order 185 delivered by Courier 7 @ t=7772s (02:09:32)
-  - Click-to-door: 41.9 minutes
-  - Ready-to-door (freshness): 31.9 minutes
-  - Route: (1.30, 1.33) → (2.80, 1.59)
-
-✓ Order 236 delivered by Courier 4 @ t=7838s (02:10:38)
-  - Click-to-door: 20.6 minutes
-  - Ready-to-door (freshness): 10.6 minutes
-  - Route: (1.30, 1.33) → (2.00, 0.57)
-
-✓ Order 197 delivered by Courier 3 @ t=7852s (02:10:52)
-  - Click-to-door: 36.6 minutes
-  - Ready-to-door (freshness): 26.6 minutes
-  - Route: (1.23, 1.23) → (1.84, 0.10)
-
-✓ Order 218 delivered by Courier 0 @ t=7862s (02:11:02)
-  - Click-to-door: 27.2 minutes
-  - Ready-to-door (freshness): 17.2 minutes
-  - Route: (1.83, 1.33) → (1.61, 3.07)
-
-✓ Order 235 delivered by Courier 10 @ t=7864s (02:11:04)
-  - Click-to-door: 22.0 minutes
-  - Ready-to-door (freshness): 12.0 minutes
-  - Route: (1.21, 0.89) → (0.26, 1.22)
-
-✓ Order 229 delivered by Courier 9 @ t=8005s (02:13:25)
-  - Click-to-door: 26.9 minutes
-  - Ready-to-door (freshness): 16.9 minutes
-  - Route: (1.30, 1.33) → (1.36, 0.10)
-
-✓ Order 244 delivered by Courier 8 @ t=8026s (02:13:46)
+✓ Order 7 delivered by Courier 3 @ t=2339s (00:38:59)
   - Click-to-door: 21.6 minutes
   - Ready-to-door (freshness): 11.6 minutes
-  - Route: (1.21, 0.89) → (0.10, 0.98)
+  - Route: (2.90, 3.33) → (1.58, 2.21)
 
-✓ Order 232 delivered by Courier 9 @ t=8168s (02:16:08)
-  - Click-to-door: 28.3 minutes
-  - Ready-to-door (freshness): 18.3 minutes
-  - Route: (1.30, 1.33) → (1.71, 0.10)
+✓ Order 5 delivered by Courier 6 @ t=2374s (00:39:34)
+  - Click-to-door: 25.5 minutes
+  - Ready-to-door (freshness): 15.5 minutes
+  - Route: (1.21, 0.89) → (2.13, 1.81)
 
-✓ Order 239 delivered by Courier 6 @ t=8178s (02:16:18)
-  - Click-to-door: 25.3 minutes
-  - Ready-to-door (freshness): 15.3 minutes
-  - Route: (3.83, 1.35) → (2.77, 2.59)
-
-✓ Order 230 delivered by Courier 4 @ t=8193s (02:16:33)
-  - Click-to-door: 29.6 minutes
-  - Ready-to-door (freshness): 19.6 minutes
-  - Route: (1.30, 1.33) → (2.90, 1.62)
-
-✓ Order 248 delivered by Courier 1 @ t=8216s (02:16:56)
-  - Click-to-door: 23.8 minutes
-  - Ready-to-door (freshness): 13.8 minutes
-  - Route: (1.30, 1.33) → (1.48, 0.10)
-
-✓ Order 265 delivered by Courier 11 @ t=8265s (02:17:45)
-  - Click-to-door: 20.8 minutes
-  - Ready-to-door (freshness): 10.8 minutes
-  - Route: (1.74, 1.44) → (1.16, 2.35)
-
-✓ Order 238 delivered by Courier 9 @ t=8303s (02:18:23)
-  - Click-to-door: 27.5 minutes
-  - Ready-to-door (freshness): 17.5 minutes
-  - Route: (1.74, 1.44) → (1.66, 0.16)
-
-✓ Order 245 delivered by Courier 5 @ t=8367s (02:19:27)
-  - Click-to-door: 27.2 minutes
-  - Ready-to-door (freshness): 17.2 minutes
-  - Route: (3.83, 1.35) → (4.90, 1.98)
-
-✓ Order 273 delivered by Courier 10 @ t=8375s (02:19:35)
-  - Click-to-door: 18.4 minutes
-  - Ready-to-door (freshness): 8.4 minutes
-  - Route: (1.30, 1.33) → (1.83, 0.47)
-
-✓ Order 270 delivered by Courier 7 @ t=8378s (02:19:38)
+✓ Order 10 delivered by Courier 2 @ t=2493s (00:41:33)
   - Click-to-door: 20.1 minutes
   - Ready-to-door (freshness): 10.1 minutes
-  - Route: (1.23, 1.23) → (1.22, 2.85)
+  - Route: (1.30, 1.33) → (1.88, 3.18)
 
-✓ Order 267 delivered by Courier 2 @ t=8391s (02:19:51)
-  - Click-to-door: 21.7 minutes
-  - Ready-to-door (freshness): 11.7 minutes
-  - Route: (1.30, 1.33) → (1.63, 0.10)
-
-✓ Order 246 delivered by Courier 1 @ t=8422s (02:20:22)
-  - Click-to-door: 28.0 minutes
-  - Ready-to-door (freshness): 18.0 minutes
-  - Route: (1.74, 1.44) → (2.19, 0.10)
-
-✓ Order 231 delivered by Courier 4 @ t=8439s (02:20:39)
-  - Click-to-door: 33.7 minutes
-  - Ready-to-door (freshness): 23.7 minutes
-  - Route: (1.30, 1.33) → (2.63, 2.40)
-
-✓ Order 272 delivered by Courier 3 @ t=8450s (02:20:50)
+✓ Order 11 delivered by Courier 1 @ t=2533s (00:42:13)
   - Click-to-door: 19.8 minutes
   - Ready-to-door (freshness): 9.8 minutes
-  - Route: (0.85, 1.65) → (0.10, 1.29)
+  - Route: (0.58, 4.38) → (0.10, 4.49)
 
-✓ Order 269 delivered by Courier 0 @ t=8502s (02:21:42)
-  - Click-to-door: 23.1 minutes
-  - Ready-to-door (freshness): 13.1 minutes
-  - Route: (1.30, 1.33) → (1.42, 0.10)
-
-✓ Order 242 delivered by Courier 1 @ t=8562s (02:22:42)
-  - Click-to-door: 30.6 minutes
-  - Ready-to-door (freshness): 20.6 minutes
-  - Route: (1.30, 1.33) → (2.35, 0.10)
-
-✓ Order 276 delivered by Courier 8 @ t=8563s (02:22:43)
-  - Click-to-door: 19.1 minutes
-  - Ready-to-door (freshness): 9.1 minutes
-  - Route: (1.21, 0.89) → (0.10, 0.10)
-
-✓ Order 274 delivered by Courier 10 @ t=8581s (02:23:01)
-  - Click-to-door: 21.8 minutes
-  - Ready-to-door (freshness): 11.8 minutes
-  - Route: (1.83, 1.33) → (2.17, 0.10)
-
-✓ Order 268 delivered by Courier 0 @ t=8706s (02:25:06)
-  - Click-to-door: 26.6 minutes
-  - Ready-to-door (freshness): 16.6 minutes
-  - Route: (1.30, 1.33) → (0.72, 0.10)
-
-✓ Order 289 delivered by Courier 11 @ t=8765s (02:26:05)
-  - Click-to-door: 18.3 minutes
-  - Ready-to-door (freshness): 8.3 minutes
-  - Route: (1.30, 1.33) → (0.10, 0.91)
-
-✓ Order 280 delivered by Courier 9 @ t=8788s (02:26:28)
-  - Click-to-door: 21.3 minutes
-  - Ready-to-door (freshness): 11.3 minutes
-  - Route: (1.23, 1.23) → (0.12, 1.10)
-
-✓ Order 271 delivered by Courier 3 @ t=8813s (02:26:53)
-  - Click-to-door: 26.8 minutes
-  - Ready-to-door (freshness): 16.8 minutes
-  - Route: (0.85, 1.65) → (0.98, 0.14)
-
-✓ Order 297 delivered by Courier 7 @ t=8845s (02:27:25)
-  - Click-to-door: 17.9 minutes
-  - Ready-to-door (freshness): 7.9 minutes
-  - Route: (0.85, 1.65) → (0.10, 1.78)
-
-✓ Order 285 delivered by Courier 6 @ t=8946s (02:29:06)
-  - Click-to-door: 22.2 minutes
-  - Ready-to-door (freshness): 12.2 minutes
-  - Route: (1.23, 1.23) → (2.28, 1.35)
-
-✓ Order 298 delivered by Courier 2 @ t=8988s (02:29:48)
-  - Click-to-door: 20.0 minutes
-  - Ready-to-door (freshness): 10.0 minutes
-  - Route: (1.83, 1.33) → (3.43, 1.94)
-
-✓ Order 281 delivered by Courier 9 @ t=8990s (02:29:50)
-  - Click-to-door: 24.2 minutes
-  - Ready-to-door (freshness): 14.2 minutes
-  - Route: (1.21, 0.89) → (0.23, 1.67)
-
-✓ Order 296 delivered by Courier 5 @ t=9010s (02:30:10)
-  - Click-to-door: 20.8 minutes
-  - Ready-to-door (freshness): 10.8 minutes
-  - Route: (3.83, 1.35) → (2.95, 0.10)
-
-✓ Order 266 delivered by Courier 0 @ t=9067s (02:31:07)
-  - Click-to-door: 33.9 minutes
-  - Ready-to-door (freshness): 23.9 minutes
-  - Route: (1.83, 1.33) → (0.43, 1.81)
-
-✓ Order 301 delivered by Courier 4 @ t=9168s (02:32:48)
-  - Click-to-door: 22.0 minutes
-  - Ready-to-door (freshness): 12.0 minutes
-  - Route: (1.21, 0.89) → (2.40, 1.42)
-
-✓ Order 302 delivered by Courier 8 @ t=9204s (02:33:24)
-  - Click-to-door: 21.7 minutes
-  - Ready-to-door (freshness): 11.7 minutes
-  - Route: (1.21, 0.89) → (3.13, 1.01)
-
-✓ Order 304 delivered by Courier 10 @ t=9208s (02:33:28)
-  - Click-to-door: 20.2 minutes
-  - Ready-to-door (freshness): 10.2 minutes
-  - Route: (0.91, 1.00) → (0.10, 0.49)
-
-✓ Order 279 delivered by Courier 9 @ t=9214s (02:33:34)
-  - Click-to-door: 28.4 minutes
-  - Ready-to-door (freshness): 18.4 minutes
-  - Route: (1.21, 0.89) → (0.70, 2.06)
-
-✓ Order 283 delivered by Courier 6 @ t=9266s (02:34:26)
-  - Click-to-door: 28.1 minutes
-  - Ready-to-door (freshness): 18.1 minutes
-  - Route: (1.21, 0.89) → (2.70, 0.10)
-
-✓ Order 300 delivered by Courier 1 @ t=9298s (02:34:58)
-  - Click-to-door: 24.5 minutes
-  - Ready-to-door (freshness): 14.5 minutes
-  - Route: (1.30, 1.33) → (0.10, 2.57)
-
-✓ Order 320 delivered by Courier 3 @ t=9306s (02:35:06)
-  - Click-to-door: 18.9 minutes
-  - Ready-to-door (freshness): 8.9 minutes
-  - Route: (1.21, 0.89) → (2.95, 0.82)
-
-✓ Order 322 delivered by Courier 11 @ t=9310s (02:35:10)
+✓ Order 15 delivered by Courier 5 @ t=2562s (00:42:42)
   - Click-to-door: 18.2 minutes
   - Ready-to-door (freshness): 8.2 minutes
-  - Route: (0.85, 1.65) → (0.10, 2.24)
+  - Route: (0.85, 1.65) → (0.10, 1.79)
 
-✓ Order 325 delivered by Courier 7 @ t=9505s (02:38:25)
-  - Click-to-door: 20.8 minutes
-  - Ready-to-door (freshness): 10.8 minutes
-  - Route: (1.83, 1.33) → (0.60, 1.86)
-
-✓ Order 321 delivered by Courier 3 @ t=9537s (02:38:57)
-  - Click-to-door: 22.1 minutes
-  - Ready-to-door (freshness): 12.1 minutes
-  - Route: (0.91, 1.00) → (2.69, 0.17)
-
-✓ Order 284 delivered by Courier 2 @ t=9560s (02:39:20)
-  - Click-to-door: 32.9 minutes
-  - Ready-to-door (freshness): 22.9 minutes
-  - Route: (1.83, 1.33) → (0.66, 1.35)
-
-✓ Order 339 delivered by Courier 9 @ t=9665s (02:41:05)
-  - Click-to-door: 18.8 minutes
-  - Ready-to-door (freshness): 8.8 minutes
-  - Route: (0.85, 1.65) → (1.02, 0.10)
-
-✓ Order 312 delivered by Courier 10 @ t=9705s (02:41:45)
-  - Click-to-door: 26.4 minutes
-  - Ready-to-door (freshness): 16.4 minutes
-  - Route: (1.21, 0.89) → (0.90, 0.10)
-
-✓ Order 337 delivered by Courier 0 @ t=9723s (02:42:03)
-  - Click-to-door: 20.3 minutes
-  - Ready-to-door (freshness): 10.3 minutes
-  - Route: (1.83, 1.33) → (2.63, 0.24)
-
-✓ Order 303 delivered by Courier 5 @ t=9782s (02:43:02)
-  - Click-to-door: 30.8 minutes
-  - Ready-to-door (freshness): 20.8 minutes
-  - Route: (3.83, 1.35) → (2.98, 3.14)
-
-✓ Order 342 delivered by Courier 4 @ t=9799s (02:43:19)
-  - Click-to-door: 20.5 minutes
-  - Ready-to-door (freshness): 10.5 minutes
-  - Route: (0.91, 1.00) → (0.37, 2.44)
-
-✓ Order 344 delivered by Courier 8 @ t=9804s (02:43:24)
-  - Click-to-door: 19.8 minutes
-  - Ready-to-door (freshness): 9.8 minutes
-  - Route: (1.30, 1.33) → (1.24, 0.10)
-
-✓ Order 338 delivered by Courier 9 @ t=9821s (02:43:41)
-  - Click-to-door: 21.4 minutes
-  - Ready-to-door (freshness): 11.4 minutes
-  - Route: (0.85, 1.65) → (1.32, 0.10)
-
-✓ Order 348 delivered by Courier 1 @ t=9859s (02:44:19)
+✓ Order 12 delivered by Courier 7 @ t=2562s (00:42:42)
   - Click-to-door: 19.6 minutes
   - Ready-to-door (freshness): 9.6 minutes
-  - Route: (0.91, 1.00) → (0.10, 1.21)
+  - Route: (0.85, 1.65) → (1.06, 0.62)
 
-✓ Order 318 delivered by Courier 10 @ t=9893s (02:44:53)
-  - Click-to-door: 28.9 minutes
-  - Ready-to-door (freshness): 18.9 minutes
-  - Route: (1.21, 0.89) → (0.34, 0.10)
+✓ Order 14 delivered by Courier 7 @ t=2801s (00:46:41)
+  - Click-to-door: 23.3 minutes
+  - Ready-to-door (freshness): 13.3 minutes
+  - Route: (1.21, 0.89) → (1.52, 0.10)
 
-✓ Order 305 delivered by Courier 6 @ t=9909s (02:45:09)
-  - Click-to-door: 30.8 minutes
-  - Ready-to-door (freshness): 20.8 minutes
-  - Route: (1.83, 1.33) → (2.05, 2.82)
+✓ Order 13 delivered by Courier 9 @ t=2936s (00:48:56)
+  - Click-to-door: 25.8 minutes
+  - Ready-to-door (freshness): 15.8 minutes
+  - Route: (0.58, 4.38) → (1.77, 4.90)
 
-✓ Order 360 delivered by Courier 7 @ t=9909s (02:45:09)
+✓ Order 18 delivered by Courier 2 @ t=3109s (00:51:49)
+  - Click-to-door: 17.9 minutes
+  - Ready-to-door (freshness): 7.9 minutes
+  - Route: (2.90, 3.33) → (1.65, 3.11)
+
+✓ Order 21 delivered by Courier 1 @ t=3116s (00:51:56)
+  - Click-to-door: 17.3 minutes
+  - Ready-to-door (freshness): 7.3 minutes
+  - Route: (0.58, 4.38) → (0.10, 3.25)
+
+✓ Order 17 delivered by Courier 6 @ t=3130s (00:52:10)
+  - Click-to-door: 18.8 minutes
+  - Ready-to-door (freshness): 8.8 minutes
+  - Route: (1.74, 1.44) → (3.18, 0.82)
+
+✓ Order 19 delivered by Courier 0 @ t=3147s (00:52:27)
   - Click-to-door: 18.2 minutes
   - Ready-to-door (freshness): 8.2 minutes
-  - Route: (0.91, 1.00) → (0.25, 2.42)
+  - Route: (0.85, 1.65) → (0.10, 1.25)
 
-✓ Order 353 delivered by Courier 11 @ t=9914s (02:45:14)
-  - Click-to-door: 19.7 minutes
-  - Ready-to-door (freshness): 9.7 minutes
-  - Route: (1.23, 1.23) → (0.10, 1.14)
+✓ Order 16 delivered by Courier 5 @ t=3178s (00:52:58)
+  - Click-to-door: 19.6 minutes
+  - Ready-to-door (freshness): 9.6 minutes
+  - Route: (0.85, 1.65) → (0.26, 3.41)
 
-✓ Order 341 delivered by Courier 9 @ t=10010s (02:46:50)
-  - Click-to-door: 24.1 minutes
-  - Ready-to-door (freshness): 14.1 minutes
-  - Route: (1.30, 1.33) → (1.69, 0.30)
+✓ Order 22 delivered by Courier 3 @ t=3228s (00:53:48)
+  - Click-to-door: 19.1 minutes
+  - Ready-to-door (freshness): 9.1 minutes
+  - Route: (1.30, 1.33) → (2.61, 0.10)
 
-✓ Order 345 delivered by Courier 8 @ t=10017s (02:46:57)
-  - Click-to-door: 23.4 minutes
-  - Ready-to-door (freshness): 13.4 minutes
-  - Route: (1.23, 1.23) → (2.01, 0.10)
+✓ Order 24 delivered by Courier 7 @ t=3385s (00:56:25)
+  - Click-to-door: 19.8 minutes
+  - Ready-to-door (freshness): 9.8 minutes
+  - Route: (1.21, 0.89) → (1.66, 2.79)
 
-✓ Order 356 delivered by Courier 2 @ t=10124s (02:48:44)
-  - Click-to-door: 22.8 minutes
-  - Ready-to-door (freshness): 12.8 minutes
-  - Route: (1.83, 1.33) → (2.52, 0.10)
+✓ Order 23 delivered by Courier 8 @ t=3431s (00:57:11)
+  - Click-to-door: 21.4 minutes
+  - Ready-to-door (freshness): 11.4 minutes
+  - Route: (1.74, 1.44) → (1.53, 0.10)
 
-✓ Order 361 delivered by Courier 7 @ t=10135s (02:48:55)
-  - Click-to-door: 22.0 minutes
-  - Ready-to-door (freshness): 12.0 minutes
-  - Route: (0.91, 1.00) → (0.10, 1.69)
+✓ Order 39 delivered by Courier 1 @ t=3536s (00:58:56)
+  - Click-to-door: 17.8 minutes
+  - Ready-to-door (freshness): 7.8 minutes
+  - Route: (0.58, 4.38) → (0.10, 4.27)
 
-✓ Order 349 delivered by Courier 1 @ t=10153s (02:49:13)
-  - Click-to-door: 24.4 minutes
-  - Ready-to-door (freshness): 14.4 minutes
-  - Route: (1.30, 1.33) → (0.44, 0.10)
+✓ Order 43 delivered by Courier 0 @ t=3624s (01:00:24)
+  - Click-to-door: 17.9 minutes
+  - Ready-to-door (freshness): 7.9 minutes
+  - Route: (1.30, 1.33) → (0.20, 2.29)
 
-✓ Order 362 delivered by Courier 3 @ t=10166s (02:49:26)
+✓ Order 33 delivered by Courier 2 @ t=3684s (01:01:24)
   - Click-to-door: 21.9 minutes
   - Ready-to-door (freshness): 11.9 minutes
-  - Route: (0.91, 1.00) → (0.10, 0.46)
+  - Route: (0.85, 1.65) → (0.10, 2.09)
 
-✓ Order 319 delivered by Courier 10 @ t=10237s (02:50:37)
-  - Click-to-door: 34.6 minutes
-  - Ready-to-door (freshness): 24.6 minutes
-  - Route: (1.21, 0.89) → (0.58, 1.73)
+✓ Order 25 delivered by Courier 4 @ t=3686s (01:01:26)
+  - Click-to-door: 24.1 minutes
+  - Ready-to-door (freshness): 14.1 minutes
+  - Route: (1.30, 1.33) → (1.44, 2.68)
 
-✓ Order 350 delivered by Courier 4 @ t=10307s (02:51:47)
-  - Click-to-door: 26.8 minutes
-  - Ready-to-door (freshness): 16.8 minutes
-  - Route: (0.85, 1.65) → (2.20, 1.66)
+✓ Order 20 delivered by Courier 3 @ t=3700s (01:01:40)
+  - Click-to-door: 27.3 minutes
+  - Ready-to-door (freshness): 17.3 minutes
+  - Route: (1.74, 1.44) → (2.53, 2.95)
 
-✓ Order 357 delivered by Courier 7 @ t=10348s (02:52:28)
-  - Click-to-door: 26.0 minutes
-  - Ready-to-door (freshness): 16.0 minutes
-  - Route: (0.85, 1.65) → (0.10, 0.93)
+✓ Order 35 delivered by Courier 6 @ t=3750s (01:02:30)
+  - Click-to-door: 22.4 minutes
+  - Ready-to-door (freshness): 12.4 minutes
+  - Route: (1.74, 1.44) → (2.11, 2.50)
 
-✓ Order 364 delivered by Courier 0 @ t=10438s (02:53:58)
-  - Click-to-door: 24.2 minutes
-  - Ready-to-door (freshness): 14.2 minutes
-  - Route: (1.21, 0.89) → (1.52, 2.72)
+✓ Order 29 delivered by Courier 9 @ t=3754s (01:02:34)
+  - Click-to-door: 24.5 minutes
+  - Ready-to-door (freshness): 14.5 minutes
+  - Route: (1.30, 1.33) → (2.34, 1.78)
 
-✓ Order 351 delivered by Courier 8 @ t=10516s (02:55:16)
-  - Click-to-door: 30.0 minutes
-  - Ready-to-door (freshness): 20.0 minutes
-  - Route: (1.21, 0.89) → (2.23, 1.16)
+✓ Order 40 delivered by Courier 1 @ t=3824s (01:03:44)
+  - Click-to-door: 22.2 minutes
+  - Ready-to-door (freshness): 12.2 minutes
+  - Route: (0.58, 4.38) → (0.56, 3.33)
 
-✓ Order 343 delivered by Courier 5 @ t=10526s (02:55:26)
-  - Click-to-door: 32.1 minutes
-  - Ready-to-door (freshness): 22.1 minutes
-  - Route: (1.74, 1.44) → (0.79, 2.44)
+✓ Order 41 delivered by Courier 2 @ t=3836s (01:03:56)
+  - Click-to-door: 21.9 minutes
+  - Ready-to-door (freshness): 11.9 minutes
+  - Route: (0.85, 1.65) → (0.10, 1.82)
 
-✓ Order 358 delivered by Courier 6 @ t=10533s (02:55:33)
-  - Click-to-door: 29.1 minutes
-  - Ready-to-door (freshness): 19.1 minutes
-  - Route: (1.21, 0.89) → (1.90, 1.74)
+✓ Order 44 delivered by Courier 5 @ t=3852s (01:04:12)
+  - Click-to-door: 21.6 minutes
+  - Ready-to-door (freshness): 11.6 minutes
+  - Route: (0.85, 1.65) → (1.82, 0.63)
 
-✓ Order 347 delivered by Courier 4 @ t=10550s (02:55:50)
-  - Click-to-door: 31.3 minutes
-  - Ready-to-door (freshness): 21.3 minutes
-  - Route: (1.74, 1.44) → (3.05, 1.83)
+✓ Order 28 delivered by Courier 4 @ t=3853s (01:04:13)
+  - Click-to-door: 26.7 minutes
+  - Ready-to-door (freshness): 16.7 minutes
+  - Route: (1.21, 0.89) → (1.75, 2.59)
 
-✓ Order 367 delivered by Courier 11 @ t=10584s (02:56:24)
-  - Click-to-door: 21.3 minutes
-  - Ready-to-door (freshness): 11.3 minutes
-  - Route: (1.23, 1.23) → (2.82, 0.10)
+✓ Order 30 delivered by Courier 0 @ t=3911s (01:05:11)
+  - Click-to-door: 26.7 minutes
+  - Ready-to-door (freshness): 16.7 minutes
+  - Route: (0.85, 1.65) → (0.80, 3.08)
 
-✓ Order 368 delivered by Courier 9 @ t=10649s (02:57:29)
-  - Click-to-door: 20.9 minutes
-  - Ready-to-door (freshness): 10.9 minutes
-  - Route: (0.85, 1.65) → (1.31, 0.33)
-
-✓ Order 359 delivered by Courier 6 @ t=10723s (02:58:43)
-  - Click-to-door: 31.9 minutes
-  - Ready-to-door (freshness): 21.9 minutes
-  - Route: (1.21, 0.89) → (1.81, 2.22)
-
-✓ Order 366 delivered by Courier 2 @ t=10737s (02:58:57)
-  - Click-to-door: 28.7 minutes
-  - Ready-to-door (freshness): 18.7 minutes
-  - Route: (1.23, 1.23) → (0.60, 0.10)
-
-✓ Order 340 delivered by Courier 5 @ t=10740s (02:59:00)
-  - Click-to-door: 36.6 minutes
-  - Ready-to-door (freshness): 26.6 minutes
-  - Route: (1.30, 1.33) → (0.10, 2.36)
-
-✓ Order 370 delivered by Courier 3 @ t=10741s (02:59:01)
-  - Click-to-door: 19.4 minutes
-  - Ready-to-door (freshness): 9.4 minutes
-  - Route: (1.30, 1.33) → (2.52, 1.29)
-
-✓ Order 352 delivered by Courier 8 @ t=10781s (02:59:41)
-  - Click-to-door: 34.3 minutes
-  - Ready-to-door (freshness): 24.3 minutes
-  - Route: (1.83, 1.33) → (2.84, 1.74)
-
-✓ Order 371 delivered by Courier 10 @ t=10800s (03:00:00)
+✓ Order 56 delivered by Courier 8 @ t=3963s (01:06:03)
   - Click-to-door: 18.7 minutes
   - Ready-to-door (freshness): 8.7 minutes
-  - Route: (0.91, 1.00) → (1.50, 2.08)
+  - Route: (1.21, 0.89) → (2.06, 0.10)
+
+✓ Order 45 delivered by Courier 7 @ t=4008s (01:06:48)
+  - Click-to-door: 23.0 minutes
+  - Ready-to-door (freshness): 13.0 minutes
+  - Route: (1.21, 0.89) → (1.71, 0.10)
+
+✓ Order 37 delivered by Courier 2 @ t=4046s (01:07:26)
+  - Click-to-door: 27.2 minutes
+  - Ready-to-door (freshness): 17.2 minutes
+  - Route: (0.85, 1.65) → (0.10, 1.08)
+
+✓ Order 27 delivered by Courier 1 @ t=4079s (01:07:59)
+  - Click-to-door: 30.5 minutes
+  - Ready-to-door (freshness): 20.5 minutes
+  - Route: (0.58, 4.38) → (1.06, 2.70)
+
+✓ Order 34 delivered by Courier 0 @ t=4097s (01:08:17)
+  - Click-to-door: 28.7 minutes
+  - Ready-to-door (freshness): 18.7 minutes
+  - Route: (1.30, 1.33) → (1.15, 2.88)
+
+✓ Order 42 delivered by Courier 6 @ t=4168s (01:09:28)
+  - Click-to-door: 27.4 minutes
+  - Ready-to-door (freshness): 17.4 minutes
+  - Route: (1.74, 1.44) → (2.82, 0.72)
+
+✓ Order 53 delivered by Courier 7 @ t=4179s (01:09:39)
+  - Click-to-door: 23.5 minutes
+  - Ready-to-door (freshness): 13.5 minutes
+  - Route: (1.21, 0.89) → (2.09, 0.14)
+
+✓ Order 57 delivered by Courier 8 @ t=4192s (01:09:52)
+  - Click-to-door: 22.2 minutes
+  - Ready-to-door (freshness): 12.2 minutes
+  - Route: (1.21, 0.89) → (2.65, 0.42)
+
+✓ Order 36 delivered by Courier 5 @ t=4194s (01:09:54)
+  - Click-to-door: 29.7 minutes
+  - Ready-to-door (freshness): 19.7 minutes
+  - Route: (0.85, 1.65) → (0.10, 0.50)
+
+✓ Order 26 delivered by Courier 4 @ t=4270s (01:11:10)
+  - Click-to-door: 33.7 minutes
+  - Ready-to-door (freshness): 23.7 minutes
+  - Route: (1.74, 1.44) → (3.11, 1.48)
+
+✓ Order 31 delivered by Courier 9 @ t=4292s (01:11:32)
+  - Click-to-door: 32.9 minutes
+  - Ready-to-door (freshness): 22.9 minutes
+  - Route: (1.21, 0.89) → (0.54, 0.10)
+
+✓ Order 38 delivered by Courier 5 @ t=4363s (01:12:43)
+  - Click-to-door: 32.0 minutes
+  - Ready-to-door (freshness): 22.0 minutes
+  - Route: (1.30, 1.33) → (0.10, 0.10)
+
+✓ Order 50 delivered by Courier 7 @ t=4446s (01:14:06)
+  - Click-to-door: 28.7 minutes
+  - Ready-to-door (freshness): 18.7 minutes
+  - Route: (1.21, 0.89) → (2.36, 1.09)
+
+✓ Order 66 delivered by Courier 3 @ t=4447s (01:14:07)
+  - Click-to-door: 25.3 minutes
+  - Ready-to-door (freshness): 15.3 minutes
+  - Route: (1.21, 0.89) → (2.86, 0.93)
+
+✓ Order 32 delivered by Courier 9 @ t=4496s (01:14:56)
+  - Click-to-door: 36.1 minutes
+  - Ready-to-door (freshness): 26.1 minutes
+  - Route: (1.30, 1.33) → (0.10, 0.36)
+
+✓ Order 54 delivered by Courier 8 @ t=4497s (01:14:57)
+  - Click-to-door: 28.6 minutes
+  - Ready-to-door (freshness): 18.6 minutes
+  - Route: (1.21, 0.89) → (2.53, 1.84)
+
+✓ Order 55 delivered by Courier 2 @ t=4587s (01:16:27)
+  - Click-to-door: 30.1 minutes
+  - Ready-to-door (freshness): 20.1 minutes
+  - Route: (1.21, 0.89) → (0.65, 2.00)
+
+✓ Order 68 delivered by Courier 0 @ t=4637s (01:17:17)
+  - Click-to-door: 28.3 minutes
+  - Ready-to-door (freshness): 18.3 minutes
+  - Route: (1.30, 1.33) → (1.39, 0.24)
+
+✓ Order 63 delivered by Courier 3 @ t=4662s (01:17:42)
+  - Click-to-door: 29.4 minutes
+  - Ready-to-door (freshness): 19.4 minutes
+  - Route: (1.30, 1.33) → (2.43, 0.58)
+
+✓ Order 80 delivered by Courier 1 @ t=4687s (01:18:07)
+  - Click-to-door: 25.5 minutes
+  - Ready-to-door (freshness): 15.5 minutes
+  - Route: (1.74, 1.44) → (2.53, 2.49)
+
+✓ Order 98 delivered by Courier 6 @ t=4789s (01:19:49)
+  - Click-to-door: 22.1 minutes
+  - Ready-to-door (freshness): 12.1 minutes
+  - Route: (1.30, 1.33) → (0.25, 1.50)
+
+✓ Order 76 delivered by Courier 4 @ t=4803s (01:20:03)
+  - Click-to-door: 28.4 minutes
+  - Ready-to-door (freshness): 18.4 minutes
+  - Route: (1.74, 1.44) → (0.41, 1.46)
+
+✓ Order 58 delivered by Courier 2 @ t=4826s (01:20:26)
+  - Click-to-door: 32.8 minutes
+  - Ready-to-door (freshness): 22.8 minutes
+  - Route: (1.21, 0.89) → (0.10, 1.56)
+
+✓ Order 64 delivered by Courier 3 @ t=4843s (01:20:43)
+  - Click-to-door: 32.3 minutes
+  - Ready-to-door (freshness): 22.3 minutes
+  - Route: (1.21, 0.89) → (2.45, 0.10)
+
+✓ Order 77 delivered by Courier 1 @ t=4862s (01:21:02)
+  - Click-to-door: 28.9 minutes
+  - Ready-to-door (freshness): 18.9 minutes
+  - Route: (1.74, 1.44) → (2.72, 2.76)
+
+✓ Order 74 delivered by Courier 0 @ t=4867s (01:21:07)
+  - Click-to-door: 30.4 minutes
+  - Ready-to-door (freshness): 20.4 minutes
+  - Route: (1.30, 1.33) → (0.69, 0.45)
+
+✓ Order 83 delivered by Courier 7 @ t=4950s (01:22:30)
+  - Click-to-door: 29.4 minutes
+  - Ready-to-door (freshness): 19.4 minutes
+  - Route: (1.74, 1.44) → (0.50, 0.45)
+
+✓ Order 92 delivered by Courier 6 @ t=4997s (01:23:17)
+  - Click-to-door: 27.6 minutes
+  - Ready-to-door (freshness): 17.6 minutes
+  - Route: (0.85, 1.65) → (0.10, 2.08)
+
+✓ Order 86 delivered by Courier 5 @ t=5034s (01:23:54)
+  - Click-to-door: 30.3 minutes
+  - Ready-to-door (freshness): 20.3 minutes
+  - Route: (1.21, 0.89) → (2.13, 2.26)
+
+✓ Order 70 delivered by Courier 4 @ t=5081s (01:24:41)
+  - Click-to-door: 35.6 minutes
+  - Ready-to-door (freshness): 25.6 minutes
+  - Route: (1.74, 1.44) → (0.18, 0.37)
+
+✓ Order 71 delivered by Courier 0 @ t=5087s (01:24:47)
+  - Click-to-door: 35.6 minutes
+  - Ready-to-door (freshness): 25.6 minutes
+  - Route: (0.85, 1.65) → (0.21, 0.10)
+
+✓ Order 73 delivered by Courier 1 @ t=5109s (01:25:09)
+  - Click-to-door: 35.2 minutes
+  - Ready-to-door (freshness): 25.2 minutes
+  - Route: (1.74, 1.44) → (2.17, 3.26)
+
+✓ Order 93 delivered by Courier 8 @ t=5135s (01:25:35)
+  - Click-to-door: 29.7 minutes
+  - Ready-to-door (freshness): 19.7 minutes
+  - Route: (1.74, 1.44) → (2.31, 0.23)
+
+✓ Order 79 delivered by Courier 7 @ t=5142s (01:25:42)
+  - Click-to-door: 33.1 minutes
+  - Ready-to-door (freshness): 23.1 minutes
+  - Route: (1.21, 0.89) → (0.26, 0.10)
+
+✓ Order 48 delivered by Courier 2 @ t=5146s (01:25:46)
+  - Click-to-door: 40.9 minutes
+  - Ready-to-door (freshness): 30.9 minutes
+  - Route: (1.21, 0.89) → (0.30, 0.10)
+
+✓ Order 94 delivered by Courier 6 @ t=5146s (01:25:46)
+  - Click-to-door: 29.5 minutes
+  - Ready-to-door (freshness): 19.5 minutes
+  - Route: (1.21, 0.89) → (0.10, 2.32)
+
+✓ Order 75 delivered by Courier 9 @ t=5312s (01:28:32)
+  - Click-to-door: 37.3 minutes
+  - Ready-to-door (freshness): 27.3 minutes
+  - Route: (0.58, 4.38) → (0.10, 4.90)
+
+✓ Order 84 delivered by Courier 5 @ t=5318s (01:28:38)
+  - Click-to-door: 35.4 minutes
+  - Ready-to-door (freshness): 25.4 minutes
+  - Route: (1.74, 1.44) → (3.10, 1.86)
+
+✓ Order 78 delivered by Courier 4 @ t=5337s (01:28:57)
+  - Click-to-door: 36.8 minutes
+  - Ready-to-door (freshness): 26.8 minutes
+  - Route: (1.21, 0.89) → (1.04, 0.10)
+
+✓ Order 95 delivered by Courier 8 @ t=5367s (01:29:27)
+  - Click-to-door: 33.1 minutes
+  - Ready-to-door (freshness): 23.1 minutes
+  - Route: (1.74, 1.44) → (3.04, 0.44)
+
+✓ Order 143 delivered by Courier 3 @ t=5397s (01:29:57)
+  - Click-to-door: 19.7 minutes
+  - Ready-to-door (freshness): 9.7 minutes
+  - Route: (1.74, 1.44) → (2.80, 1.34)
+
+✓ Order 85 delivered by Courier 7 @ t=5475s (01:31:15)
+  - Click-to-door: 37.9 minutes
+  - Ready-to-door (freshness): 27.9 minutes
+  - Route: (1.21, 0.89) → (2.03, 0.10)
+
+✓ Order 87 delivered by Courier 9 @ t=5481s (01:31:21)
+  - Click-to-door: 36.9 minutes
+  - Ready-to-door (freshness): 26.9 minutes
+  - Route: (0.58, 4.38) → (0.51, 4.90)
+
+✓ Order 127 delivered by Courier 1 @ t=5553s (01:32:33)
+  - Click-to-door: 25.5 minutes
+  - Ready-to-door (freshness): 15.5 minutes
+  - Route: (2.90, 3.33) → (3.89, 3.11)
+
+✓ Order 81 delivered by Courier 5 @ t=5563s (01:32:43)
+  - Click-to-door: 40.0 minutes
+  - Ready-to-door (freshness): 30.0 minutes
+  - Route: (1.74, 1.44) → (3.35, 1.08)
+
+✓ Order 132 delivered by Courier 6 @ t=5682s (01:34:42)
+  - Click-to-door: 26.1 minutes
+  - Ready-to-door (freshness): 16.1 minutes
+  - Route: (0.85, 1.65) → (2.01, 1.15)
+
+✓ Order 91 delivered by Courier 8 @ t=5703s (01:35:03)
+  - Click-to-door: 39.7 minutes
+  - Ready-to-door (freshness): 29.7 minutes
+  - Route: (1.21, 0.89) → (2.78, 1.98)
+
+✓ Order 140 delivered by Courier 3 @ t=5711s (01:35:11)
+  - Click-to-door: 25.1 minutes
+  - Ready-to-door (freshness): 15.1 minutes
+  - Route: (1.74, 1.44) → (3.17, 2.59)
+
+✓ Order 130 delivered by Courier 0 @ t=5713s (01:35:13)
+  - Click-to-door: 27.4 minutes
+  - Ready-to-door (freshness): 17.4 minutes
+  - Route: (1.74, 1.44) → (0.58, 0.51)
+
+✓ Order 117 delivered by Courier 2 @ t=5822s (01:37:02)
+  - Click-to-door: 33.0 minutes
+  - Ready-to-door (freshness): 23.0 minutes
+  - Route: (1.30, 1.33) → (2.96, 1.70)
+
+✓ Order 88 delivered by Courier 9 @ t=5839s (01:37:19)
+  - Click-to-door: 42.6 minutes
+  - Ready-to-door (freshness): 32.6 minutes
+  - Route: (0.58, 4.38) → (2.47, 4.88)
+
+✓ Order 148 delivered by Courier 4 @ t=5852s (01:37:32)
+  - Click-to-door: 25.1 minutes
+  - Ready-to-door (freshness): 15.1 minutes
+  - Route: (1.21, 0.89) → (2.65, 1.15)
+
+✓ Order 124 delivered by Courier 6 @ t=5931s (01:38:51)
+  - Click-to-door: 32.3 minutes
+  - Ready-to-door (freshness): 22.3 minutes
+  - Route: (0.85, 1.65) → (2.25, 1.98)
+
+✓ Order 135 delivered by Courier 3 @ t=5973s (01:39:33)
+  - Click-to-door: 30.7 minutes
+  - Ready-to-door (freshness): 20.7 minutes
+  - Route: (1.74, 1.44) → (2.51, 3.11)
+
+✓ Order 129 delivered by Courier 0 @ t=5975s (01:39:35)
+  - Click-to-door: 32.0 minutes
+  - Ready-to-door (freshness): 22.0 minutes
+  - Route: (1.74, 1.44) → (1.35, 0.10)
+
+✓ Order 144 delivered by Courier 1 @ t=5995s (01:39:55)
+  - Click-to-door: 29.2 minutes
+  - Ready-to-door (freshness): 19.2 minutes
+  - Route: (2.90, 3.33) → (2.79, 1.53)
+
+✓ Order 122 delivered by Courier 2 @ t=5995s (01:39:55)
+  - Click-to-door: 33.8 minutes
+  - Ready-to-door (freshness): 23.8 minutes
+  - Route: (1.30, 1.33) → (2.70, 1.87)
+
+✓ Order 155 delivered by Courier 4 @ t=6030s (01:40:30)
+  - Click-to-door: 25.0 minutes
+  - Ready-to-door (freshness): 15.0 minutes
+  - Route: (1.21, 0.89) → (2.71, 1.56)
+
+✓ Order 169 delivered by Courier 7 @ t=6090s (01:41:30)
+  - Click-to-door: 20.6 minutes
+  - Ready-to-door (freshness): 10.6 minutes
+  - Route: (1.74, 1.44) → (1.73, 3.29)
+
+✓ Order 126 delivered by Courier 6 @ t=6138s (01:42:18)
+  - Click-to-door: 35.5 minutes
+  - Ready-to-door (freshness): 25.5 minutes
+  - Route: (1.74, 1.44) → (2.88, 1.88)
+
+✓ Order 128 delivered by Courier 0 @ t=6145s (01:42:25)
+  - Click-to-door: 35.3 minutes
+  - Ready-to-door (freshness): 25.3 minutes
+  - Route: (1.30, 1.33) → (1.76, 0.10)
+
+✓ Order 120 delivered by Courier 2 @ t=6265s (01:44:25)
+  - Click-to-door: 39.5 minutes
+  - Ready-to-door (freshness): 29.5 minutes
+  - Route: (1.30, 1.33) → (2.42, 2.84)
+
+✓ Order 151 delivered by Courier 1 @ t=6266s (01:44:26)
+  - Click-to-door: 30.0 minutes
+  - Ready-to-door (freshness): 20.0 minutes
+  - Route: (2.90, 3.33) → (1.87, 1.86)
+
+✓ Order 171 delivered by Courier 5 @ t=6276s (01:44:36)
+  - Click-to-door: 23.5 minutes
+  - Ready-to-door (freshness): 13.5 minutes
+  - Route: (2.90, 3.33) → (1.41, 3.68)
+
+✓ Order 145 delivered by Courier 4 @ t=6282s (01:44:42)
+  - Click-to-door: 33.9 minutes
+  - Ready-to-door (freshness): 23.9 minutes
+  - Route: (1.30, 1.33) → (2.66, 2.60)
+
+✓ Order 172 delivered by Courier 7 @ t=6330s (01:45:30)
+  - Click-to-door: 24.1 minutes
+  - Ready-to-door (freshness): 14.1 minutes
+  - Route: (1.74, 1.44) → (2.17, 2.73)
+
+✓ Order 179 delivered by Courier 8 @ t=6380s (01:46:20)
+  - Click-to-door: 22.5 minutes
+  - Ready-to-door (freshness): 12.5 minutes
+  - Route: (1.21, 0.89) → (1.66, 0.10)
+
+✓ Order 178 delivered by Courier 8 @ t=6520s (01:48:40)
+  - Click-to-door: 25.3 minutes
+  - Ready-to-door (freshness): 15.3 minutes
+  - Route: (1.21, 0.89) → (1.83, 0.10)
+
+✓ Order 160 delivered by Courier 5 @ t=6575s (01:49:35)
+  - Click-to-door: 32.7 minutes
+  - Ready-to-door (freshness): 22.7 minutes
+  - Route: (2.90, 3.33) → (1.26, 2.34)
+
+✓ Order 170 delivered by Courier 3 @ t=6604s (01:50:04)
+  - Click-to-door: 29.0 minutes
+  - Ready-to-door (freshness): 19.0 minutes
+  - Route: (1.74, 1.44) → (0.50, 1.35)
+
+✓ Order 168 delivered by Courier 7 @ t=6618s (01:50:18)
+  - Click-to-door: 30.2 minutes
+  - Ready-to-door (freshness): 20.2 minutes
+  - Route: (1.74, 1.44) → (2.96, 2.12)
+
+✓ Order 194 delivered by Courier 0 @ t=6733s (01:52:13)
+  - Click-to-door: 23.7 minutes
+  - Ready-to-door (freshness): 13.7 minutes
+  - Route: (1.74, 1.44) → (0.85, 2.54)
+
+✓ Order 195 delivered by Courier 1 @ t=6770s (01:52:50)
+  - Click-to-door: 24.3 minutes
+  - Ready-to-door (freshness): 14.3 minutes
+  - Route: (0.85, 1.65) → (0.10, 2.34)
+
+✓ Order 186 delivered by Courier 9 @ t=6803s (01:53:23)
+  - Click-to-door: 27.8 minutes
+  - Ready-to-door (freshness): 17.8 minutes
+  - Route: (0.85, 1.65) → (0.10, 0.82)
+
+✓ Order 182 delivered by Courier 6 @ t=6808s (01:53:28)
+  - Click-to-door: 28.6 minutes
+  - Ready-to-door (freshness): 18.6 minutes
+  - Route: (1.30, 1.33) → (2.41, 0.78)
+
+✓ Order 142 delivered by Courier 5 @ t=6827s (01:53:47)
+  - Click-to-door: 43.6 minutes
+  - Ready-to-door (freshness): 33.6 minutes
+  - Route: (2.90, 3.33) → (2.13, 2.13)
+
+✓ Order 175 delivered by Courier 8 @ t=6855s (01:54:15)
+  - Click-to-door: 32.0 minutes
+  - Ready-to-door (freshness): 22.0 minutes
+  - Route: (1.21, 0.89) → (1.85, 1.87)
+
+✓ Order 165 delivered by Courier 3 @ t=6911s (01:55:11)
+  - Click-to-door: 35.5 minutes
+  - Ready-to-door (freshness): 25.5 minutes
+  - Route: (1.74, 1.44) → (0.83, 0.12)
+
+✓ Order 184 delivered by Courier 9 @ t=6946s (01:55:46)
+  - Click-to-door: 30.5 minutes
+  - Ready-to-door (freshness): 20.5 minutes
+  - Route: (0.85, 1.65) → (0.10, 0.63)
+
+✓ Order 181 delivered by Courier 2 @ t=6986s (01:56:26)
+  - Click-to-door: 31.6 minutes
+  - Ready-to-door (freshness): 21.6 minutes
+  - Route: (1.21, 0.89) → (0.10, 1.08)
+
+✓ Order 197 delivered by Courier 4 @ t=6989s (01:56:29)
+  - Click-to-door: 27.8 minutes
+  - Ready-to-door (freshness): 17.8 minutes
+  - Route: (1.21, 0.89) → (2.33, 0.69)
+
+✓ Order 190 delivered by Courier 1 @ t=7075s (01:57:55)
+  - Click-to-door: 30.9 minutes
+  - Ready-to-door (freshness): 20.9 minutes
+  - Route: (0.85, 1.65) → (0.10, 0.80)
+
+✓ Order 191 delivered by Courier 0 @ t=7080s (01:58:00)
+  - Click-to-door: 30.7 minutes
+  - Ready-to-door (freshness): 20.7 minutes
+  - Route: (1.21, 0.89) → (2.38, 2.18)
+
+✓ Order 180 delivered by Courier 6 @ t=7080s (01:58:00)
+  - Click-to-door: 34.2 minutes
+  - Ready-to-door (freshness): 24.2 minutes
+  - Route: (1.21, 0.89) → (2.54, 1.91)
+
+✓ Order 177 delivered by Courier 9 @ t=7099s (01:58:19)
+  - Click-to-door: 35.4 minutes
+  - Ready-to-door (freshness): 25.4 minutes
+  - Route: (0.85, 1.65) → (0.10, 0.36)
+
+✓ Order 166 delivered by Courier 3 @ t=7167s (01:59:27)
+  - Click-to-door: 39.4 minutes
+  - Ready-to-door (freshness): 29.4 minutes
+  - Route: (1.74, 1.44) → (1.93, 0.10)
+
+✓ Order 167 delivered by Courier 4 @ t=7191s (01:59:51)
+  - Click-to-door: 39.8 minutes
+  - Ready-to-door (freshness): 29.8 minutes
+  - Route: (1.21, 0.89) → (2.61, 1.09)
+
+✓ Order 192 delivered by Courier 0 @ t=7206s (02:00:06)
+  - Click-to-door: 31.9 minutes
+  - Ready-to-door (freshness): 21.9 minutes
+  - Route: (1.74, 1.44) → (2.42, 2.18)
+
+✓ Order 188 delivered by Courier 7 @ t=7214s (02:00:14)
+  - Click-to-door: 34.2 minutes
+  - Ready-to-door (freshness): 24.2 minutes
+  - Route: (2.90, 3.33) → (1.35, 3.87)
+
+✓ Order 183 delivered by Courier 6 @ t=7236s (02:00:36)
+  - Click-to-door: 35.7 minutes
+  - Ready-to-door (freshness): 25.7 minutes
+  - Route: (1.21, 0.89) → (2.44, 2.11)
+
+✓ Order 193 delivered by Courier 1 @ t=7289s (02:01:29)
+  - Click-to-door: 33.0 minutes
+  - Ready-to-door (freshness): 23.0 minutes
+  - Route: (0.85, 1.65) → (0.17, 0.10)
+
+✓ Order 198 delivered by Courier 2 @ t=7289s (02:01:29)
+  - Click-to-door: 32.7 minutes
+  - Ready-to-door (freshness): 22.7 minutes
+  - Route: (1.21, 0.89) → (0.85, 1.86)
+
+✓ Order 187 delivered by Courier 4 @ t=7421s (02:03:41)
+  - Click-to-door: 37.7 minutes
+  - Ready-to-door (freshness): 27.7 minutes
+  - Route: (1.21, 0.89) → (2.19, 1.59)
+
+✓ Order 189 delivered by Courier 2 @ t=7485s (02:04:45)
+  - Click-to-door: 37.8 minutes
+  - Ready-to-door (freshness): 27.8 minutes
+  - Route: (1.21, 0.89) → (1.01, 2.33)
+
+✓ Order 199 delivered by Courier 7 @ t=7571s (02:06:11)
+  - Click-to-door: 37.2 minutes
+  - Ready-to-door (freshness): 27.2 minutes
+  - Route: (0.58, 4.38) → (0.10, 4.60)
+
+✓ Order 196 delivered by Courier 7 @ t=8421s (02:20:21)
+  - Click-to-door: 51.7 minutes
+  - Ready-to-door (freshness): 41.7 minutes
+  - Route: (1.74, 1.44) → (1.72, 0.14)
 
 
 ====================================================================================================
@@ -2508,22 +1435,22 @@ FINAL SIMULATION SUMMARY
 ====================================================================================================
 
 TIER 1 - Mission-Critical:
-  - Fulfillment Rate: 57.3%
-  - Avg Click-to-Door: 24.5 minutes
-  - P90 Click-to-Door: 33.7 minutes
+  - Fulfillment Rate: 66.0%
+  - Avg Click-to-Door: 28.4 minutes
+  - P90 Click-to-Door: 37.1 minutes
 
 TIER 2 - Operational Efficiency:
-  - System Throughput: 72.0 orders/hr
-  - Orders/Courier-Hour: 6.00
-  - Freshness: 14.5 minutes
+  - System Throughput: 44.0 orders/hr
+  - Orders/Courier-Hour: 4.40
+  - Freshness: 18.4 minutes
 
 TIER 3 - Diagnostic:
-  - Avg Bundle Size: 1.56
-  - Courier Utilization: 91.0%
-  - Total Distance: 456.1 km
+  - Avg Bundle Size: 2.28
+  - Courier Utilization: 63.0%
+  - Total Distance: 234.3 km
 
 Orders Breakdown:
-  - Delivered: 216
-  - In Transit: 12
+  - Delivered: 132
+  - In Transit: 0
   - Unassigned: 0
-  - Out of Scope: 5
+  - Out of Scope: 0

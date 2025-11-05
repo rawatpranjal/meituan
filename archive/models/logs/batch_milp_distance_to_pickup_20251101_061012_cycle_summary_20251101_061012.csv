@@ -1,3 +1,0 @@
-dispatch_time,num_orders_in_batch,num_available_couriers,supply_demand_ratio,num_proposed_assignments,num_accepted_assignments,num_rejections,assignment_rate,acceptance_rate,total_cost_of_cycle,avg_cost_per_assignment,agreement_rate_with_actual,cost_function,mode,strategy_key,num_units,num_bundles,avg_bundle_size,micro_batch_sec,optimizer_status,num_deferred_in,num_deferred_out,num_deferred_carry,decision_ms,optimizer_ms
-1665977114,658,802,1.2188449848024316,0,0,0,0.0,0,0,0,0.0,distance_to_pickup,BATCH,milp_vrp,658,0,0,0,ok,0,658,658,9261.604625033215,9057.894375000615
-1665977234,1282,882,0.6879875195007801,0,0,0,0.0,0,0,0,0.0,distance_to_pickup,BATCH,milp_vrp,1282,0,0,0,ok,0,1282,1282,16481.25633294694,15998.724667006172
