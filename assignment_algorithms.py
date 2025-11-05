@@ -140,15 +140,49 @@ def assign_hungarian(state: SimulationState, idle_couriers: List[Courier],
 # ALGORITHM 3: SIMPLE BUNDLING (GROUP BY RESTAURANT + HUNGARIAN)
 # ============================================================================
 
+def _generate_partitions(items: List[int], max_size: int = 3) -> List[List[List[int]]]:
+    """
+    Generate all partitions of items where each part has ≤ max_size elements.
+
+    Args:
+        items: List of items to partition
+        max_size: Maximum size of each partition part
+
+    Returns:
+        List of partitions, where each partition is a list of non-overlapping bundles
+    """
+    if not items:
+        return [[]]
+
+    if len(items) == 1:
+        return [[[items[0]]]]
+
+    result = []
+    first = items[0]
+    rest = items[1:]
+
+    # For each partition of the rest
+    for partition in _generate_partitions(rest, max_size):
+        # Option 1: Put first element in its own bundle
+        result.append([[first]] + partition)
+
+        # Option 2: Add first element to an existing bundle (if it doesn't exceed max_size)
+        for i, bundle in enumerate(partition):
+            if len(bundle) < max_size:
+                new_partition = [bundle + [first] if j == i else list(b) for j, b in enumerate(partition)]
+                result.append(new_partition)
+
+    return result
+
+
 def _find_best_partition(candidates: List[List[int]], all_order_ids: List[int],
                         couriers: List[Courier], state: SimulationState) -> List[List[int]]:
     """
     Find best non-overlapping partition of orders into bundles.
 
-    Tries multiple partitioning strategies and picks the best:
-    1. All singles (equivalent to Hungarian)
-    2. Greedy max bundles (fill bundles to max size)
-    3. Balanced bundles (distribute evenly)
+    For small order counts (≤7), enumerates ALL valid partitions and picks the one
+    with lowest cost (as estimated by Hungarian assignment). For larger counts,
+    falls back to heuristic strategies.
 
     Args:
         candidates: All possible bundles (not used, kept for compatibility)
@@ -159,6 +193,8 @@ def _find_best_partition(candidates: List[List[int]], all_order_ids: List[int],
     Returns:
         Best partition (list of non-overlapping bundles)
     """
+    MAX_ORDERS_FOR_FULL_ENUMERATION = 7  # 7 orders → ~877 partitions (manageable)
+
     def estimate_partition_cost(partition):
         """
         Estimate REALISTIC total cost of partition using Hungarian assignment.
@@ -204,6 +240,22 @@ def _find_best_partition(candidates: List[List[int]], all_order_ids: List[int],
 
         return total_cost
 
+    # For small order counts, enumerate all valid partitions
+    if len(all_order_ids) <= MAX_ORDERS_FOR_FULL_ENUMERATION:
+        all_partitions = _generate_partitions(all_order_ids, max_size=3)
+
+        best_partition = None
+        best_cost = float('inf')
+
+        for partition in all_partitions:
+            cost = estimate_partition_cost(partition)
+            if cost < best_cost:
+                best_cost = cost
+                best_partition = partition
+
+        return best_partition
+
+    # For large order counts, use heuristic strategies
     strategies = []
 
     # Strategy 1: All singles (equivalent to Hungarian)
