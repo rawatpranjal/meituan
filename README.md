@@ -291,15 +291,27 @@ where $T_{total} = |C| \times t_{duration}$
 
 **Scenario:** 60 orders, 8 couriers, 1 hour, 5 restaurants, Poisson arrival (λ = 1/min)
 
-| Algorithm | Fulfillment | Delivered | Bundles | Avg Delivery Time | Distance (km) | Runtime |
-|-----------|------------|-----------|---------|-------------------|---------------|---------|
-| Greedy | 53.3% | 32/60 | 0 | 23.6 min | 110.8 | 0.1s |
-| Hungarian | 55.0% | 33/60 | 0 | 20.5 min | 112.8 | 0.3s |
-| Simple Bundling | 71.7% | 43/60 | 14 | 19.6 min | 106.8 | 0.4s |
-| Network Bundling | 76.7% | 46/60 | 15 | 22.1 min | 102.3 | 1.2s |
-| Anticipated Bundling | 83.3% | 50/60 | 17 | 18.7 min | 114.4 | 0.8s |
+### Customer & Order Metrics
 
-Total runtime: 2.8 seconds
+| Algorithm | Fulfillment | Delivered | Expired | Avg Time | P90 Time | Freshness |
+|-----------|------------|-----------|---------|----------|----------|-----------|
+| Greedy | 53.3% | 32/60 | 9 | 23.6 min | 32.1 min | 18.6 min |
+| Hungarian | 55.0% | 33/60 | 14 | 20.5 min | 28.8 min | 15.5 min |
+| Simple Bundling | 71.7% | 43/60 | 6 | 19.6 min | 27.3 min | 14.6 min |
+| Network Bundling | 76.7% | 46/60 | 5 | 22.1 min | 30.5 min | 17.1 min |
+| Anticipated Bundling | 83.3% | 50/60 | 6 | 18.7 min | 30.8 min | 13.7 min |
+
+### Operational & Efficiency Metrics
+
+| Algorithm | Bundles | Avg Bundle | Utilization | Ord/Cour-Hr | Distance | Dist/Order | Throughput | Runtime |
+|-----------|---------|------------|-------------|-------------|----------|------------|------------|---------|
+| Greedy | 0 | - | 81.7% | 4.00 | 110.8 km | 3.46 | 32.0/hr | 0.1s |
+| Hungarian | 0 | - | 82.3% | 4.12 | 112.8 km | 3.42 | 33.0/hr | 0.3s |
+| Simple Bundling | 14 | 2.64 | 81.8% | 5.38 | 106.8 km | 2.48 | 43.0/hr | 0.4s |
+| Network Bundling | 15 | 2.80 | 84.7% | 5.75 | 102.3 km | 2.22 | 46.0/hr | 1.1s |
+| Anticipated Bundling | 17 | 2.59 | 81.1% | 6.25 | 114.4 km | 2.29 | 50.0/hr | 0.8s |
+
+Total runtime: 2.7 seconds
 
 ---
 
