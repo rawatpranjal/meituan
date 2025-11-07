@@ -57,7 +57,7 @@ def draw_visualization(ax, snapshot, restaurants, grid_size, total_duration, num
     ax.clear()
     zoom_margin = 0.1
     ax.set_xlim(-zoom_margin, grid_size + zoom_margin)
-    ax.set_ylim(-0.95, grid_size + 0.5)
+    ax.set_ylim(-0.25, grid_size + 0.45)
     ax.set_aspect('equal')
     ax.axis('off')
     ax.set_facecolor('#FFFFFF')
@@ -192,7 +192,7 @@ def draw_visualization(ax, snapshot, restaurants, grid_size, total_duration, num
         '▲ Courier  ⋯→ Route'
     )
     ax.text(0.15, grid_size - 0.15, legend_text,
-           fontsize=10, verticalalignment='top', horizontalalignment='left',
+           fontsize=15, verticalalignment='top', horizontalalignment='left',
            bbox=dict(boxstyle='round,pad=0.4', facecolor='white', alpha=0.9,
                    edgecolor='#666666', linewidth=1.5),
            zorder=25)
@@ -204,7 +204,7 @@ def draw_visualization(ax, snapshot, restaurants, grid_size, total_duration, num
 
     time_text = f'Hour {hours + 1} of {total_hours} | {hours:02d}:{minutes:02d}'
     ax.text(grid_size - 0.15, grid_size - 0.15, time_text,
-           fontsize=12, ha='right', va='top', fontweight='bold',
+           fontsize=15, ha='right', va='top', fontweight='bold',
            bbox=dict(boxstyle='round,pad=0.4', facecolor='white',
                    edgecolor='#666666', linewidth=1.5),
            zorder=25)
@@ -228,47 +228,13 @@ def draw_visualization(ax, snapshot, restaurants, grid_size, total_duration, num
     elapsed_hours = current_time / 3600
     throughput = len(delivered_orders) / elapsed_hours if elapsed_hours > 0 else 0
 
-    total_courier_hours = (len(snapshot['couriers']) * current_time) / 3600
-    orders_per_courier_hr = len(delivered_orders) / total_courier_hours if total_courier_hours > 0 else 0
-
-    freshness = (metrics.get('total_ready_to_door_time', 0) / len(delivered_orders)) / 60 if delivered_orders else 0
-
-    bundles_created = metrics.get('bundles_created', 0)
-    avg_bundle_size = metrics.get('total_bundle_size', 0) / bundles_created if bundles_created > 0 else 0
-
-    total_courier_time = len(snapshot['couriers']) * current_time
-    active_time = total_courier_time - metrics.get('total_courier_idle_time', 0)
-    utilization = (active_time / total_courier_time * 100) if total_courier_time > 0 else 0
-
-    total_distance = sum(c['total_distance_traveled'] for c in snapshot['couriers'].values())
-
-    tier1_text = (
+    metrics_text = (
         f'Fulfillment: {fulfillment_rate:.1f}%  |  '
-        f'Avg Click-to-Door: {avg_click_to_door:.1f}min  |  '
-        f'P90 Click-to-Door: {p90_click_to_door:.1f}min'
+        f'P90 Click-to-Door: {p90_click_to_door:.1f}min  |  '
+        f'Throughput: {throughput:.1f} ord/hr'
     )
-    ax.text(grid_size/2, -0.15, tier1_text,
-           fontsize=11, ha='center', va='top', fontweight='bold',
-           bbox=dict(boxstyle='round,pad=0.5', facecolor='#FFEBEE',
-                   edgecolor='#D32F2F', linewidth=2.5))
-
-    tier2_text = (
-        f'System Throughput: {throughput:.1f} ord/hr  |  '
-        f'Orders/Courier-Hour: {orders_per_courier_hr:.2f}  |  '
-        f'Freshness: {freshness:.1f}min'
-    )
-    ax.text(grid_size/2, -0.42, tier2_text,
-           fontsize=11, ha='center', va='top',
-           bbox=dict(boxstyle='round,pad=0.5', facecolor='#E3F2FD',
-                   edgecolor='#1976D2', linewidth=2))
-
-    tier3_text = (
-        f'Avg Bundle Size: {avg_bundle_size:.2f}  |  '
-        f'Utilization: {utilization:.1f}%  |  '
-        f'Distance: {total_distance:.1f}km'
-    )
-    ax.text(grid_size/2, -0.69, tier3_text,
-           fontsize=11, ha='center', va='top',
+    ax.text(grid_size/2, -0.15, metrics_text,
+           fontsize=13, ha='center', va='top', fontweight='bold',
            bbox=dict(boxstyle='round,pad=0.5', facecolor='#F5F5F5',
                    edgecolor='#757575', linewidth=2))
 
@@ -285,7 +251,7 @@ def create_gif(algo_name, scenario, state, output_path, grid_size, num_couriers)
 
     print(f"  Timeline: {len(timeline)} seconds → {len(sampled_indices)} frames")
 
-    fig, ax = plt.subplots(figsize=(14, 16))
+    fig, ax = plt.subplots(figsize=(16, 12))
     plt.tight_layout(pad=0.5)
     restaurants = list(state.restaurants.values())
 
@@ -300,7 +266,7 @@ def create_gif(algo_name, scenario, state, output_path, grid_size, num_couriers)
 
         display_name = ALGORITHM_NAMES.get(algo_name, algo_name)
         ax.text(grid_size/2, grid_size + 0.35, display_name,
-               fontsize=16, fontweight='bold', ha='center')
+               fontsize=22, fontweight='bold', ha='center')
 
         return ax,
 
