@@ -303,6 +303,24 @@ where $T_{total} = |C| \times t_{duration}$
 
 Total runtime: 2.4 seconds (with seed=42 for reproducibility)
 
+### Assignment Overlap Analysis
+
+**How often do different algorithms assign the same courier to the same order?**
+
+| Algorithm | Greedy | Hungarian | Simple Bundling | Network Bundling | Anticipated Bundling |
+|-----------|--------|-----------|-----------------|------------------|---------------------|
+| Greedy | 100% | 24.0% | 34.4% | 20.6% | 3.4% |
+| Hungarian | 24.0% | 100% | 26.7% | 24.2% | 18.8% |
+| Simple Bundling | 34.4% | 26.7% | 100% | 21.4% | 17.5% |
+| Network Bundling | 20.6% | 24.2% | 21.4% | 100% | 4.8% |
+| Anticipated Bundling | 3.4% | 18.8% | 17.5% | 4.8% | 100% |
+
+**Key Findings:**
+- Average pairwise overlap: 19.6% (algorithms make substantially different assignment decisions)
+- Most similar: Greedy ↔ Simple Bundling (34.4%)
+- Most different: Greedy ↔ Anticipated Bundling (3.4%)
+- Anticipated bundling's lookahead mechanism produces the most unique assignments
+
 ### Metric Definitions
 
 **Orders Expired While Waiting for Match**: Orders that became READY (food finished cooking at restaurant) but no courier was assigned before the 30-minute deadline passed. The food spoiled at the restaurant while waiting in the assignment queue. This represents a capacity failure where demand exceeded courier supply.
