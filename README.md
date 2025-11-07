@@ -293,8 +293,8 @@ where $T_{total} = |C| \times t_{duration}$
 
 ### Customer & Order Metrics
 
-| Algorithm | Fulfillment | Delivered | Expired | Avg Time | P90 Time | Freshness |
-|-----------|------------|-----------|---------|----------|----------|-----------|
+| Algorithm | Fulfillment Rate | Orders Delivered | Orders Expired | Avg Delivery Time | P90 Delivery Time | Avg Ready-to-Door |
+|-----------|-----------------|------------------|----------------|-------------------|-------------------|-------------------|
 | Greedy | 53.3% | 32/60 | 9 | 23.6 min | 32.1 min | 18.6 min |
 | Hungarian | 55.0% | 33/60 | 14 | 20.5 min | 28.8 min | 15.5 min |
 | Simple Bundling | 71.7% | 43/60 | 6 | 19.6 min | 27.3 min | 14.6 min |
@@ -303,13 +303,13 @@ where $T_{total} = |C| \times t_{duration}$
 
 ### Operational & Efficiency Metrics
 
-| Algorithm | Bundles | Avg Bundle | Utilization | Ord/Cour-Hr | Distance | Dist/Order | Throughput | Runtime |
-|-----------|---------|------------|-------------|-------------|----------|------------|------------|---------|
-| Greedy | 0 | - | 81.7% | 4.00 | 110.8 km | 3.46 | 32.0/hr | 0.1s |
-| Hungarian | 0 | - | 82.3% | 4.12 | 112.8 km | 3.42 | 33.0/hr | 0.3s |
-| Simple Bundling | 14 | 2.64 | 81.8% | 5.38 | 106.8 km | 2.48 | 43.0/hr | 0.4s |
-| Network Bundling | 15 | 2.80 | 84.7% | 5.75 | 102.3 km | 2.22 | 46.0/hr | 1.1s |
-| Anticipated Bundling | 17 | 2.59 | 81.1% | 6.25 | 114.4 km | 2.29 | 50.0/hr | 0.8s |
+| Algorithm | Bundles Created | Avg Bundle Size | Courier Utilization | Orders per Courier-Hour | Total Distance | Distance per Order | System Throughput | Algorithm Runtime |
+|-----------|----------------|-----------------|---------------------|------------------------|----------------|-------------------|-------------------|-------------------|
+| Greedy | 0 | - | 81.7% | 4.00 | 110.8 km | 3.46 km | 32.0/hr | 0.1s |
+| Hungarian | 0 | - | 82.3% | 4.12 | 112.8 km | 3.42 km | 33.0/hr | 0.3s |
+| Simple Bundling | 14 | 2.64 | 81.8% | 5.38 | 106.8 km | 2.48 km | 43.0/hr | 0.4s |
+| Network Bundling | 15 | 2.80 | 84.7% | 5.75 | 102.3 km | 2.22 km | 46.0/hr | 1.1s |
+| Anticipated Bundling | 17 | 2.59 | 81.1% | 6.25 | 114.4 km | 2.29 km | 50.0/hr | 0.8s |
 
 Total runtime: 2.7 seconds
 
