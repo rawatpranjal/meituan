@@ -303,6 +303,58 @@ Total runtime: 2.8 seconds
 
 ---
 
+## Visual Comparison
+
+Each GIF shows the 12 assignment batches (one every 5 minutes):
+
+<table>
+<tr>
+<td width="50%">
+
+**Greedy Assignment**
+
+![Greedy](outputs/quick_test/gifs/greedy.gif)
+
+</td>
+<td width="50%">
+
+**Hungarian Algorithm**
+
+![Hungarian](outputs/quick_test/gifs/hungarian.gif)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Simple Bundling**
+
+![Simple Bundling](outputs/quick_test/gifs/simple_bundling.gif)
+
+</td>
+<td width="50%">
+
+**Network Bundling**
+
+![Network Bundling](outputs/quick_test/gifs/network_bundling.gif)
+
+</td>
+</tr>
+<tr>
+<td colspan="2" align="center">
+
+**Anticipated Bundling**
+
+![Anticipated Bundling](outputs/quick_test/gifs/anticipated_bundling.gif)
+
+</td>
+</tr>
+</table>
+
+Legend: ■ Restaurant (red) ● Customer (blue) ▲ Courier (black) ⋯→ Route (colored)
+
+---
+
 ## System Parameters
 
 **Physics:**
