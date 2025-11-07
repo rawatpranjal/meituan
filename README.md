@@ -78,7 +78,7 @@ where $c_{ij}$ = Manhattan travel time from courier $i$ to restaurant of order $
 ```math
 \min \sum_{(i,j) \in E} w_{ij} \cdot x_{ij}
 ```
-where $w_{ij} = \text{courier\_id}_i \times 10^6 + \text{order\_id}_j$
+where $w_{ij} = i \times 10^6 + j$ (courier and order IDs)
 
 **Constraints:**
 ```math
@@ -146,6 +146,7 @@ where $t_{ij}$ = total route duration for courier $i$ serving bundle $j$
 ```math
 \min \sum_{i,j} w_{ij} \cdot x_{ij}
 ```
+where $w_{ij} = i \times 10^{12} + j$ (courier and bundle IDs)
 
 **Assignment Constraints:**
 ```math
