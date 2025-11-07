@@ -293,15 +293,21 @@ where $T_{total} = |C| \times t_{duration}$
 
 ### Performance Summary (Non-Redundant Metrics)
 
-| Algorithm | Fulfillment Rate | Orders Expired | Avg Ready-to-Door | Avg Bundle Size | Courier Utilization | Distance per Order | Orders per Courier-Hr | Runtime |
-|-----------|-----------------|----------------|-------------------|----------------|--------------------|--------------------|---------------------|---------|
-| Greedy | 53.3% | 9 | 18.6 min | - | 81.7% | 3.46 km | 4.00 | 0.1s |
-| Hungarian | 55.0% | 14 | 15.5 min | - | 82.3% | 3.42 km | 4.12 | 0.3s |
-| Simple Bundling | 71.7% | 6 | 14.6 min | 2.64 | 81.8% | 2.48 km | 5.38 | 0.4s |
-| Network Bundling | 76.7% | 5 | 17.1 min | 2.80 | 84.7% | 2.22 km | 5.75 | 1.1s |
-| Anticipated Bundling | 83.3% | 6 | 13.7 min | 2.59 | 81.1% | 2.29 km | 6.25 | 0.8s |
+| Algorithm | Fulfillment Rate | Orders Expired While Waiting for Match | Avg Ready-to-Door | Avg Bundle Size | Courier Utilization | Distance per Order | Orders per Courier-Hr | Runtime |
+|-----------|-----------------|----------------------------------------|-------------------|----------------|--------------------|--------------------|---------------------|---------|
+| Greedy | 53.3% | 9 | 23.6 min | - | 81.7% | 3.46 km | 4.00 | 0.1s |
+| Hungarian | 56.7% | 16 | 18.2 min | - | 82.3% | 2.95 km | 4.25 | 0.3s |
+| Simple Bundling | 71.7% | 6 | 19.6 min | 2.64 | 81.8% | 2.48 km | 5.38 | 0.3s |
+| Network Bundling | 76.7% | 5 | 22.1 min | 2.80 | 84.7% | 2.22 km | 5.75 | 1.0s |
+| Anticipated Bundling | 83.3% | 6 | 18.7 min | 2.59 | 81.1% | 2.29 km | 6.25 | 0.7s |
 
-Total runtime: 2.7 seconds
+Total runtime: 2.4 seconds (with seed=42 for reproducibility)
+
+### Metric Definitions
+
+**Orders Expired While Waiting for Match**: Orders that became READY (food finished cooking at restaurant) but no courier was assigned before the 30-minute deadline passed. The food spoiled at the restaurant while waiting in the assignment queue. This represents a capacity failure where demand exceeded courier supply.
+
+**Important Note**: This metric does NOT include orders delivered late (picked up by courier but delivered after deadline). Late deliveries represent quality failures and should never occur in this simulation due to feasibility pre-filtering in the assignment algorithms.
 
 ---
 

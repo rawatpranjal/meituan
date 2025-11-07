@@ -388,7 +388,7 @@ def assign_hungarian(state: SimulationState, idle_couriers: List[Courier],
     x: Dict[Tuple[int, int], cp_model.IntVar] = {}
 
     # Costs for objectives
-    pickup_cost: Dict[Tuple[int, int], int] = {}          # Manhattan time-to-pickup (seconds, int)
+    delivery_cost: Dict[Tuple[int, int], int] = {}        # Total delivery time (seconds, int)
     tie_weight: Dict[Tuple[int, int], int] = {}           # Deterministic small weight
 
     I = range(len(idle_couriers))
@@ -407,9 +407,8 @@ def assign_hungarian(state: SimulationState, idle_couriers: List[Courier],
             var = model.NewBoolVar(f'x_{i}_{j}')
             x[(i, j)] = var
 
-            # Manhattan time-to-pickup in seconds (int)
-            t_pick = _manhattan_travel_time(ci.current_location, oj.restaurant_location, state)
-            pickup_cost[(i, j)] = int(round(t_pick))
+            # Total delivery time (courier→restaurant→customer + service times)
+            delivery_cost[(i, j)] = finish_cost
 
             # Deterministic tiebreak weight: prefer lower courier id, then order id
             # Scale order-id so courier precedence dominates
@@ -440,17 +439,17 @@ def assign_hungarian(state: SimulationState, idle_couriers: List[Courier],
         return []
     best_card = int(round(solver.Value(total_assigned)))
 
-    # ----- Pass 2: fix cardinality, minimize total pickup time -----
+    # ----- Pass 2: fix cardinality, minimize total delivery time -----
     model.Add(total_assigned == best_card)
-    total_pickup = sum(pickup_cost[e] * x[e] for e in x)
-    model.Minimize(total_pickup)
+    total_delivery = sum(delivery_cost[e] * x[e] for e in x)
+    model.Minimize(total_delivery)
     status = solver.Solve(model)
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return []
-    best_pickup = int(round(solver.Value(total_pickup)))
+    best_delivery = int(round(solver.Value(total_delivery)))
 
     # ----- Pass 3: fix both, minimize deterministic tie-weight -----
-    model.Add(total_pickup == best_pickup)
+    model.Add(total_delivery == best_delivery)
     total_tie = sum(tie_weight[e] * x[e] for e in x)
     model.Minimize(total_tie)
     status = solver.Solve(model)

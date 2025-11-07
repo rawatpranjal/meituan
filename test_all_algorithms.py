@@ -2,6 +2,7 @@
 
 import sys
 import time
+import numpy as np
 from datetime import datetime
 from config_loader import load_config
 from scenario_generators.scenario_factory import ScenarioFactory
@@ -19,7 +20,8 @@ def test_algorithm(name, assign_func, cfg):
     print(f"Testing {name} algorithm")
     print('='*60)
 
-    # Create scenario
+    # Create scenario (reset seed for reproducible identical scenarios)
+    np.random.seed(42)
     factory = ScenarioFactory(cfg)
     scenario = factory.create_scenario()
     scenario['config'] = cfg
@@ -53,6 +55,7 @@ def test_algorithm(name, assign_func, cfg):
     return metrics
 
 def main():
+    np.random.seed(42)
     print(f"\nTest started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Working directory: /Users/pranjal/Code/meituan")
 
