@@ -129,6 +129,36 @@ def test_1_3_more_orders_than_couriers():
     print("PASS")
 
 
+def test_1_4_same_ready_time_one_per_courier():
+    """All orders ready now; only one assignment per courier in this batch."""
+    print("\n" + "="*80)
+    print("TEST 1.4: Same ready_time → One per courier")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (2.0, 2.0))]
+    couriers = [Courier(0, (2.0, 2.0)), Courier(1, (2.1, 2.1)), Courier(2, (1.9, 2.0))]
+
+    orders = [
+        Order(0, 0, (2.0, 2.0), (2.0, 3.0), 0.0),
+        Order(1, 0, (2.0, 2.0), (2.1, 3.1), 0.0),
+        Order(2, 0, (2.0, 2.0), (1.9, 1.9), 0.0),
+        Order(3, 0, (2.0, 2.0), (2.5, 2.5), 0.0),
+        Order(4, 0, (2.0, 2.0), (3.0, 3.0), 0.0),
+    ]
+    for o in orders:
+        o.state = "READY"
+        o.ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+    result = assign_greedy(state, couriers, orders)
+    print(f"Output: {result}")
+
+    # Exactly len(couriers) assignments, and each courier appears at most once.
+    assert len(result) == len(couriers)
+    assert len({cid for cid, _ in result}) == len(couriers)
+    print("PASS")
+
+
 # ============================================================================
 # CATEGORY 2: LOGICAL CORRECTNESS TESTS
 # ============================================================================
@@ -395,6 +425,197 @@ def test_4_1_distant_bait_scenario():
 
 
 # ============================================================================
+# CATEGORY 5: DEADLINE FEASIBILITY (EXPIRATION) TESTS
+# ============================================================================
+
+from simulator_core import PICKUP_SERVICE_TIME, DROPOFF_SERVICE_TIME
+
+def test_5_1_deadline_infeasible_skip():
+    """Test 5.1: Skip assignment when finish time exceeds ready_time + expiration_time."""
+    print("\n" + "="*80)
+    print("TEST 5.1: Deadline Infeasible → Skip")
+    print("="*80)
+
+    # One restaurant, one courier, one order that cannot possibly meet deadline
+    restaurants = [Restaurant(0, (2.0, 2.0))]
+    couriers = [Courier(0, (2.0, 2.0))]
+    # Ready now; expiration = 1s while service alone is 150+120=270s
+    orders = [Order(0, 0, (2.0, 2.0), (2.0, 2.0), placement_time=0.0, expiration_time=1.0)]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+
+    result = assign_greedy(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert result == [], "Greedy must not assign an order guaranteed to expire."
+
+    print("PASS")
+
+
+def test_5_2_deadline_edge_equal_ok():
+    """Test 5.2: Assign when finish time exactly equals the deadline (<= allowed)."""
+    print("\n" + "="*80)
+    print("TEST 5.2: Deadline Edge Case (finish == deadline) → Assign")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (2.0, 2.0))]
+    couriers = [Courier(0, (2.0, 2.0))]
+
+    # Choose locations so travel times are zero; finish time = pickup(150) + dropoff(120) = 270s
+    restaurant_loc = (2.0, 2.0)
+    diner_loc = (2.0, 2.0)
+    orders = [Order(
+        0, 0, restaurant_loc, diner_loc, placement_time=0.0, expiration_time=PICKUP_SERVICE_TIME + DROPOFF_SERVICE_TIME
+    )]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0  # deadline = 270s after ready
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+
+    result = assign_greedy(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert len(result) == 1 and result[0] == (0, [0]), "Greedy should accept finish == deadline."
+
+    print("PASS")
+
+
+def test_5_3_mixed_feasibility_choose_feasible():
+    """Two couriers: one infeasible due to distance, one feasible → choose feasible."""
+    print("\n" + "="*80)
+    print("TEST 5.3: Mixed feasibility → Choose feasible")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (0.0, 0.0))]
+    # Courier 0 very far → infeasible; Courier 1 at pickup → feasible.
+    couriers = [Courier(0, (10.0, 10.0)), Courier(1, (0.0, 0.0))]
+
+    # Ready now; give a reasonable expiration so only courier 1 can make it.
+    orders = [Order(0, 0, (0.0, 0.0), (0.0, 0.0), placement_time=0.0, expiration_time=400.0)]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+    result = assign_greedy(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert len(result) == 1 and result[0] == (1, [0])
+    print("PASS")
+
+
+def test_5_4_skip_infeasible_then_assign_next():
+    """First READY order is infeasible; second READY order is feasible → skip then assign."""
+    print("\n" + "="*80)
+    print("TEST 5.4: Skip infeasible, assign next feasible")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (2.0, 2.0))]
+    couriers = [Courier(0, (2.0, 2.0))]
+
+    # Order 0 has impossible deadline; Order 1 is lenient.
+    o0 = Order(0, 0, (2.0, 2.0), (2.0, 2.0), placement_time=0.0, expiration_time=1.0)
+    o1 = Order(1, 0, (2.0, 2.0), (2.0, 2.0), placement_time=0.0, expiration_time=10_000.0)
+    for o in (o0, o1):
+        o.state = "READY"
+        o.ready_time = 0.0
+
+    # Ensure o0 is processed first by equal ready_time and lower id.
+    orders = [o0, o1]
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+    result = assign_greedy(state, couriers, orders)
+    print(f"Output: {result}")
+
+    # Expect courier assigned to order 1 only.
+    assert len(result) == 1 and result[0] == (0, [1])
+    print("PASS")
+
+
+# ============================================================================
+# CATEGORY 6: MANHATTAN TIE-BREAKER TESTS
+# ============================================================================
+
+def test_6_1_manhattan_overrides_euclidean():
+    """Test 6.1: Manhattan tie-break chooses different courier than Euclidean would."""
+    print("\n" + "="*80)
+    print("TEST 6.1: Manhattan Overrides Euclidean")
+    print("="*80)
+
+    # Restaurant at origin
+    restaurants = [Restaurant(0, (0.0, 0.0))]
+
+    # Courier 0: (1.0, 0.0) → Manhattan=1.0 km
+    # Courier 1: (0.6, 0.6) → Manhattan=1.2 km, Euclidean≈0.8485 km (closer in Euclidean)
+    couriers = [Courier(0, (1.0, 0.0)), Courier(1, (0.6, 0.6))]
+
+    orders = [Order(0, 0, (0.0, 0.0), (0.0, 0.0), placement_time=0.0, expiration_time=10_000.0)]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+
+    result = assign_greedy(state, couriers, orders)
+    print(f"Output: {result}")
+
+    # Manhattan should select courier 0 even though Euclidean would prefer courier 1
+    assert len(result) == 1 and result[0][0] == 0 and result[0][1] == [0], \
+        "Greedy must tie-break by Manhattan time-to-pickup, not Euclidean."
+
+    print("PASS")
+
+
+def test_6_2_manhattan_tie_breaker_by_id():
+    """Test 6.2: When Manhattan times tie, choose lowest courier ID deterministically."""
+    print("\n" + "="*80)
+    print("TEST 6.2: Manhattan Tie → Lowest ID")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (2.0, 2.0))]
+    # Both have Manhattan distance 1.0 to pickup
+    couriers = [Courier(0, (2.0, 3.0)), Courier(1, (3.0, 2.0))]
+
+    orders = [Order(0, 0, (2.0, 2.0), (2.0, 2.0), placement_time=0.0, expiration_time=10_000.0)]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+
+    result = assign_greedy(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert len(result) == 1 and result[0][0] == 0 and result[0][1] == [0], \
+        "With equal Manhattan times, the lower courier ID must win."
+
+    print("PASS")
+
+
+def test_6_3_manhattan_stable_under_speed_config():
+    """Tie-break by Manhattan must be invariant to courier_speed_kmh config scaling."""
+    print("\n" + "="*80)
+    print("TEST 6.3: Manhattan stable under speed config")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (0.0, 0.0))]
+    # Manhattan to pickup: c0=1.0, c1=1.2 (Euclidean would prefer c1)
+    couriers = [Courier(0, (1.0, 0.0)), Courier(1, (0.6, 0.6))]
+    orders = [Order(0, 0, (0.0, 0.0), (0.0, 0.0), placement_time=0.0, expiration_time=10_000.0)]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+    # Simulate scenario config speed change; Manhattan times scale but ordering must not change.
+    state.config = {"physics": {"courier_speed_kmh": 7.2}}  # any value; ordering invariant
+
+    result = assign_greedy(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert len(result) == 1 and result[0] == (0, [0])
+    print("PASS")
+
+
+# ============================================================================
 # TEST RUNNER
 # ============================================================================
 
@@ -405,12 +626,20 @@ def run_all_tests():
         test_1_1_simple_one_to_one,
         test_1_2_nearest_courier_selection,
         test_1_3_more_orders_than_couriers,
+        test_1_4_same_ready_time_one_per_courier,
         test_2_1_prioritization_by_ready_time,
         test_2_2_courier_uniqueness,
         test_3_1_no_idle_couriers,
         test_3_2_no_ready_orders,
         test_3_3_equal_travel_times,
-        test_4_1_distant_bait_scenario
+        test_4_1_distant_bait_scenario,
+        test_5_1_deadline_infeasible_skip,
+        test_5_2_deadline_edge_equal_ok,
+        test_5_3_mixed_feasibility_choose_feasible,
+        test_5_4_skip_infeasible_then_assign_next,
+        test_6_1_manhattan_overrides_euclidean,
+        test_6_2_manhattan_tie_breaker_by_id,
+        test_6_3_manhattan_stable_under_speed_config
     ]
 
     passed = 0

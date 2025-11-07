@@ -1,29 +1,19 @@
-"""
-Configuration Loader for Food Delivery Simulation
-
-Loads and validates YAML configuration files for scenario testing.
-Provides default values and helpful error messages for invalid configs.
-
-Dependencies:
-    pip install pyyaml
-"""
 
 import yaml
 import os
 from typing import Dict, Any, Optional
 from copy import deepcopy
 
-
 # Default "physics" parameters (shared across all scenarios)
 DEFAULT_PHYSICS = {
     'map_size_m': 5000,
-    'distance_metric': 'manhattan',
+    'distance_metric': 'manhattan',  # ENFORCED: Manhattan-only
     'courier_speed_kmh': 30.0,
     'pickup_service_time_s': 90,
     'dropoff_service_time_s': 45,
     'meal_prep_time_s': 300,  # 5 minutes
     'order_expiration_minutes': 30,
-    'batch_interval_s': 60  # 1 minute
+    'batch_interval_s': 300  # ENFORCED: 5 minutes
 }
 
 # Default algorithm parameters
@@ -45,22 +35,8 @@ DEFAULT_VISUALIZATION = {
     'sample_interval_s': 60
 }
 
-
 def load_config(config_path: str) -> Dict[str, Any]:
-    """
-    Load and validate a scenario configuration file.
 
-    Args:
-        config_path: Path to YAML config file
-
-    Returns:
-        Validated configuration dictionary with defaults filled in
-
-    Raises:
-        FileNotFoundError: If config file doesn't exist
-        yaml.YAMLError: If YAML is malformed
-        ValueError: If required fields are missing
-    """
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"Config file not found: {config_path}")
 
@@ -76,17 +52,8 @@ def load_config(config_path: str) -> Dict[str, Any]:
 
     return config
 
-
 def _apply_defaults(config: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Apply default values to config where not specified.
 
-    Args:
-        config: Raw config from YAML file
-
-    Returns:
-        Config with defaults applied
-    """
     config = deepcopy(config)  # Don't modify original
 
     # Apply physics defaults
@@ -115,17 +82,8 @@ def _apply_defaults(config: Dict[str, Any]) -> Dict[str, Any]:
 
     return config
 
-
 def _validate_config(config: Dict[str, Any]) -> None:
-    """
-    Validate that config has all required fields and valid values.
 
-    Args:
-        config: Configuration dictionary
-
-    Raises:
-        ValueError: If validation fails
-    """
     # Validate scenario section
     if 'scenario' not in config:
         raise ValueError("Config must have 'scenario' section")
@@ -161,51 +119,31 @@ def _validate_config(config: Dict[str, Any]) -> None:
     if 'profile' not in config['demand']:
         raise ValueError("demand.profile is required")
 
-    # Validate distance metric
-    valid_metrics = ['euclidean', 'manhattan']
-    if config['physics']['distance_metric'] not in valid_metrics:
+    # Validate distance metric (ENFORCED: Manhattan-only)
+    if config['physics']['distance_metric'] != 'manhattan':
         raise ValueError(
-            f"physics.distance_metric must be one of {valid_metrics}, "
+            f"Only 'manhattan' distance metric is supported, "
             f"got: {config['physics']['distance_metric']}"
         )
 
+    # Validate batch interval (ENFORCED: 5 minutes)
+    if config['physics']['batch_interval_s'] != 300:
+        raise ValueError(
+            f"batch_interval_s must be 300 (5 minutes), "
+            f"got: {config['physics']['batch_interval_s']}"
+        )
 
 def save_config_snapshot(config: Dict[str, Any], output_path: str) -> None:
-    """
-    Save a config snapshot to file (for provenance tracking).
 
-    Args:
-        config: Configuration dictionary
-        output_path: Where to save the snapshot (JSON format)
-    """
     import json
     with open(output_path, 'w') as f:
         json.dump(config, f, indent=2)
 
-
 def get_scenario_name(config: Dict[str, Any]) -> str:
-    """
-    Extract scenario name from config.
 
-    Args:
-        config: Configuration dictionary
-
-    Returns:
-        Scenario name string
-    """
     return config['scenario']['name']
 
-
 def get_output_directory(config: Dict[str, Any], base_dir: str = 'outputs') -> str:
-    """
-    Get the output directory path for this scenario.
 
-    Args:
-        config: Configuration dictionary
-        base_dir: Base directory for all outputs
-
-    Returns:
-        Path to scenario-specific output directory
-    """
     scenario_name = get_scenario_name(config)
     return os.path.join(base_dir, scenario_name)

@@ -1,10 +1,3 @@
-"""
-Demand Generators for Food Delivery Simulation
-
-Generates order schedules with different temporal and spatial patterns.
-Supports sustained peaks, steady demand, unpredictable bursts, Poisson processes,
-and scripted order sequences.
-"""
 
 import numpy as np
 from typing import List, Dict, Any, Tuple
@@ -13,18 +6,8 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from simulator_core import Order
 
-
 def generate_demand(config: Dict[str, Any], restaurants: List) -> List[Order]:
-    """
-    Generate order schedule based on config specification.
 
-    Args:
-        config: Full configuration dictionary
-        restaurants: List of Restaurant objects (for location reference)
-
-    Returns:
-        List of Order objects with placement times and locations
-    """
     demand_config = config['demand']
     profile = demand_config['profile']
 
@@ -40,20 +23,13 @@ def generate_demand(config: Dict[str, Any], restaurants: List) -> List[Order]:
         return _generate_scripted(config, restaurants)
     elif profile == 'manual':
         return _generate_manual(config, restaurants)
+    elif profile == 'composite':
+        return _generate_composite(config, restaurants)
     else:
         raise ValueError(f"Unknown demand profile: {profile}")
 
-
 def _generate_sustained_peak(config: Dict[str, Any], restaurants: List) -> List[Order]:
-    """
-    Generate sustained peak demand pattern (Downtown Crush scenario).
 
-    Pattern:
-    - 2-hour dinner rush centered on downtown restaurants
-    - 90% of orders go to clustered downtown restaurants during peak
-    - High order rate during peak, low otherwise
-    - Total: 400 orders over 3 hours
-    """
     demand_config = config['demand']
     total_orders = demand_config['total_orders']
     duration_hours = config['scenario']['duration_hours']
@@ -68,6 +44,10 @@ def _generate_sustained_peak(config: Dict[str, Any], restaurants: List) -> List[
 
     random_seed = config['scenario'].get('random_seed', 42)
     np.random.seed(random_seed + 2000)
+
+    # Get meal prep time from config
+    physics_config = config['physics']
+    meal_prep_time = physics_config.get('meal_prep_time_s', 300)
 
     # Calculate time windows
     peak_start_s = peak_start_hour * 3600
@@ -132,24 +112,16 @@ def _generate_sustained_peak(config: Dict[str, Any], restaurants: List) -> List[
             restaurant_id=restaurant_id,
             restaurant_location=restaurants[restaurant_id].location,
             diner_location=customer_location,
-            placement_time=current_time
+            placement_time=current_time,
+            meal_prep_time=meal_prep_time
         )
         orders.append(order)
         order_id += 1
 
     return orders[:total_orders]  # Ensure exact count
 
-
 def _generate_steady_high(config: Dict[str, Any], restaurants: List) -> List[Order]:
-    """
-    Generate steady high demand pattern (River Divide scenario).
 
-    Pattern:
-    - Constant pressure throughout simulation
-    - Uniform rate across all restaurants
-    - All customers on north side of river (if divided layout)
-    - Total: 300 orders over 3 hours
-    """
     demand_config = config['demand']
     total_orders = demand_config['total_orders']
     duration_hours = config['scenario']['duration_hours']
@@ -161,6 +133,10 @@ def _generate_steady_high(config: Dict[str, Any], restaurants: List) -> List[Ord
 
     random_seed = config['scenario'].get('random_seed', 42)
     np.random.seed(random_seed + 2000)
+
+    # Get meal prep time from config
+    physics_config = config['physics']
+    meal_prep_time = physics_config.get('meal_prep_time_s', 300)
 
     # Generate orders with uniform Poisson rate
     orders = []
@@ -196,25 +172,16 @@ def _generate_steady_high(config: Dict[str, Any], restaurants: List) -> List[Ord
             restaurant_id=restaurant_id,
             restaurant_location=restaurants[restaurant_id].location,
             diner_location=customer_location,
-            placement_time=current_time
+            placement_time=current_time,
+            meal_prep_time=meal_prep_time
         )
         orders.append(order)
         order_id += 1
 
     return orders[:total_orders]
 
-
 def _generate_unpredictable_bursts(config: Dict[str, Any], restaurants: List) -> List[Order]:
-    """
-    Generate unpredictable burst demand pattern (Pop-Up Problem scenario).
 
-    Pattern:
-    - Long calm periods (0.2 orders/min)
-    - Sudden 20-minute bursts (4.0 orders/min) at ONE cluster
-    - 3-4 bursts randomly timed
-    - Bursts rotate between different restaurant clusters
-    - Total: 350 orders over 4 hours
-    """
     demand_config = config['demand']
     total_orders = demand_config['total_orders']
     duration_hours = config['scenario']['duration_hours']
@@ -229,6 +196,10 @@ def _generate_unpredictable_bursts(config: Dict[str, Any], restaurants: List) ->
 
     random_seed = config['scenario'].get('random_seed', 42)
     np.random.seed(random_seed + 2000)
+
+    # Get meal prep time from config
+    physics_config = config['physics']
+    meal_prep_time = physics_config.get('meal_prep_time_s', 300)
 
     # Identify restaurant clusters (for scattered layout)
     restaurant_clusters = _identify_restaurant_clusters(restaurants, config)
@@ -315,16 +286,16 @@ def _generate_unpredictable_bursts(config: Dict[str, Any], restaurants: List) ->
             restaurant_id=restaurant_id,
             restaurant_location=restaurants[restaurant_id].location,
             diner_location=customer_location,
-            placement_time=current_time
+            placement_time=current_time,
+            meal_prep_time=meal_prep_time
         )
         orders.append(order)
         order_id += 1
 
     return orders[:total_orders]
 
-
 def _generate_poisson(config: Dict[str, Any], restaurants: List) -> List[Order]:
-    """Generate generic Poisson process with configurable peak period."""
+
     demand_config = config['demand']
     total_orders = demand_config['total_orders']
     duration_hours = config['scenario']['duration_hours']
@@ -338,6 +309,12 @@ def _generate_poisson(config: Dict[str, Any], restaurants: List) -> List[Order]:
 
     random_seed = config['scenario'].get('random_seed', 42)
     np.random.seed(random_seed + 2000)
+
+    # Get meal prep time and expiration from config
+    physics_config = config['physics']
+    meal_prep_time = physics_config.get('meal_prep_time_s', 300)
+    expiration_minutes = physics_config.get('order_expiration_minutes', 30)
+    expiration_time = expiration_minutes * 60  # Convert to seconds
 
     peak_start_s = peak_start_hour * 3600
     peak_end_s = peak_end_hour * 3600
@@ -370,59 +347,35 @@ def _generate_poisson(config: Dict[str, Any], restaurants: List) -> List[Order]:
             restaurant_id=restaurant_id,
             restaurant_location=restaurants[restaurant_id].location,
             diner_location=customer_location,
-            placement_time=current_time
+            placement_time=current_time,
+            meal_prep_time=meal_prep_time,
+            expiration_time=expiration_time
         )
         orders.append(order)
         order_id += 1
 
     return orders[:total_orders]
 
-
 def _generate_scripted(config: Dict[str, Any], restaurants: List) -> List[Order]:
-    """Generate explicitly scripted order sequence."""
+
     demand_config = config['demand']
     scripted_orders = demand_config.get('scripted', {}).get('orders', [])
+
+    # Get default meal prep time from config
+    physics_config = config['physics']
+    default_meal_prep = physics_config.get('meal_prep_time_s', 300)
 
     orders = []
     for i, order_spec in enumerate(scripted_orders):
         restaurant_id = order_spec['restaurant_id']
         customer_location = tuple(order_spec['customer_location'])
         placement_time = order_spec['time']
+        meal_prep_time = order_spec.get('meal_prep_time', default_meal_prep)
 
         order = Order(
             order_id=i,
             restaurant_id=restaurant_id,
             restaurant_location=restaurants[restaurant_id].location,
-            diner_location=customer_location,
-            placement_time=placement_time
-        )
-        orders.append(order)
-
-    return orders
-
-
-def _generate_manual(config: Dict[str, Any], restaurants: List) -> List[Order]:
-    """
-    Generate manually specified orders with full control over all parameters.
-
-    Supports custom meal prep times and expiration times per order.
-    """
-    demand_config = config['demand']
-    manual_orders = demand_config.get('manual', {}).get('orders', [])
-    physics_config = config['physics']
-    default_meal_prep = physics_config.get('meal_prep_time_s', 300)
-
-    orders = []
-    for i, order_spec in enumerate(manual_orders):
-        restaurant_index = order_spec['restaurant_index']
-        customer_location = tuple(order_spec['customer_location'])
-        placement_time = order_spec['placement_time']
-        meal_prep_time = order_spec.get('meal_prep_time', default_meal_prep)
-
-        order = Order(
-            order_id=i,
-            restaurant_id=restaurant_index,
-            restaurant_location=restaurants[restaurant_index].location,
             diner_location=customer_location,
             placement_time=placement_time,
             meal_prep_time=meal_prep_time
@@ -431,6 +384,34 @@ def _generate_manual(config: Dict[str, Any], restaurants: List) -> List[Order]:
 
     return orders
 
+def _generate_manual(config: Dict[str, Any], restaurants: List) -> List[Order]:
+
+    demand_config = config['demand']
+    manual_orders = demand_config.get('manual', {}).get('orders', [])
+    physics_config = config['physics']
+    default_meal_prep = physics_config.get('meal_prep_time_s', 300)
+    default_expiration = physics_config.get('order_expiration_minutes', 30) * 60  # Convert to seconds
+
+    orders = []
+    for i, order_spec in enumerate(manual_orders):
+        restaurant_index = order_spec['restaurant_index']
+        customer_location = tuple(order_spec['customer_location'])
+        placement_time = order_spec['placement_time']
+        meal_prep_time = order_spec.get('meal_prep_time', default_meal_prep)
+        expiration_time = order_spec.get('expiration_time', default_expiration)
+
+        order = Order(
+            order_id=i,
+            restaurant_id=restaurant_index,
+            restaurant_location=restaurants[restaurant_index].location,
+            diner_location=customer_location,
+            placement_time=placement_time,
+            meal_prep_time=meal_prep_time,
+            expiration_time=expiration_time
+        )
+        orders.append(order)
+
+    return orders
 
 # =============================================================================
 # HELPER FUNCTIONS
@@ -438,16 +419,7 @@ def _generate_manual(config: Dict[str, Any], restaurants: List) -> List[Order]:
 
 def _generate_customer_near_restaurant(restaurant_loc: Tuple[float, float],
                                        config: Dict[str, Any]) -> Tuple[float, float]:
-    """
-    Generate customer location in ring around restaurant.
 
-    Args:
-        restaurant_loc: Restaurant (x, y) in km
-        config: Configuration dictionary
-
-    Returns:
-        Customer (x, y) location in km
-    """
     map_size_km = config['physics']['map_size_m'] / 1000.0
 
     # Ring parameters: 1-2 km from restaurant
@@ -466,9 +438,8 @@ def _generate_customer_near_restaurant(restaurant_loc: Tuple[float, float],
 
     return (x, y)
 
-
 def _generate_customer_north_side(config: Dict[str, Any]) -> Tuple[float, float]:
-    """Generate customer location on north side of river."""
+
     map_size_km = config['physics']['map_size_m'] / 1000.0
     boundary_y = config.get('geography', {}).get('river_y_position', map_size_km / 2) / 1000.0
 
@@ -477,9 +448,8 @@ def _generate_customer_north_side(config: Dict[str, Any]) -> Tuple[float, float]
 
     return (x, y)
 
-
 def _generate_customer_south_side(config: Dict[str, Any]) -> Tuple[float, float]:
-    """Generate customer location on south side of river."""
+
     map_size_km = config['physics']['map_size_m'] / 1000.0
     boundary_y = config.get('geography', {}).get('river_y_position', map_size_km / 2) / 1000.0
 
@@ -488,16 +458,8 @@ def _generate_customer_south_side(config: Dict[str, Any]) -> Tuple[float, float]
 
     return (x, y)
 
-
 def _identify_restaurant_clusters(restaurants: List, config: Dict[str, Any]) -> List[List[int]]:
-    """
-    Identify which restaurants belong to which geographic cluster.
 
-    For scattered layout with 4 corner clusters.
-
-    Returns:
-        List of lists, where each inner list is restaurant IDs in that cluster
-    """
     restaurant_config = config.get('restaurants', {})
 
     if restaurant_config.get('layout') == 'scattered':
@@ -514,3 +476,33 @@ def _identify_restaurant_clusters(restaurants: List, config: Dict[str, Any]) -> 
     else:
         # Fallback: all restaurants in one cluster
         return [list(range(len(restaurants)))]
+
+def _generate_composite(config: Dict[str, Any], restaurants: List) -> List[Order]:
+
+    # Import the composite generator
+    import sys
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from demand_profile_composite import generate_composite_orders
+
+    # Get physics config for order creation
+    physics_config = config.get('physics', {})
+
+    # Generate raw order data
+    order_data = generate_composite_orders(config)
+
+    # Convert to Order objects
+    orders = []
+    for idx, data in enumerate(order_data):
+        order = Order(
+            order_id=idx,
+            restaurant_id=data['restaurant_id'],
+            restaurant_location=restaurants[data['restaurant_id']].location,
+            diner_location=tuple(data['customer_location']),
+            placement_time=data['time'],
+            meal_prep_time=data['meal_prep_time_s'],
+            expiration_time=data['expiration_minutes'] * 60
+        )
+        orders.append(order)
+
+    return orders

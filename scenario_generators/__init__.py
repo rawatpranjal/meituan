@@ -1,9 +1,3 @@
-"""
-Scenario Generators Module
-
-Provides factory functions for generating restaurants, couriers, and demand
-patterns for food delivery simulation scenarios.
-"""
 
 from .layout_generators import (
     generate_restaurant_layout,

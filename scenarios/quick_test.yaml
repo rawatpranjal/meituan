@@ -1,0 +1,46 @@
+scenario:
+  name: "manageable_test"
+  duration_hours: 1.0  # 1 hour (12 batches)
+  random_seed: 42
+
+physics:
+  map_size_m: 5000
+  distance_metric: "manhattan"
+  courier_speed_kmh: 30
+  pickup_service_time_s: 90
+  dropoff_service_time_s: 45
+  meal_prep_time_s: 300
+  order_expiration_minutes: 30
+  batch_interval_s: 300
+
+restaurants:
+  count: 5
+  layout: "clustered"
+  clustered:
+    downtown_fraction: 0.8
+    downtown_center: [2.5, 2.5]
+    downtown_radius: 0.8
+
+couriers:
+  count: 8
+  layout: "central"
+  central:
+    center: [2.5, 2.5]
+    scatter_radius: 0.8
+
+demand:
+  total_orders: 60
+  profile: "poisson"
+  poisson:
+    rate_per_minute: 1.0
+
+algorithms:
+  bundling:
+    max_bundle_size: 3
+  anticipated:
+    lookahead_window_s: 900
+
+visualization:
+  frames: 30
+  fps: 2
+  sample_interval_s: 60

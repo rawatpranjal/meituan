@@ -1,9 +1,3 @@
-"""
-Layout Generators for Food Delivery Simulation
-
-Generates restaurant and courier placement patterns for different scenario types.
-Supports clustered, divided, scattered, random, and explicit placement strategies.
-"""
 
 import numpy as np
 from typing import List, Tuple, Dict, Any
@@ -12,17 +6,8 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from simulator_core import Restaurant, Courier
 
-
 def generate_restaurant_layout(config: Dict[str, Any]) -> List[Restaurant]:
-    """
-    Generate restaurant locations based on config specification.
 
-    Args:
-        config: Full configuration dictionary
-
-    Returns:
-        List of Restaurant objects with assigned locations
-    """
     restaurant_config = config['restaurants']
     count = restaurant_config['count']
     layout_type = restaurant_config.get('layout', 'random')
@@ -44,9 +29,8 @@ def generate_restaurant_layout(config: Dict[str, Any]) -> List[Restaurant]:
     else:
         raise ValueError(f"Unknown restaurant layout type: {layout_type}")
 
-
 def _generate_explicit_restaurants(config: Dict[str, Any], count: int) -> List[Restaurant]:
-    """Generate restaurants at explicitly specified locations."""
+
     locations = config.get('locations', [])
     if len(locations) != count:
         raise ValueError(
@@ -55,15 +39,8 @@ def _generate_explicit_restaurants(config: Dict[str, Any], count: int) -> List[R
 
     return [Restaurant(i, tuple(loc)) for i, loc in enumerate(locations)]
 
-
 def _generate_clustered_restaurants(config: Dict[str, Any], count: int, map_size: float) -> List[Restaurant]:
-    """
-    Generate restaurants with most clustered in 'downtown' area.
 
-    Pattern for Downtown Crush scenario:
-    - 75% of restaurants in tight downtown cluster (bottom-left quadrant)
-    - 25% scattered elsewhere on map
-    """
     downtown_fraction = config.get('clustered', {}).get('downtown_fraction', 0.75)
     downtown_center = config.get('clustered', {}).get('downtown_center', [1.25, 1.25])
     downtown_radius = config.get('clustered', {}).get('downtown_radius', 0.5)
@@ -95,15 +72,8 @@ def _generate_clustered_restaurants(config: Dict[str, Any], count: int, map_size
 
     return restaurants
 
-
 def _generate_divided_restaurants(config: Dict[str, Any], count: int, map_size: float) -> List[Restaurant]:
-    """
-    Generate restaurants all on one side of a dividing line (e.g., river).
 
-    Pattern for River Divide scenario:
-    - ALL restaurants south of center line
-    - Uniform distribution within allowed region
-    """
     # FIX: Convert river_position from meters to km (config stores meters, map_size is in km)
     river_position_m = config.get('divided', {}).get('river_position', map_size * 1000 / 2)
     river_position = river_position_m / 1000.0  # Convert to km
@@ -125,16 +95,8 @@ def _generate_divided_restaurants(config: Dict[str, Any], count: int, map_size: 
 
     return restaurants
 
-
 def _generate_scattered_restaurants(config: Dict[str, Any], count: int, map_size: float) -> List[Restaurant]:
-    """
-    Generate restaurants in distinct geographic clusters (corner clusters).
 
-    Pattern for Pop-Up Problem scenario:
-    - 4 geographic zones (corners of map)
-    - Restaurants evenly distributed across zones
-    - Each zone has tight cluster
-    """
     num_clusters = config.get('scattered', {}).get('num_clusters', 4)
     cluster_radius = config.get('scattered', {}).get('cluster_radius', 0.3)
 
@@ -176,9 +138,8 @@ def _generate_scattered_restaurants(config: Dict[str, Any], count: int, map_size
 
     return restaurants
 
-
 def _generate_random_restaurants(count: int, map_size: float) -> List[Restaurant]:
-    """Generate restaurants at completely random locations."""
+
     restaurants = []
     for i in range(count):
         x = np.random.uniform(0.5, map_size - 0.5)
@@ -186,21 +147,12 @@ def _generate_random_restaurants(count: int, map_size: float) -> List[Restaurant
         restaurants.append(Restaurant(i, (x, y)))
     return restaurants
 
-
 # =============================================================================
 # COURIER LAYOUT GENERATORS
 # =============================================================================
 
 def generate_courier_layout(config: Dict[str, Any]) -> List[Courier]:
-    """
-    Generate courier starting locations based on config specification.
 
-    Args:
-        config: Full configuration dictionary
-
-    Returns:
-        List of Courier objects with assigned starting locations
-    """
     courier_config = config['couriers']
     count = courier_config['count']
     layout_type = courier_config.get('layout', 'random')
@@ -221,9 +173,8 @@ def generate_courier_layout(config: Dict[str, Any]) -> List[Courier]:
     else:
         raise ValueError(f"Unknown courier layout type: {layout_type}")
 
-
 def _generate_explicit_couriers(config: Dict[str, Any], count: int, duration: int) -> List[Courier]:
-    """Generate couriers at explicitly specified locations."""
+
     locations = config.get('locations', [])
     if len(locations) != count:
         raise ValueError(
@@ -232,15 +183,8 @@ def _generate_explicit_couriers(config: Dict[str, Any], count: int, duration: in
 
     return [Courier(i, tuple(loc), 0, duration) for i, loc in enumerate(locations)]
 
-
 def _generate_central_couriers(config: Dict[str, Any], count: int, map_size: float, duration: int) -> List[Courier]:
-    """
-    Generate couriers clustered around a central point.
 
-    Pattern for Downtown Crush and Pop-Up Problem scenarios:
-    - All couriers start near map center
-    - Small random scatter for realism
-    """
     center = config.get('central', {}).get('center', [map_size / 2, map_size / 2])
     scatter_radius = config.get('central', {}).get('scatter_radius', 0.5)
 
@@ -261,15 +205,8 @@ def _generate_central_couriers(config: Dict[str, Any], count: int, map_size: flo
 
     return couriers
 
-
 def _generate_zonal_couriers(config: Dict[str, Any], count: int, map_size: float, duration: int) -> List[Courier]:
-    """
-    Generate couriers split between geographic zones.
 
-    Pattern for River Divide scenario:
-    - 67% of couriers south of boundary
-    - 33% of couriers north of boundary
-    """
     zones_config = config.get('zonal', {}).get('zones', {'south': 10, 'north': 5})
     # FIX: Convert boundary_y from meters to km (config stores meters, map_size is in km)
     boundary_y_m = config.get('zonal', {}).get('boundary_y', map_size * 1000 / 2)
@@ -307,9 +244,8 @@ def _generate_zonal_couriers(config: Dict[str, Any], count: int, map_size: float
 
     return couriers
 
-
 def _generate_random_couriers(count: int, map_size: float, duration: int) -> List[Courier]:
-    """Generate couriers at completely random locations."""
+
     couriers = []
     for i in range(count):
         x = np.random.uniform(0.5, map_size - 0.5)

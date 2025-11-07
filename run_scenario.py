@@ -1,15 +1,4 @@
 #!/usr/bin/env python3
-"""
-Scenario Runner for Food Delivery Simulation
-
-Master script for running individual scenarios with config-based setup.
-Generates all outputs (logs, GIFs, analysis) in per-scenario folders.
-
-Usage:
-    python3 run_scenario.py scenarios/downtown_crush.yaml
-    python3 run_scenario.py scenarios/river_divide.yaml
-    python3 run_scenario.py scenarios/popup_problem.yaml
-"""
 
 import sys
 import os
@@ -23,31 +12,15 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from config_loader import load_config, get_scenario_name, get_output_directory, save_config_snapshot
 from scenario_generators import ScenarioFactory
 
-
 def create_output_directories(output_dir: str):
-    """
-    Create directory structure for scenario outputs.
 
-    Structure:
-        outputs/{scenario_name}/
-            ├── logs/
-            ├── gifs/
-            ├── analysis/
-            └── metadata.json
-    """
     os.makedirs(f"{output_dir}/logs", exist_ok=True)
     os.makedirs(f"{output_dir}/gifs", exist_ok=True)
     os.makedirs(f"{output_dir}/analysis", exist_ok=True)
     print(f"✓ Created output directories: {output_dir}/")
 
-
 def run_scenario(config_path: str):
-    """
-    Run complete simulation pipeline for a single scenario.
 
-    Args:
-        config_path: Path to scenario YAML config file
-    """
     print("=" * 80)
     print("RUNNING SCENARIO FROM CONFIG")
     print("=" * 80)
@@ -229,7 +202,6 @@ def run_scenario(config_path: str):
     print("✅ SCENARIO COMPLETE WITH VISUALIZATIONS")
     print("=" * 80)
 
-
 def main():
     if len(sys.argv) < 2:
         print("Usage: python3 run_scenario.py <config_path>")
@@ -248,7 +220,6 @@ def main():
         sys.exit(1)
 
     run_scenario(config_path)
-
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,211 @@
+{
+  "scenario": {
+    "name": "grand_unified_showcase",
+    "description": "One run exposing bundling, network, and anticipatory advantages",
+    "duration_hours": 3,
+    "random_seed": 42
+  },
+  "physics": {
+    "map_size_m": 5000,
+    "distance_metric": "manhattan",
+    "courier_speed_kmh": 30,
+    "pickup_service_time_s": 90,
+    "dropoff_service_time_s": 45,
+    "meal_prep_time_s": 300,
+    "order_expiration_minutes": 30,
+    "batch_interval_s": 300
+  },
+  "restaurants": {
+    "count": 8,
+    "layout": "explicit",
+    "locations": [
+      [
+        1.1,
+        1.1
+      ],
+      [
+        1.25,
+        1.1
+      ],
+      [
+        1.1,
+        1.25
+      ],
+      [
+        1.3,
+        1.25
+      ],
+      [
+        1.2,
+        1.35
+      ],
+      [
+        3.7,
+        1.9
+      ],
+      [
+        4.1,
+        2.1
+      ],
+      [
+        3.4,
+        2.3
+      ]
+    ]
+  },
+  "couriers": {
+    "count": 12,
+    "layout": "central",
+    "central": {
+      "center": [
+        2.5,
+        2.5
+      ],
+      "scatter_radius": 0.6
+    }
+  },
+  "demand": {
+    "total_orders": 300,
+    "profile": "composite",
+    "composite": {
+      "background_poisson": {
+        "rate_per_min": 0.2
+      },
+      "phases": [
+        {
+          "name": "downtown_crush",
+          "start_min": 20,
+          "end_min": 100,
+          "rate_per_min": 2.8,
+          "restaurant_weights": {
+            "downtown_ids": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "downtown_fraction": 0.9
+          },
+          "customer_constraint": null
+        },
+        {
+          "name": "river_divide",
+          "start_min": 100,
+          "end_min": 140,
+          "rate_per_min": 1.7,
+          "restaurant_weights": {
+            "downtown_ids": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "downtown_fraction": 0.7
+          },
+          "customer_constraint": "north_only"
+        },
+        {
+          "name": "pop_up_bursts",
+          "start_min": 140,
+          "end_min": 180,
+          "calm_rate_per_min": 0.3,
+          "bursts": {
+            "duration_min": 10,
+            "peak_rate_per_min": 3.8,
+            "sequence": [
+              {
+                "zone_box": [
+                  0.5,
+                  0.5,
+                  1.2,
+                  1.2
+                ]
+              },
+              {
+                "zone_box": [
+                  3.8,
+                  0.5,
+                  4.5,
+                  1.2
+                ]
+              },
+              {
+                "zone_box": [
+                  3.8,
+                  3.8,
+                  4.5,
+                  4.5
+                ]
+              },
+              {
+                "zone_box": [
+                  0.5,
+                  3.8,
+                  1.2,
+                  4.5
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "scripted_orders": [
+        {
+          "at_sec": 1500,
+          "restaurant_id": 5,
+          "customer_location_km": [
+            4.6,
+            4.4
+          ],
+          "meal_prep_time_s": 600,
+          "expiration_minutes": 20
+        },
+        {
+          "at_sec": 8700,
+          "restaurant_id": 6,
+          "customer_location_km": [
+            0.6,
+            4.4
+          ],
+          "meal_prep_time_s": 600,
+          "expiration_minutes": 20
+        }
+      ]
+    }
+  },
+  "algorithms": {
+    "bundling": {
+      "max_bundle_size": 3
+    },
+    "anticipated": {
+      "lookahead_window_s": 900,
+      "alpha_penalty": 0.1,
+      "beta_penalty": 0.15
+    }
+  },
+  "visualization": {
+    "frames": 180,
+    "fps": 2,
+    "sample_interval_s": 60,
+    "features": {
+      "show_river": true,
+      "show_downtown_box": true,
+      "show_burst_indicator": true
+    }
+  },
+  "geography": {
+    "river_y_position": 2500,
+    "bridges": [
+      [
+        1500,
+        2500
+      ],
+      [
+        3500,
+        2500
+      ]
+    ]
+  }
+}

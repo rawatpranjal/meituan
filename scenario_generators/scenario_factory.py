@@ -1,13 +1,3 @@
-"""
-Scenario Factory for Food Delivery Simulation
-
-Orchestrates generation of complete scenarios by coordinating:
-- Restaurant layout generation
-- Courier placement
-- Demand pattern generation
-
-Converts YAML config into executable simulation scenario.
-"""
 
 import sys
 import os
@@ -17,37 +7,14 @@ from typing import Dict, Any
 from .layout_generators import generate_restaurant_layout, generate_courier_layout
 from .demand_generators import generate_demand
 
-
 class ScenarioFactory:
-    """
-    Factory class for generating complete simulation scenarios from config.
-
-    Usage:
-        factory = ScenarioFactory(config)
-        scenario = factory.create_scenario()
-    """
 
     def __init__(self, config: Dict[str, Any]):
-        """
-        Initialize factory with configuration.
 
-        Args:
-            config: Validated configuration dictionary from config_loader
-        """
         self.config = config
 
     def create_scenario(self) -> Dict[str, Any]:
-        """
-        Generate complete scenario including restaurants, couriers, and orders.
 
-        Returns:
-            Dictionary with:
-                - 'restaurants': List of Restaurant objects
-                - 'couriers': List of Courier objects
-                - 'order_schedule': List of Order objects
-                - 'duration': Simulation duration in seconds
-                - 'config': Original config for reference
-        """
         # Generate geographic layout
         print(f"  Generating {self.config['restaurants']['count']} restaurants...")
         restaurants = generate_restaurant_layout(self.config)
@@ -78,12 +45,7 @@ class ScenarioFactory:
         }
 
     def get_scenario_summary(self) -> str:
-        """
-        Get human-readable summary of scenario configuration.
 
-        Returns:
-            Formatted string describing the scenario
-        """
         lines = []
         lines.append(f"Scenario: {self.config['scenario']['name']}")
         lines.append(f"Description: {self.config['scenario'].get('description', 'N/A')}")
@@ -106,17 +68,8 @@ class ScenarioFactory:
 
         return "\n".join(lines)
 
-
 def create_scenario_from_config_file(config_path: str) -> Dict[str, Any]:
-    """
-    Convenience function to create scenario directly from config file path.
 
-    Args:
-        config_path: Path to YAML config file
-
-    Returns:
-        Complete scenario dictionary
-    """
     from config_loader import load_config
 
     config = load_config(config_path)

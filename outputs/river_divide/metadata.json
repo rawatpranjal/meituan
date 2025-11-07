@@ -74,5 +74,38 @@
       "show_river": true,
       "show_burst_indicator": false
     }
+  },
+  "run_timestamp": "2025-11-07T10:02:59.942673",
+  "results": {
+    "greedy": {
+      "orders_delivered": 69,
+      "total_distance": 270.24,
+      "bundles_created": 69,
+      "avg_delivery_time": 21.0
+    },
+    "hungarian": {
+      "orders_delivered": 72,
+      "total_distance": 284.57,
+      "bundles_created": 72,
+      "avg_delivery_time": 21.1
+    },
+    "simple_bundling": {
+      "orders_delivered": 71,
+      "total_distance": 276.08,
+      "bundles_created": 70,
+      "avg_delivery_time": 20.9
+    },
+    "network_bundling": {
+      "orders_delivered": 31,
+      "total_distance": 104.59,
+      "bundles_created": 29,
+      "avg_delivery_time": 20.4
+    },
+    "anticipated_bundling": {
+      "orders_delivered": 30,
+      "total_distance": 110.09,
+      "bundles_created": 26,
+      "avg_delivery_time": 17.9
+    }
   }
 }

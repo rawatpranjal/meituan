@@ -13,7 +13,7 @@
     "dropoff_service_time_s": 120,
     "meal_prep_time_s": 600,
     "order_expiration_minutes": 20,
-    "batch_interval_s": 60
+    "batch_interval_s": 300
   },
   "restaurants": {
     "count": 1,
@@ -72,7 +72,7 @@
       "show_burst_indicator": false
     }
   },
-  "run_timestamp": "2025-11-05T10:02:55.659358",
+  "run_timestamp": "2025-11-07T11:09:30.393903",
   "results": {
     "greedy": {
       "orders_delivered": 0,

@@ -16,6 +16,11 @@ from simulator_core import (
 from assignment_algorithms import assign_hungarian, calculate_route_duration
 
 
+# Give long routes time to finish in tests that are not about deadline failure
+LONG_EXP = 10_000.0       # ~2.78 hours
+ULTRA_EXP = 100_000.0     # used for the "extremely far" test
+
+
 # ============================================================================
 # CATEGORY 1: BASIC OPTIMALITY TEST
 # ============================================================================
@@ -232,7 +237,7 @@ def test_3_3_one_courier_one_order():
 
     couriers = [Courier(0, (1.0, 1.0))]
 
-    orders = [Order(0, 0, (2.0, 2.0), (3.0, 3.0), 0.0)]
+    orders = [Order(0, 0, (2.0, 2.0), (3.0, 3.0), 0.0, expiration_time=LONG_EXP)]
     orders[0].state = "READY"
     orders[0].ready_time = 0.0
 
@@ -271,8 +276,8 @@ def test_4_1_strategic_dilemma():
     ]
 
     orders = [
-        Order(0, 0, (5.0, 5.0), (6.0, 6.0), 0.0),
-        Order(1, 1, (5.2, 5.2), (6.2, 6.2), 0.0)
+        Order(0, 0, (5.0, 5.0), (6.0, 6.0), 0.0, expiration_time=LONG_EXP),
+        Order(1, 1, (5.2, 5.2), (6.2, 6.2), 0.0, expiration_time=LONG_EXP)
     ]
 
     orders[0].ready_time = 300.0
@@ -378,8 +383,8 @@ def test_5_2_symmetrical_order_choice():
     couriers = [Courier(0, (5.0, 5.0))]
 
     orders = [
-        Order(0, 0, (5.0, 4.0), (6.0, 6.0), 0.0),
-        Order(1, 1, (5.0, 6.0), (7.0, 7.0), 0.0)
+        Order(0, 0, (5.0, 4.0), (6.0, 6.0), 0.0, expiration_time=LONG_EXP),
+        Order(1, 1, (5.0, 6.0), (7.0, 7.0), 0.0, expiration_time=LONG_EXP)
     ]
 
     for order in orders:
@@ -476,9 +481,9 @@ def test_6_2_all_orders_at_one_restaurant():
     ]
 
     orders = [
-        Order(0, 0, (5.0, 5.0), (1.0, 1.0), 0.0),
-        Order(1, 0, (5.0, 5.0), (2.0, 2.0), 0.0),
-        Order(2, 0, (5.0, 5.0), (3.0, 3.0), 0.0)
+        Order(0, 0, (5.0, 5.0), (1.0, 1.0), 0.0, expiration_time=LONG_EXP),
+        Order(1, 0, (5.0, 5.0), (2.0, 2.0), 0.0, expiration_time=LONG_EXP),
+        Order(2, 0, (5.0, 5.0), (3.0, 3.0), 0.0, expiration_time=LONG_EXP)
     ]
 
     for order in orders:
@@ -528,7 +533,7 @@ def test_7_1_extremely_unattractive_assignment():
 
     couriers = [Courier(0, (0.0, 0.0))]
 
-    orders = [Order(0, 0, (100.0, 100.0), (101.0, 101.0), 0.0)]
+    orders = [Order(0, 0, (100.0, 100.0), (101.0, 101.0), 0.0, expiration_time=ULTRA_EXP)]
     orders[0].state = "READY"
     orders[0].ready_time = 0.0
 
@@ -569,8 +574,8 @@ def test_7_2_identical_costs_for_all_pairings():
     ]
 
     orders = [
-        Order(0, 0, (1.0, 0.0), (2.0, 2.0), 0.0),
-        Order(1, 1, (-1.0, 0.0), (-2.0, -2.0), 0.0)
+        Order(0, 0, (1.0, 0.0), (2.0, 2.0), 0.0, expiration_time=LONG_EXP),
+        Order(1, 1, (-1.0, 0.0), (-2.0, -2.0), 0.0, expiration_time=LONG_EXP)
     ]
 
     for order in orders:
@@ -661,6 +666,129 @@ def test_8_1_the_sacrificial_order():
 
 
 # ============================================================================
+# CATEGORY 9: DEADLINE FEASIBILITY & MANHATTAN TIE-BREAK TESTS
+# ============================================================================
+
+from simulator_core import PICKUP_SERVICE_TIME, DROPOFF_SERVICE_TIME
+
+def test_9_1_deadline_infeasible_skip():
+    """Test 9.1: Skip assignment when finish time exceeds deadline."""
+    print("\n" + "="*80)
+    print("TEST 9.1: Deadline Infeasible → Skip")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (2.0, 2.0))]
+    couriers = [Courier(0, (2.0, 2.0))]
+    # Expiration = 1s while service alone is 150+120=270s
+    orders = [Order(0, 0, (2.0, 2.0), (2.0, 2.0), placement_time=0.0, expiration_time=1.0)]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+    result = assign_hungarian(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert result == []
+    print("PASS")
+
+
+def test_9_2_deadline_edge_equal_ok():
+    """Test 9.2: Assign when finish time exactly equals deadline."""
+    print("\n" + "="*80)
+    print("TEST 9.2: Deadline Edge Case (finish == deadline) → Assign")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (2.0, 2.0))]
+    couriers = [Courier(0, (2.0, 2.0))]
+
+    # Zero travel times; finish = pickup(150) + dropoff(120) = 270s
+    orders = [Order(
+        0, 0, (2.0, 2.0), (2.0, 2.0), placement_time=0.0,
+        expiration_time=PICKUP_SERVICE_TIME + DROPOFF_SERVICE_TIME
+    )]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+    result = assign_hungarian(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert len(result) == 1 and result[0] == (0, [0])
+    print("PASS")
+
+
+def test_9_3_manhattan_overrides_euclidean():
+    """Test 9.3: Manhattan tie-break chooses different courier than Euclidean."""
+    print("\n" + "="*80)
+    print("TEST 9.3: Manhattan Overrides Euclidean")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (0.0, 0.0))]
+    # C0: Manhattan=1.0, C1: Manhattan=1.2 (but Euclidean≈0.8485)
+    couriers = [Courier(0, (1.0, 0.0)), Courier(1, (0.6, 0.6))]
+    orders = [Order(0, 0, (0.0, 0.0), (0.0, 0.0), placement_time=0.0, expiration_time=10_000.0)]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+    result = assign_hungarian(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert len(result) == 1 and result[0][0] == 0 and result[0][1] == [0]
+    print("PASS")
+
+
+def test_9_4_manhattan_tie_lowest_id():
+    """Test 9.4: When Manhattan times tie, choose lowest courier ID."""
+    print("\n" + "="*80)
+    print("TEST 9.4: Manhattan Tie → Lowest Courier ID")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (2.0, 2.0))]
+    # Both have Manhattan distance 1.0
+    couriers = [Courier(0, (2.0, 3.0)), Courier(1, (3.0, 2.0))]
+    orders = [Order(0, 0, (2.0, 2.0), (2.0, 2.0), placement_time=0.0, expiration_time=10_000.0)]
+    orders[0].state = "READY"
+    orders[0].ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+    result = assign_hungarian(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert len(result) == 1 and result[0][0] == 0 and result[0][1] == [0]
+    print("PASS")
+
+
+def test_9_5_cardinality_then_pickup_time():
+    """Test 9.5: Maximize cardinality first, then minimize pickup time."""
+    print("\n" + "="*80)
+    print("TEST 9.5: Cardinality First, Then Pickup Time")
+    print("="*80)
+
+    restaurants = [Restaurant(0, (1.0, 1.0)), Restaurant(1, (5.0, 5.0))]
+    # Two couriers, two orders - should assign both
+    couriers = [Courier(0, (1.0, 1.0)), Courier(1, (5.0, 5.0))]
+    orders = [
+        Order(0, 0, (1.0, 1.0), (2.0, 2.0), 0.0, expiration_time=10_000.0),
+        Order(1, 1, (5.0, 5.0), (6.0, 6.0), 0.0, expiration_time=10_000.0)
+    ]
+    for o in orders:
+        o.state = "READY"
+        o.ready_time = 0.0
+
+    state = SimulationState(restaurants, couriers, orders, duration=3600)
+    result = assign_hungarian(state, couriers, orders)
+    print(f"Output: {result}")
+
+    assert len(result) == 2
+    assigned_couriers = {c_id for c_id, _ in result}
+    assigned_orders = {o_ids[0] for _, o_ids in result}
+    assert assigned_couriers == {0, 1}
+    assert assigned_orders == {0, 1}
+    print("PASS")
+
+
+# ============================================================================
 # TEST RUNNER
 # ============================================================================
 
@@ -681,7 +809,12 @@ def run_all_tests():
         test_6_2_all_orders_at_one_restaurant,
         test_7_1_extremely_unattractive_assignment,
         test_7_2_identical_costs_for_all_pairings,
-        test_8_1_the_sacrificial_order
+        test_8_1_the_sacrificial_order,
+        test_9_1_deadline_infeasible_skip,
+        test_9_2_deadline_edge_equal_ok,
+        test_9_3_manhattan_overrides_euclidean,
+        test_9_4_manhattan_tie_lowest_id,
+        test_9_5_cardinality_then_pickup_time
     ]
 
     passed = 0

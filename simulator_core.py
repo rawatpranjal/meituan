@@ -1,164 +1,250 @@
-"""
-Food Delivery Routing Simulator - Core Engine
-
-This module contains the core simulation engine for comparing batched assignment
-algorithms in a food delivery context.
-
-Simulation Parameters:
-- Grid: 5km x 5km
-- Restaurants: 5 (uniformly distributed)
-- Couriers: 10 (random start positions)
-- Orders: 20 (Poisson process with peak hour)
-- Duration: 1 hour (3600 seconds)
-- Batch interval: 60 seconds
-- Courier speed: 30 km/h = 0.5 km/min = 8.33 m/s
-- Meal prep time: 10 minutes (600 seconds)
-"""
 
 import numpy as np
 from datetime import datetime
 from copy import deepcopy
-from typing import List, Tuple, Dict, Optional, Callable
+from typing import List, Tuple, Dict, Optional
 import json
-from distance_metrics import get_distance_metric
-
 
 # ============================================================================
-# CONFIGURATION - "THE ENGINEERED GAUNTLET"
+# PHYSICS HELPERS - MANHATTAN ONLY
 # ============================================================================
 
-GRID_SIZE = 5.0  # km (A larger 5x5 grid to create meaningful distances for the "Distant Bait" test)
-NUM_RESTAURANTS = 4  # Gauntlet: 3 downtown, 1 suburban to test geographic intelligence
-NUM_COURIERS = 5  # Gauntlet: 5 strategically placed couriers to create specific challenges
-NUM_ORDERS = 80  # Will be overridden by scripted scenario (kept for compatibility)
-SIMULATION_DURATION = 3600  # seconds (1 hour to see the full story play out)
-BATCH_INTERVAL = 300  # seconds (5 minutes)
-COURIER_SPEED_KMH = 20.0  # km/h (REALISTIC: urban congestion, stop signs, turns)
-COURIER_SPEED_M_PER_S = (COURIER_SPEED_KMH * 1000.0) / 3600.0  # meters/second
-MEAL_PREP_TIME = 600  # seconds (10 minutes - CRITICAL for the "Impossible Deadline" test)
-RANDOM_SEED = 42
-
-# Service times at pickup and dropoff (REALISTIC urban times)
-PICKUP_SERVICE_TIME = 150  # seconds (2.5 min: parking, walking to restaurant, waiting, handoff)
-DROPOFF_SERVICE_TIME = 120  # seconds (2 min: parking, finding building/apartment, customer handoff)
-
-# Order expiration timeout - THE MOST CRITICAL CHANGE
-# Eased from 5 to 15 minutes to make multi-order bundling a viable, winning strategy
-ORDER_EXPIRATION_TIME = 900  # seconds (15 minutes)
-
-
-# ============================================================================
-# HELPER FUNCTIONS
-# ============================================================================
-
-# Global distance function (set by run_simulation)
-_distance_func = None
+# Global state for physics calculations
 _courier_speed_m_per_s = None
 
-def set_distance_function(distance_func: Callable, courier_speed_kmh: float):
-    """
-    Set the global distance function and courier speed for this simulation run.
+def manhattan_distance(loc1: Tuple[float, float], loc2: Tuple[float, float]) -> float:
 
-    Args:
-        distance_func: Distance calculation function from distance_metrics
-        courier_speed_kmh: Courier speed in km/h
-    """
-    global _distance_func, _courier_speed_m_per_s
-    _distance_func = distance_func
+    return abs(loc1[0] - loc2[0]) + abs(loc1[1] - loc2[1])
+
+def set_courier_speed(courier_speed_kmh: float):
+
+    global _courier_speed_m_per_s
     _courier_speed_m_per_s = (courier_speed_kmh * 1000.0) / 3600.0
 
-
-def euclidean_distance(loc1: Tuple[float, float], loc2: Tuple[float, float]) -> float:
-    """Calculate Euclidean distance between two points in km (legacy function)."""
-    return np.sqrt((loc1[0] - loc2[0])**2 + (loc1[1] - loc2[1])**2)
-
-
 def get_distance(loc1: Tuple[float, float], loc2: Tuple[float, float]) -> float:
-    """
-    Calculate distance between two points using configured metric.
 
-    Args:
-        loc1: First location (x, y) in km
-        loc2: Second location (x, y) in km
-
-    Returns:
-        Distance in km
-    """
-    if _distance_func is None:
-        # Fallback to Euclidean if not configured
-        return euclidean_distance(loc1, loc2)
-    return _distance_func(loc1, loc2)
-
+    return manhattan_distance(loc1, loc2)
 
 def get_travel_time(loc1: Tuple[float, float], loc2: Tuple[float, float]) -> float:
-    """Calculate travel time in seconds between two points."""
+
     distance_km = get_distance(loc1, loc2)
     distance_m = distance_km * 1000.0
     if _courier_speed_m_per_s is None:
-        # Fallback to default speed
-        return distance_m / COURIER_SPEED_M_PER_S
+        raise ValueError("Courier speed not configured - call set_courier_speed() first")
     return distance_m / _courier_speed_m_per_s
 
+def simulate_bundle_timeline(courier_location: Tuple[float, float],
+                            order_ids: List[int],
+                            state,
+                            current_time: float) -> Dict:
+
+    if not order_ids:
+        return {'feasible': True, 'events': [], 'total_duration': 0}
+
+    if not hasattr(state, 'config') or state.config is None:
+        raise ValueError("State must have config for timeline simulation")
+
+    # Get physics parameters
+    pickup_service_time = state.config['physics']['pickup_service_time_s']
+    dropoff_service_time = state.config['physics']['dropoff_service_time_s']
+
+    # Get orders
+    orders = [state.orders[oid] for oid in order_ids]
+
+    # Group orders by restaurant
+    by_restaurant = {}
+    for order in orders:
+        rest_id = order.restaurant_id
+        if rest_id not in by_restaurant:
+            by_restaurant[rest_id] = []
+        by_restaurant[rest_id].append(order)
+
+    events = []
+    time_cursor = current_time
+    location = courier_location
+
+    # Phase 1: Visit restaurants (TSP if multiple)
+    restaurant_visits = list(by_restaurant.keys())
+
+    if len(restaurant_visits) > 1:
+        # Multi-restaurant: Use TSP for optimal restaurant visiting order
+        # For simplicity, using nearest-neighbor heuristic for >8 restaurants
+        if len(restaurant_visits) <= 8:
+            # Exact TSP via brute force
+            from itertools import permutations
+            best_route = None
+            best_time = float('inf')
+
+            for perm in permutations(restaurant_visits):
+                test_time = 0
+                test_loc = location
+                for rest_id in perm:
+                    rest_loc = state.restaurants[rest_id].location
+                    test_time += get_travel_time(test_loc, rest_loc)
+                    test_loc = rest_loc
+                if test_time < best_time:
+                    best_time = test_time
+                    best_route = list(perm)
+            restaurant_visits = best_route
+        else:
+            # Nearest neighbor for >8 restaurants
+            remaining = set(restaurant_visits)
+            ordered = []
+            current = location
+
+            while remaining:
+                nearest = min(remaining,
+                            key=lambda r: get_distance(current, state.restaurants[r].location))
+                ordered.append(nearest)
+                current = state.restaurants[nearest].location
+                remaining.remove(nearest)
+            restaurant_visits = ordered
+
+    # Visit each restaurant
+    for rest_id in restaurant_visits:
+        restaurant = state.restaurants[rest_id]
+        rest_orders = by_restaurant[rest_id]
+
+        # Travel to restaurant
+        travel_time = get_travel_time(location, restaurant.location)
+        time_cursor += travel_time
+
+        events.append({
+            'type': 'arrive_restaurant',
+            'time': time_cursor,
+            'restaurant_id': rest_id,
+            'location': restaurant.location
+        })
+
+        # Check if we need to wait for orders to be ready
+        max_ready_time = max(o.ready_time for o in rest_orders)
+        if time_cursor < max_ready_time:
+            wait_time = max_ready_time - time_cursor
+            # Cap waiting at 5 minutes (300 seconds)
+            if wait_time > 300:
+                return {
+                    'feasible': False,
+                    'reason': f'Would need to wait {wait_time}s at restaurant {rest_id}',
+                    'events': events
+                }
+            time_cursor = max_ready_time
+            events.append({
+                'type': 'wait_for_ready',
+                'time': time_cursor,
+                'wait_duration': wait_time
+            })
+
+        # Pickup service time (once per restaurant)
+        time_cursor += pickup_service_time
+
+        events.append({
+            'type': 'pickup_complete',
+            'time': time_cursor,
+            'order_ids': [o.id for o in rest_orders]
+        })
+
+        location = restaurant.location
+
+    # Phase 2: Deliver orders (TSP for optimal delivery sequence)
+    delivery_sequence = orders.copy()
+
+    if len(delivery_sequence) > 1:
+        # TSP for delivery sequence
+        if len(delivery_sequence) <= 8:
+            # Exact TSP
+            from itertools import permutations
+            best_seq = None
+            best_time = float('inf')
+
+            for perm in permutations(delivery_sequence):
+                test_time = 0
+                test_loc = location
+                for order in perm:
+                    test_time += get_travel_time(test_loc, order.diner_location)
+                    test_loc = order.diner_location
+                if test_time < best_time:
+                    best_time = test_time
+                    best_seq = list(perm)
+            delivery_sequence = best_seq
+        else:
+            # Nearest neighbor
+            remaining = set(delivery_sequence)
+            ordered = []
+            current = location
+
+            while remaining:
+                nearest = min(remaining,
+                            key=lambda o: get_distance(current, o.diner_location))
+                ordered.append(nearest)
+                current = nearest.diner_location
+                remaining.remove(nearest)
+            delivery_sequence = ordered
+
+    # Deliver each order
+    for order in delivery_sequence:
+        # Travel to customer
+        travel_time = get_travel_time(location, order.diner_location)
+        time_cursor += travel_time
+
+        # Dropoff service time
+        time_cursor += dropoff_service_time
+
+        # Check per-order deadline
+        deadline = order.ready_time + order.expiration_time
+        if time_cursor > deadline:
+            return {
+                'feasible': False,
+                'reason': f'Order {order.id} would expire (delivery at {time_cursor} > deadline {deadline})',
+                'events': events
+            }
+
+        events.append({
+            'type': 'delivery_complete',
+            'time': time_cursor,
+            'order_id': order.id,
+            'location': order.diner_location,
+            'deadline': deadline,
+            'margin': deadline - time_cursor
+        })
+
+        location = order.diner_location
+
+    return {
+        'feasible': True,
+        'events': events,
+        'total_duration': time_cursor - current_time,
+        'final_time': time_cursor
+    }
 
 def calculate_predicted_delivery_time(courier, order_ids: List[int],
                                       state) -> float:
-    """
-    Calculate the estimated delivery completion time for a bundle.
 
-    This function enforces the deadline feasibility constraint by predicting
-    when the courier will complete delivery of ALL orders in the bundle.
-
-    Args:
-        courier: Courier object with current_location
-        order_ids: List of order IDs to be assigned
-        state: SimulationState with current_time and orders
-
-    Returns:
-        Timestamp (float) when the LAST order in the bundle will be delivered.
-
-    The calculation accounts for:
-        - Travel time to restaurant(s)
-        - Waiting for food to be ready
-        - Pickup service times (150s per restaurant)
-        - TSP-optimized delivery route
-        - Dropoff service times (120s per customer)
-    """
     if not order_ids:
         return state.current_time
 
-    try:
-        # Lazy import to avoid circular dependency
-        # (assignment_algorithms imports from simulator_core)
-        from assignment_algorithms import calculate_route_duration
+    # Use the new timeline simulator
+    timeline = simulate_bundle_timeline(
+        courier.current_location,
+        order_ids,
+        state,
+        state.current_time
+    )
 
-        # Calculate full route duration using existing helper function
-        # This handles all complexities: multi-restaurant, TSP, service times, waiting
-        route_duration = calculate_route_duration(
-            courier.current_location,
-            order_ids,
-            state,
-            use_tsp_optimization=(len(order_ids) > 1),
-            include_service_times=True
-        )
-
-        return state.current_time + route_duration
-    except Exception as e:
-        # If calculation fails, log error and return a very large time
-        # This will cause the assignment to be rejected (conservative approach)
-        state.log_event('DEADLINE_CALCULATION_ERROR',
-                       f'Error calculating predicted delivery time: {e}',
+    if timeline['feasible']:
+        return timeline['final_time']
+    else:
+        # Return a very large time if infeasible
+        state.log_event('BUNDLE_INFEASIBLE',
+                       f'Bundle infeasible: {timeline.get("reason", "unknown")}',
                        courier_id=courier.id,
-                       order_ids=order_ids,
-                       error=str(e))
+                       order_ids=order_ids)
         return float('inf')  # Infinite time = guaranteed rejection
-
 
 # ============================================================================
 # CORE CLASSES
 # ============================================================================
 
 class Restaurant:
-    """Represents a restaurant (pickup location)."""
 
     def __init__(self, restaurant_id: int, location: Tuple[float, float]):
         self.id = restaurant_id
@@ -170,9 +256,7 @@ class Restaurant:
             'location': self.location
         }
 
-
 class Order:
-    """Represents a food delivery order."""
 
     def __init__(self, order_id: int, restaurant_id: int, restaurant_location: Tuple[float, float],
                  diner_location: Tuple[float, float], placement_time: float, meal_prep_time: Optional[float] = None,
@@ -182,11 +266,15 @@ class Order:
         self.restaurant_location = restaurant_location
         self.diner_location = diner_location
         self.placement_time = placement_time
-        # Allow variable meal prep time (7-15 min range for realism), default to 10 min
-        self.meal_prep_time = meal_prep_time if meal_prep_time is not None else MEAL_PREP_TIME
+        # Meal prep time must be provided from config
+        if meal_prep_time is None:
+            raise ValueError("meal_prep_time is required - no hardcoded defaults allowed")
+        self.meal_prep_time = meal_prep_time
         self.ready_time = placement_time + self.meal_prep_time
-        # Allow custom expiration window (for test design), default to 15 min
-        self.expiration_time = expiration_time if expiration_time is not None else ORDER_EXPIRATION_TIME
+        # Expiration time must be provided from config
+        if expiration_time is None:
+            raise ValueError("expiration_time is required - no hardcoded defaults allowed")
+        self.expiration_time = expiration_time
 
         # State tracking
         self.state = "PENDING"  # PENDING -> READY -> ASSIGNED -> PICKED_UP -> DELIVERED
@@ -194,12 +282,6 @@ class Order:
         self.assignment_time = None
         self.pickup_time = None
         self.delivery_time = None
-
-        # Relay tracking
-        self.is_relay = False
-        self.relay_handoff_location = None
-        self.relay_courier_id = None  # Second courier who completes delivery
-        self.handoff_time = None
 
     def to_dict(self):
         return {
@@ -213,19 +295,13 @@ class Order:
             'assigned_courier_id': self.assigned_courier_id,
             'assignment_time': self.assignment_time,
             'pickup_time': self.pickup_time,
-            'delivery_time': self.delivery_time,
-            'is_relay': self.is_relay,
-            'relay_handoff_location': self.relay_handoff_location,
-            'relay_courier_id': self.relay_courier_id,
-            'handoff_time': self.handoff_time
+            'delivery_time': self.delivery_time
         }
 
-
 class Courier:
-    """Represents a delivery courier."""
 
     def __init__(self, courier_id: int, start_location: Tuple[float, float],
-                 shift_start: float = 0.0, shift_end: float = SIMULATION_DURATION):
+                 shift_start: float = 0.0, shift_end: float = 3600.0):
         self.id = courier_id
         self.start_location = start_location
         self.current_location = start_location
@@ -233,15 +309,15 @@ class Courier:
         self.shift_end = shift_end
 
         # State tracking
-        self.state = "IDLE"  # IDLE, DRIVING_TO_PICKUP, AT_PICKUP, DRIVING_TO_DROPOFF, DRIVING_TO_HANDOFF, AT_HANDOFF
+        self.state = "IDLE"  # IDLE, DRIVING_TO_PICKUP, AT_PICKUP, DRIVING_TO_DROPOFF
         self.assigned_order_ids = []  # List of order IDs (for bundling)
         self.current_route = []  # List of (location, action, order_id) tuples
         self.next_destination = None
         self.arrival_time_at_destination = None
 
-        # Relay tracking
-        self.relay_orders = []  # Orders to hand off to other couriers
-        self.incoming_relay_orders = []  # Orders received from other couriers
+        # Multi-restaurant support
+        self.pickup_route = []  # List of restaurant pickups to make
+        self.current_pickup_index = 0  # Current position in pickup route
 
         # Metrics
         self.total_distance_traveled = 0.0
@@ -264,12 +340,10 @@ class Courier:
             'total_deliveries': self.total_deliveries
         }
 
-
 class SimulationState:
-    """Manages the complete simulation state."""
 
     def __init__(self, restaurants: List[Restaurant], couriers: List[Courier],
-                 order_schedule: List[Order], duration: int = SIMULATION_DURATION):
+                 order_schedule: List[Order], duration: int):
         self.current_time = 0.0
         self.duration = duration  # Store simulation duration
         self.config = None  # Will be set by run_simulation if config-based scenario
@@ -294,15 +368,11 @@ class SimulationState:
             'total_courier_idle_time': 0.0,
             'bundles_created': 0,
             'total_bundle_size': 0,
-            'unserved_orders': 0,  # Deprecated - kept for compatibility
-            # Relay metrics
-            'relay_handoffs': 0,
-            'relay_orders': 0,
-            'relay_distance_saved': 0.0
+            'unserved_orders': 0  # Deprecated - kept for compatibility
         }
 
     def log_event(self, event_type: str, description: str, **kwargs):
-        """Log a simulation event."""
+
         event = {
             'time': self.current_time,
             'type': event_type,
@@ -312,7 +382,7 @@ class SimulationState:
         self.events_log.append(event)
 
     def snapshot(self):
-        """Create a snapshot of the current state for timeline."""
+
         return {
             'time': self.current_time,
             'couriers': {cid: c.to_dict() for cid, c in self.couriers.items()},
@@ -321,16 +391,16 @@ class SimulationState:
         }
 
     def get_idle_couriers(self) -> List[Courier]:
-        """Get all couriers currently in IDLE state."""
+
         return [c for c in self.couriers.values() if c.state == "IDLE"]
 
     def get_ready_orders(self) -> List[Order]:
-        """Get all orders in READY state (excluding EXPIRED)."""
+
         return [o for o in self.orders.values()
                 if o.state == "READY" and self.current_time >= o.ready_time]
 
     def compute_final_metrics(self):
-        """Compute final aggregate metrics."""
+
         # Categorize orders by final state
         delivered_orders = [o for o in self.orders.values() if o.state == "DELIVERED"]
         in_transit_orders = [o for o in self.orders.values() if o.state == "PICKED_UP"]
@@ -412,24 +482,12 @@ class SimulationState:
         else:
             self.metrics['avg_bundle_size'] = 0
 
-
 # ============================================================================
-# SCENARIO GENERATION
+# SCENARIO GENERATION (LEGACY - USE CONFIG FILES INSTEAD)
 # ============================================================================
 
-def generate_gauntlet_scenario(duration: int = SIMULATION_DURATION) -> Dict:
-    """
-    Generates the "Engineered Gauntlet" scenario.
+def generate_gauntlet_scenario(duration: int = 3600) -> Dict:
 
-    This is a scripted, non-random scenario designed to surgically expose the
-    weaknesses and strengths of each algorithm in a pre-defined sequence.
-
-    The gauntlet contains 4 key tests:
-    1. Test 1 (t=300s): Distant Bait - exposes Greedy's myopic decision-making
-    2. Test 2 (t=900s): Pizzeria Pileup - exposes 1-to-1 matching limitations
-    3. Test 3 (t=1200s): Cross-Street Rivalry - requires multi-restaurant bundling
-    4. Test 4 (t=2100s): Impossible Deadline - requires anticipatory planning
-    """
     print("Generating the 'Engineered Gauntlet' scenario...")
 
     # --- GEOGRAPHIC SETUP ---
@@ -455,7 +513,7 @@ def generate_gauntlet_scenario(duration: int = SIMULATION_DURATION) -> Dict:
     order_id_counter = 0
 
     def add_order(restaurant_idx, diner_loc, placement_time, meal_prep_time=None, expiration_time=None):
-        """Add order with optional custom meal prep and expiration times (for realism and test design)."""
+
         nonlocal order_id_counter
         order_schedule.append(
             Order(order_id_counter, restaurant_idx, restaurants[restaurant_idx].location,
@@ -493,8 +551,10 @@ def generate_gauntlet_scenario(duration: int = SIMULATION_DURATION) -> Dict:
               meal_prep_time=600, expiration_time=600)  # Custom 10-min expiration window
 
     # Add some background "noise" orders with variable prep times (7-15 min) for realism
-    np.random.seed(RANDOM_SEED)
-    for t in range(400, duration - MEAL_PREP_TIME, 350):
+    # LEGACY: Using hardcoded values for legacy function
+    np.random.seed(42)
+    meal_prep_time = 600  # 10 minutes
+    for t in range(400, duration - meal_prep_time, 350):
         # Avoid placing noise during the exact moments of our key tests
         if 900 <= t <= 1300 or 1800 <= t <= 1900 or t == 300:
             continue
@@ -514,17 +574,19 @@ def generate_gauntlet_scenario(duration: int = SIMULATION_DURATION) -> Dict:
         'duration': duration
     }
 
-
 # Keep old function as backup
-def generate_scenario_legacy(seed: int = RANDOM_SEED, duration: Optional[int] = None) -> Dict:
-    """Legacy scenario generation (Small Town Lunch Rush). Kept for reference."""
+def generate_scenario_legacy(seed: int = 42, duration: Optional[int] = None) -> Dict:
+
+    # LEGACY: Using hardcoded values for legacy function
     np.random.seed(seed)
-    sim_duration = duration if duration is not None else SIMULATION_DURATION
+    sim_duration = duration if duration is not None else 3600
+    grid_size = 5.0
+    num_restaurants = 4
 
     # Generate restaurants (tight cluster at town center)
     restaurants = []
-    center = GRID_SIZE / 2
-    for i in range(NUM_RESTAURANTS):
+    center = grid_size / 2
+    for i in range(num_restaurants):
         location = (
             center + np.random.uniform(-0.025, 0.025),
             center + np.random.uniform(-0.025, 0.025)
@@ -532,21 +594,24 @@ def generate_scenario_legacy(seed: int = RANDOM_SEED, duration: Optional[int] = 
         restaurants.append(Restaurant(i, location))
 
     # Generate couriers (random start positions)
+    num_couriers = 5
     couriers = []
-    for i in range(NUM_COURIERS):
+    for i in range(num_couriers):
         location = (
-            np.random.uniform(0, GRID_SIZE),
-            np.random.uniform(0, GRID_SIZE)
+            np.random.uniform(0, grid_size),
+            np.random.uniform(0, grid_size)
         )
         couriers.append(Courier(i, location))
 
     # Generate order schedule
+    meal_prep_time = 600
+    num_orders = 80
     order_schedule = []
     current_time = 0.0
     order_id = 0
-    max_placement_time = sim_duration - MEAL_PREP_TIME
+    max_placement_time = sim_duration - meal_prep_time
 
-    while order_id < NUM_ORDERS and current_time < max_placement_time:
+    while order_id < num_orders and current_time < max_placement_time:
         current_minute = current_time / 60.0
         if current_minute < 15:
             lambda_rate = 0.33
@@ -590,24 +655,11 @@ def generate_scenario_legacy(seed: int = RANDOM_SEED, duration: Optional[int] = 
         'duration': sim_duration
     }
 
-
 # Alias for backward compatibility
 generate_scenario = generate_gauntlet_scenario
 
-
 def generate_asymmetric_scenario(duration: int = 900) -> Dict:
-    """
-    Generate asymmetric scenario to reveal algorithm differences visually.
 
-    Creates a downtown hub with 2 close restaurants and a suburban outlier,
-    with strategic courier placement to force different assignment strategies.
-
-    Args:
-        duration: Simulation duration in seconds (default: 900s = 15 minutes)
-
-    Returns:
-        Dictionary with 'restaurants', 'couriers', and 'order_schedule' lists
-    """
     # Fixed geographic setup for visual differentiation
     restaurants = [
         Restaurant(0, (2.0, 2.0)),    # R1 - Downtown hub
@@ -655,7 +707,9 @@ def generate_asymmetric_scenario(duration: int = 900) -> Dict:
     if duration > 900:
         # Add more order waves with similar patterns
         order_id = 8
-        for wave_time in range(300, min(duration - MEAL_PREP_TIME, 10800), 120):
+        # LEGACY: Using hardcoded value for legacy function
+        meal_prep_time = 600
+        for wave_time in range(300, min(duration - meal_prep_time, 10800), 120):
             # Alternate between hub restaurants with bursts
             restaurant_idx = 0 if (wave_time // 120) % 2 == 0 else 1
             restaurant = restaurants[restaurant_idx]
@@ -685,40 +739,28 @@ def generate_asymmetric_scenario(duration: int = 900) -> Dict:
         'duration': duration
     }
 
-
 # ============================================================================
 # SIMULATION ENGINE
 # ============================================================================
 
 def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) -> SimulationState:
-    """
-    Run the simulation with a specific assignment algorithm.
 
-    Args:
-        scenario: Dictionary with restaurants, couriers, order_schedule, duration, and config
-        assignment_algorithm: Function that takes (state) and returns list of (courier_id, [order_ids])
-        algorithm_name: Name of the algorithm for logging
-
-    Returns:
-        Final SimulationState with complete timeline and metrics
-    """
     # Extract config if present (for new config-based scenarios)
     config = scenario.get('config', None)
 
     if config:
-        # Set up distance function from config
-        distance_metric = config['physics']['distance_metric']
+        # Set up courier speed from config
         courier_speed = config['physics']['courier_speed_kmh']
-        distance_func = get_distance_metric(distance_metric)
-        set_distance_function(distance_func, courier_speed)
+        set_courier_speed(courier_speed)
 
         # Get parameters from config
-        sim_duration = scenario.get('duration', config['scenario']['duration_hours'] * 3600)
+        sim_duration = int(scenario.get('duration', config['scenario']['duration_hours'] * 3600))
         batch_interval = config['physics']['batch_interval_s']
+        pickup_service_time = config['physics']['pickup_service_time_s']
+        dropoff_service_time = config['physics']['dropoff_service_time_s']
     else:
-        # Legacy mode: use hardcoded defaults
-        sim_duration = scenario.get('duration', SIMULATION_DURATION)
-        batch_interval = BATCH_INTERVAL
+        # Fail fast - config is required
+        raise ValueError("Config is required - no hardcoded defaults allowed")
 
     # Initialize simulation state
     state = SimulationState(
@@ -778,48 +820,75 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
                     courier.total_distance_traveled += distance
 
                     if courier.state == "DRIVING_TO_PICKUP":
-                        # Arrived at restaurant - start pickup service
+                        # Check if all orders at this restaurant are ready
+                        current_pickup = courier.pickup_route[courier.current_pickup_index]
+                        max_ready_time = max(state.orders[oid].ready_time
+                                           for oid in current_pickup['order_ids'])
+
+                        if t < max_ready_time:
+                            # Need to wait for orders to be ready
+                            wait_time = max_ready_time - t
+                            if wait_time > 300:  # Cap waiting at 5 minutes
+                                state.log_event('EXCESSIVE_WAIT_WARNING',
+                                              f'Courier {courier.id} would wait {wait_time:.0f}s > 300s cap',
+                                              courier_id=courier.id,
+                                              wait_time=wait_time)
+                                # Still wait but log the issue
+                            courier.state = "WAITING_AT_PICKUP"
+                            courier.arrival_time_at_destination = max_ready_time  # Wait until orders ready
+                            state.log_event('WAITING_AT_PICKUP',
+                                          f'Courier {courier.id} waiting {wait_time:.0f}s for orders to be ready',
+                                          courier_id=courier.id,
+                                          wait_time=wait_time,
+                                          ready_at=max_ready_time)
+                        else:
+                            # Orders ready - start pickup service immediately
+                            courier.state = "AT_PICKUP"
+                            courier.arrival_time_at_destination = t + pickup_service_time
+
+                            state.log_event('PICKUP_SERVICE_START',
+                                           f'Courier {courier.id} starting pickup service ({pickup_service_time}s)',
+                                           courier_id=courier.id,
+                                           service_time=pickup_service_time)
+
+                    elif courier.state == "WAITING_AT_PICKUP" and t >= courier.arrival_time_at_destination:
+                        # Wait complete - start pickup service
                         courier.state = "AT_PICKUP"
-                        courier.arrival_time_at_destination = t + PICKUP_SERVICE_TIME  # Wait for service
+                        courier.arrival_time_at_destination = t + pickup_service_time
 
                         state.log_event('PICKUP_SERVICE_START',
-                                       f'Courier {courier.id} starting pickup service ({PICKUP_SERVICE_TIME}s)',
+                                       f'Courier {courier.id} starting pickup service after wait ({pickup_service_time}s)',
                                        courier_id=courier.id,
-                                       service_time=PICKUP_SERVICE_TIME)
+                                       service_time=pickup_service_time)
 
                     elif courier.state == "AT_PICKUP" and t >= courier.arrival_time_at_destination:
-                        # Pickup service completed - mark orders as picked up
-                        for order_id in courier.assigned_order_ids:
+                        # Pickup service completed - mark orders FROM THIS RESTAURANT as picked up
+                        current_pickup = courier.pickup_route[courier.current_pickup_index]
+                        for order_id in current_pickup['order_ids']:
                             order = state.orders[order_id]
                             order.state = "PICKED_UP"
                             order.pickup_time = t
                             state.log_event('ORDER_PICKED_UP', f'Order {order_id} picked up by courier {courier.id}',
                                            order_id=order_id, courier_id=courier.id)
 
-                        # Check for relay orders that need handoff
-                        relay_orders = [oid for oid in courier.assigned_order_ids
-                                       if state.orders[oid].is_relay]
-                        non_relay_orders = [oid for oid in courier.assigned_order_ids
-                                          if not state.orders[oid].is_relay]
-
-                        # If we have relay orders, handle them first
-                        if relay_orders:
-                            # Head to handoff point for first relay order
-                            first_relay = state.orders[relay_orders[0]]
-                            courier.state = "DRIVING_TO_HANDOFF"
-                            courier.next_destination = first_relay.relay_handoff_location
+                        # Check if there are more restaurants to visit
+                        courier.current_pickup_index += 1
+                        if courier.current_pickup_index < len(courier.pickup_route):
+                            # Go to next restaurant
+                            next_pickup = courier.pickup_route[courier.current_pickup_index]
+                            courier.state = "DRIVING_TO_PICKUP"
+                            courier.next_destination = next_pickup['location']
                             travel_time = get_travel_time(courier.current_location, courier.next_destination)
                             courier.arrival_time_at_destination = t + travel_time
-                            courier.relay_orders = relay_orders
-                            courier.assigned_order_ids = non_relay_orders  # Keep non-relay orders
 
-                            state.log_event('COURIER_TO_HANDOFF',
-                                          f'Courier {courier.id} heading to handoff point',
+                            state.log_event('MULTI_RESTAURANT_ROUTE',
+                                          f'Courier {courier.id} heading to restaurant {next_pickup["restaurant_id"]}',
                                           courier_id=courier.id,
-                                          handoff_location=first_relay.relay_handoff_location,
-                                          relay_orders=relay_orders)
+                                          restaurant_id=next_pickup['restaurant_id'],
+                                          pickup_index=courier.current_pickup_index,
+                                          total_pickups=len(courier.pickup_route))
 
-                        # Otherwise handle normal delivery
+                        # All pickups complete, start deliveries
                         elif courier.assigned_order_ids:
                             # Import TSP optimizer (lazy import to avoid circular dependency)
                             from assignment_algorithms import optimize_delivery_sequence
@@ -873,65 +942,6 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
                                            courier_id=courier.id,
                                            order_ids=courier.assigned_order_ids)
 
-                    elif courier.state == "DRIVING_TO_HANDOFF":
-                        # Arrived at handoff point - perform handoff
-                        if courier.relay_orders:
-                            for relay_order_id in courier.relay_orders:
-                                relay_order = state.orders[relay_order_id]
-
-                                # Transfer to relay courier
-                                relay_courier = state.couriers.get(relay_order.relay_courier_id)
-                                if relay_courier and relay_courier.state == "IDLE":
-                                    # Transfer order to relay courier
-                                    relay_courier.incoming_relay_orders.append(relay_order_id)
-                                    relay_courier.assigned_order_ids = [relay_order_id]
-                                    relay_courier.state = "DRIVING_TO_DROPOFF"
-                                    relay_courier.next_destination = relay_order.diner_location
-                                    travel_time = get_travel_time(relay_courier.current_location, relay_order.diner_location)
-                                    relay_courier.arrival_time_at_destination = t + travel_time
-
-                                    # Update order
-                                    relay_order.handoff_time = t
-                                    relay_order.assigned_courier_id = relay_courier.id
-
-                                    # Track metrics
-                                    state.metrics['relay_handoffs'] += 1
-
-                                    # Calculate distance saved
-                                    direct_distance = get_distance(relay_order.restaurant_location, relay_order.diner_location)
-                                    relay_distance = get_distance(relay_order.restaurant_location, relay_order.relay_handoff_location)
-                                    state.metrics['relay_distance_saved'] += direct_distance - relay_distance
-
-                                    state.log_event('HANDOFF_COMPLETE',
-                                                  f'Order {relay_order_id} handed off from courier {courier.id} to {relay_courier.id}',
-                                                  order_id=relay_order_id,
-                                                  from_courier=courier.id,
-                                                  to_courier=relay_courier.id,
-                                                  handoff_location=relay_order.relay_handoff_location)
-                                else:
-                                    # Relay courier not available, deliver normally
-                                    courier.assigned_order_ids.append(relay_order_id)
-                                    state.log_event('HANDOFF_FAILED',
-                                                  f'Relay courier {relay_order.relay_courier_id} not available, courier {courier.id} will deliver',
-                                                  order_id=relay_order_id,
-                                                  courier_id=courier.id)
-
-                            courier.relay_orders = []
-
-                            # Check if courier has non-relay orders to deliver
-                            if courier.assigned_order_ids:
-                                first_order = state.orders[courier.assigned_order_ids[0]]
-                                courier.state = "DRIVING_TO_DROPOFF"
-                                courier.next_destination = first_order.diner_location
-                                travel_time = get_travel_time(courier.current_location, courier.next_destination)
-                                courier.arrival_time_at_destination = t + travel_time
-                            else:
-                                # No more orders - return to IDLE
-                                courier.state = "IDLE"
-                                courier.next_destination = None
-                                courier.arrival_time_at_destination = None
-                                courier.last_state_change_time = t
-
                     elif courier.state == "DRIVING_TO_DROPOFF":
                         # Delivered an order
                         delivered_order_id = courier.assigned_order_ids.pop(0)
@@ -960,7 +970,7 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
                             courier.next_destination = next_order.diner_location
                             # Include dropoff service time before traveling to next location
                             travel_time = get_travel_time(courier.current_location, courier.next_destination)
-                            courier.arrival_time_at_destination = t + DROPOFF_SERVICE_TIME + travel_time
+                            courier.arrival_time_at_destination = t + dropoff_service_time + travel_time
                         else:
                             # No more orders - return to IDLE
                             courier.state = "IDLE"
@@ -997,14 +1007,8 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
 
                 # Process assignments
                 for assignment in assignments:
-                    # Handle both regular and relay assignments
-                    if len(assignment) == 3:
-                        # Relay assignment: (courier_id, order_ids, relay_info)
-                        courier_id, order_ids, relay_info = assignment
-                    else:
-                        # Regular assignment: (courier_id, order_ids)
-                        courier_id, order_ids = assignment
-                        relay_info = None
+                    # Regular assignment: (courier_id, order_ids)
+                    courier_id, order_ids = assignment
 
                     # ============================================================
                     # VALIDATION 1: Verify courier is actually idle
@@ -1102,29 +1106,31 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
 
                     courier.assigned_order_ids = list(order_ids)
 
-                    # Process relay information if present
-                    if relay_info:
-                        for order_id in order_ids:
-                            if order_id in relay_info:
-                                order = state.orders[order_id]
-                                order.is_relay = True
-                                order.relay_handoff_location = relay_info[order_id]['handoff_location']
-                                order.relay_courier_id = relay_info[order_id]['relay_courier']
+                    # Build multi-restaurant route plan
+                    orders = [state.orders[oid] for oid in order_ids]
 
-                                # Track relay metrics
-                                state.metrics['relay_orders'] += 1
+                    # Group orders by restaurant
+                    by_restaurant = {}
+                    for order in orders:
+                        rest_id = order.restaurant_id
+                        if rest_id not in by_restaurant:
+                            by_restaurant[rest_id] = []
+                        by_restaurant[rest_id].append(order.id)
 
-                                state.log_event('RELAY_SCHEDULED',
-                                              f'Order {order_id} scheduled for relay handoff',
-                                              order_id=order_id,
-                                              handoff_location=order.relay_handoff_location,
-                                              relay_courier=order.relay_courier_id)
+                    # Build route with restaurant visits
+                    courier.pickup_route = []
+                    for rest_id, rest_order_ids in by_restaurant.items():
+                        courier.pickup_route.append({
+                            'restaurant_id': rest_id,
+                            'location': state.restaurants[rest_id].location,
+                            'order_ids': rest_order_ids
+                        })
 
+                    # Set initial state to go to first restaurant
                     courier.state = "DRIVING_TO_PICKUP"
-
-                    # All orders in bundle are from same restaurant (for now)
-                    first_order = state.orders[order_ids[0]]
-                    courier.next_destination = first_order.restaurant_location
+                    courier.current_pickup_index = 0
+                    first_pickup = courier.pickup_route[0]
+                    courier.next_destination = first_pickup['location']
                     travel_time = get_travel_time(courier.current_location, courier.next_destination)
                     courier.arrival_time_at_destination = t + travel_time
 
@@ -1141,18 +1147,16 @@ def run_simulation(scenario: Dict, assignment_algorithm, algorithm_name: str) ->
                         order.assigned_courier_id = courier_id
                         order.assignment_time = t
 
-                    # Track bundles
-                    if len(order_ids) > 0:
+                    # Track bundles (only count multi-order assignments as bundles)
+                    if len(order_ids) > 1:
                         state.metrics['bundles_created'] += 1
                         state.metrics['total_bundle_size'] += len(order_ids)
 
                     state.log_event('ASSIGNMENT_MADE',
-                                   f'Courier {courier_id} assigned orders {order_ids}' +
-                                   (' with relay' if relay_info else ''),
+                                   f'Courier {courier_id} assigned orders {order_ids}',
                                    courier_id=courier_id,
                                    order_ids=order_ids,
-                                   bundle_size=len(order_ids),
-                                   has_relay=bool(relay_info))
+                                   bundle_size=len(order_ids))
 
             next_batch_time += batch_interval
 

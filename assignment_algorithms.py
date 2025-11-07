@@ -3,30 +3,334 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 from typing import List, Tuple, Dict, Optional
 from ortools.sat.python import cp_model
+from itertools import permutations
 from simulator_core import (
     SimulationState, Courier, Order,
-    euclidean_distance, get_distance, get_travel_time,
-    PICKUP_SERVICE_TIME, DROPOFF_SERVICE_TIME
+    manhattan_distance, get_distance, get_travel_time
 )
-
 
 # ============================================================================
 # ALGORITHM 1: BATCHED GREEDY (ORDER-FIRST, NEAREST COURIER)
 # ============================================================================
 
+def _speed_mps(state: SimulationState) -> float:
+
+    if hasattr(state, 'config') and state.config is not None and 'physics' in state.config:
+        speed_kmh = state.config['physics']['courier_speed_kmh']
+    else:
+        # Fallback for tests that don't have config
+        speed_kmh = 30.0
+    return (speed_kmh * 1000.0) / 3600.0
+
+def _get_service_times(state: SimulationState) -> Tuple[float, float]:
+
+    if hasattr(state, 'config') and state.config is not None and 'physics' in state.config:
+        pickup = state.config['physics']['pickup_service_time_s']
+        dropoff = state.config['physics']['dropoff_service_time_s']
+    else:
+        # Fallback for tests that don't have config
+        pickup = 90.0
+        dropoff = 45.0
+    return pickup, dropoff
+
+def _manhattan_travel_time(loc1: Tuple[float, float], loc2: Tuple[float, float], state: SimulationState) -> float:
+
+    dx_km = abs(loc1[0] - loc2[0])
+    dy_km = abs(loc1[1] - loc2[1])
+    manhattan_distance_km = dx_km + dy_km
+    manhattan_distance_m = manhattan_distance_km * 1000.0
+    speed_mps = _speed_mps(state)
+    return manhattan_distance_m / speed_mps
+
+def _single_edge_manhattan_finish_and_cost(
+    state: SimulationState,
+    courier: Courier,
+    order: Order
+) -> Optional[int]:
+
+    now = state.current_time
+
+    # STRICT READY-ONLY + STRICT PERISHABILITY GUARDS
+    if order.ready_time > now:
+        return None
+    if order.expiration_time is None or order.expiration_time <= 0:
+        return None
+    if now > order.ready_time + order.expiration_time:
+        return None
+
+    # Manhattan travel to pickup (no waiting; item is READY by construction)
+    t_to_pickup = _manhattan_travel_time(courier.current_location, order.restaurant_location, state)
+    pickup_start = now + t_to_pickup
+
+    pickup_service_time, dropoff_service_time = _get_service_times(state)
+
+    t_pickup_to_drop = _manhattan_travel_time(order.restaurant_location, order.diner_location, state)
+    finish_time = pickup_start + pickup_service_time + t_pickup_to_drop + dropoff_service_time
+
+    deadline = order.ready_time + order.expiration_time
+    if finish_time > deadline:
+        return None
+
+    total_duration = (pickup_start - now) + pickup_service_time + t_pickup_to_drop + dropoff_service_time
+    return int(round(total_duration))
+
+def _bundle_lex_code(bundle: List[int]) -> int:
+
+    code = 0
+    base = 1_000_000
+    for oid in sorted(bundle):
+        code = code * base + int(oid)
+    return code
+
+def _bundle_cost_if_feasible(
+    state: SimulationState,
+    courier: Courier,
+    bundle_order_ids: List[int]
+) -> Optional[int]:
+
+    now = state.current_time
+    if not bundle_order_ids:
+        return 0
+
+    orders = [state.orders[oid] for oid in bundle_order_ids]
+    # Enforce single-restaurant bundles
+    if len({o.restaurant_id for o in orders}) != 1:
+        return None
+
+    # STRICT READY-ONLY + STRICT PERISHABILITY PER ORDER
+    for o in orders:
+        if o.ready_time > now:
+            return None
+        if o.expiration_time is None or o.expiration_time <= 0:
+            return None
+        if now > o.ready_time + o.expiration_time:  # already expired
+            return None
+
+    # Travel to the restaurant
+    rest_loc = orders[0].restaurant_location
+    t_to_rest = _manhattan_travel_time(courier.current_location, rest_loc, state)
+
+    # No waiting for future-ready items; all items must already be READY at 'now'
+    arrival_time = now + t_to_rest
+    pickup_start = arrival_time
+
+    pickup_service_time, dropoff_service_time = _get_service_times(state)
+
+    # One pickup service only for same-restaurant bundle
+    time_cursor = pickup_start + pickup_service_time
+    cur_loc = rest_loc
+
+    # Optimal drop sequence among ≤3 orders by brute-force permutations
+    best_total = None
+    feasible = False
+
+    for seq in permutations(orders):
+        t = time_cursor
+        loc = cur_loc
+        ok = True
+
+        for o in seq:
+            t += _manhattan_travel_time(loc, o.diner_location, state)
+            t += dropoff_service_time
+
+            # Strict finite deadline
+            deadline = o.ready_time + o.expiration_time
+            if t > deadline:
+                ok = False
+                break
+
+            loc = o.diner_location
+
+        if ok:
+            feasible = True
+            if best_total is None or t - now < best_total:
+                best_total = t - now
+
+    if not feasible:
+        return None
+
+    return int(round(best_total))
+
+def _simulate_bundle_route(state: SimulationState, courier_loc: Tuple[float, float],
+                          order_ids: List[int], allow_wait: bool) -> Optional[Tuple[int, Dict[int, float]]]:
+
+    if not order_ids:
+        return 0, {}
+
+    # Get config parameters
+    pickup_service, dropoff_service = _get_service_times(state)
+    now = state.current_time
+    orders = [state.orders[oid] for oid in order_ids]
+
+    # Group orders by restaurant
+    restaurants = {}
+    for order in orders:
+        rest_id = order.restaurant_id
+        if rest_id not in restaurants:
+            restaurants[rest_id] = []
+        restaurants[rest_id].append(order)
+
+    # Build pickup sequence (TSP over restaurants)
+    rest_locations = []
+    rest_ids = []
+    for rest_id, rest_orders in restaurants.items():
+        # Use first order's restaurant location as representative
+        rest_locations.append(rest_orders[0].restaurant_location)
+        rest_ids.append(rest_id)
+
+    # TSP for pickup sequence (exact for ≤8, nearest-neighbor for >8)
+    if len(rest_locations) <= 8 and len(rest_locations) > 1:
+        # Exact TSP via permutations
+        from itertools import permutations
+        best_seq = None
+        best_time = float('inf')
+
+        for perm in permutations(range(len(rest_locations))):
+            time = 0
+            loc = courier_loc
+            for idx in perm:
+                time += _manhattan_travel_time(loc, rest_locations[idx], state)
+                loc = rest_locations[idx]
+            if time < best_time:
+                best_time = time
+                best_seq = list(perm)
+        pickup_sequence = best_seq
+    elif len(rest_locations) > 1:
+        # Nearest-neighbor for >8 restaurants
+        remaining = set(range(len(rest_locations)))
+        sequence = []
+        current = courier_loc
+
+        while remaining:
+            nearest_idx = min(remaining,
+                            key=lambda i: _manhattan_travel_time(current, rest_locations[i], state))
+            sequence.append(nearest_idx)
+            current = rest_locations[nearest_idx]
+            remaining.remove(nearest_idx)
+        pickup_sequence = sequence
+    else:
+        # Single restaurant
+        pickup_sequence = [0]
+
+    # Simulate pickup phase
+    t = now
+    current_loc = courier_loc
+    picked_orders = []
+    total_wait_time = 0  # Track cumulative wait time across all restaurants
+
+    for idx in pickup_sequence:
+        rest_id = rest_ids[idx]
+        rest_loc = rest_locations[idx]
+        rest_orders = restaurants[rest_id]
+
+        # Travel to restaurant
+        t += _manhattan_travel_time(current_loc, rest_loc, state)
+
+        # Check if we need to wait for orders to be ready
+        max_ready = max(o.ready_time for o in rest_orders)
+
+        if allow_wait:
+            # Anticipated bundling: wait if arrived early
+            if t < max_ready:
+                wait_time = max_ready - t
+                total_wait_time += wait_time
+                # Cap TOTAL waiting at 5 minutes across all restaurants
+                if total_wait_time > 300:
+                    return None  # Infeasible - too much cumulative waiting
+                t = max_ready
+        else:
+            # Network bundling: reject if any order not ready
+            if t < max_ready:
+                return None  # Infeasible - can't pick up yet
+
+        # Pickup service time (once per restaurant)
+        t += pickup_service
+        picked_orders.extend(rest_orders)
+        current_loc = rest_loc
+
+    # Delivery phase - TSP over all customer locations
+    if len(orders) <= 8 and len(orders) > 1:
+        # Exact TSP for deliveries
+        from itertools import permutations
+        best_seq = None
+        best_time = float('inf')
+
+        for perm in permutations(range(len(orders))):
+            test_t = t
+            test_loc = current_loc
+            for idx in perm:
+                test_t += _manhattan_travel_time(test_loc, orders[idx].diner_location, state)
+                test_t += dropoff_service
+                test_loc = orders[idx].diner_location
+            if test_t < best_time:
+                best_time = test_t
+                best_seq = list(perm)
+        delivery_sequence = best_seq
+    elif len(orders) > 1:
+        # Nearest-neighbor for >8 deliveries
+        remaining = set(range(len(orders)))
+        sequence = []
+        current = current_loc
+
+        while remaining:
+            nearest_idx = min(remaining,
+                            key=lambda i: _manhattan_travel_time(current, orders[i].diner_location, state))
+            sequence.append(nearest_idx)
+            current = orders[nearest_idx].diner_location
+            remaining.remove(nearest_idx)
+        delivery_sequence = sequence
+    else:
+        # Single delivery
+        delivery_sequence = [0]
+
+    # Simulate deliveries and check per-order deadlines
+    drop_times = {}
+    for idx in delivery_sequence:
+        order = orders[idx]
+
+        # Travel to customer
+        t += _manhattan_travel_time(current_loc, order.diner_location, state)
+
+        # Dropoff service
+        t += dropoff_service
+
+        # Check deadline
+        deadline = order.ready_time + order.expiration_time
+        if t > deadline:
+            return None  # Infeasible - order would expire
+
+        drop_times[order.id] = t
+        current_loc = order.diner_location
+
+    total_time = int(round(t - now))
+    return total_time, drop_times
+
+def _generate_2r_candidates(ready_orders: List[Order], max_bundle_size: int) -> List[List[int]]:
+
+    from itertools import combinations
+
+    # Start with all singles
+    order_ids = [o.id for o in ready_orders]
+    candidates = [[oid] for oid in order_ids]
+
+    # Add bundles of size 2-3 with at most 2 unique restaurants
+    for size in range(2, min(max_bundle_size + 1, len(order_ids) + 1)):
+        for combo in combinations(range(len(order_ids)), size):
+            bundle_orders = [ready_orders[i] for i in combo]
+            unique_restaurants = set(o.restaurant_id for o in bundle_orders)
+
+            # Only keep bundles with ≤2 unique restaurants
+            if len(unique_restaurants) <= 2:
+                candidates.append([order_ids[i] for i in combo])
+
+    return candidates
+
 def assign_greedy(state: SimulationState, idle_couriers: List[Courier],
                   ready_orders: List[Order]) -> List[Tuple[int, List[int]]]:
-    """
-    Greedy assignment: For each order, find the nearest available courier.
 
-    Orders are processed sequentially in order of ready_time (oldest first).
-    This makes the algorithm predictable and scientifically consistent.
-
-    Returns:
-        List of (courier_id, [order_id]) assignments
-    """
     assignments = []
     available_couriers = list(idle_couriers)
+    now = state.current_time
 
     # Sort orders by ready_time to ensure consistent, deterministic behavior
     pending_orders = sorted(ready_orders, key=lambda o: o.ready_time)
@@ -35,14 +339,33 @@ def assign_greedy(state: SimulationState, idle_couriers: List[Courier],
         if not available_couriers:
             break
 
-        # Find nearest courier (by travel time)
-        best_courier = None
-        min_time = float('inf')
+        # Find feasible couriers who can meet the deadline
+        feasible_couriers = []
+
+        pickup_service_time, dropoff_service_time = _get_service_times(state)
 
         for courier in available_couriers:
-            travel_time = get_travel_time(courier.current_location, order.restaurant_location)
-            if travel_time < min_time:
-                min_time = travel_time
+            # Compute finish_time
+            t_to_pickup = get_travel_time(courier.current_location, order.restaurant_location)
+            t_pickup_to_dropoff = get_travel_time(order.restaurant_location, order.diner_location)
+            finish_time = now + t_to_pickup + pickup_service_time + t_pickup_to_dropoff + dropoff_service_time
+
+            # Check feasibility: finish_time <= order.ready_time + order.expiration_time
+            if finish_time <= order.ready_time + order.expiration_time:
+                feasible_couriers.append(courier)
+
+        if not feasible_couriers:
+            # No feasible courier for this order, skip it
+            continue
+
+        # Tie-break by Manhattan travel time to pickup (lowest wins)
+        best_courier = None
+        min_manhattan_time = float('inf')
+
+        for courier in feasible_couriers:
+            manhattan_time = _manhattan_travel_time(courier.current_location, order.restaurant_location, state)
+            if manhattan_time < min_manhattan_time or (manhattan_time == min_manhattan_time and (best_courier is None or courier.id < best_courier.id)):
+                min_manhattan_time = manhattan_time
                 best_courier = courier
 
         if best_courier:
@@ -51,93 +374,103 @@ def assign_greedy(state: SimulationState, idle_couriers: List[Courier],
 
     return assignments
 
-
 # ============================================================================
 # ALGORITHM 2: BATCHED HUNGARIAN (OPTIMAL 1-TO-1 MATCHING)
 # ============================================================================
 
 def assign_hungarian(state: SimulationState, idle_couriers: List[Courier],
                      ready_orders: List[Order]) -> List[Tuple[int, List[int]]]:
-    """
-    UPGRADED Hungarian Algorithm using the OR-Tools Solver.
 
-    This version is provably optimal for 1-to-1 matching and uses the
-    standardized multi-objective function to prioritize fulfillment.
-    """
     if not idle_couriers or not ready_orders:
         return []
 
-    # Candidate bundles are ONLY singles for Hungarian
-    candidate_bundles = [[order.id] for order in ready_orders]
-
     model = cp_model.CpModel()
-    PRIORITY_MULTIPLIER = 1_000_000
+    x: Dict[Tuple[int, int], cp_model.IntVar] = {}
 
-    x = {}
-    for i in range(len(idle_couriers)):
-        for j in range(len(candidate_bundles)):
-            x[(i, j)] = model.NewBoolVar(f'x_{i}_{j}')
+    # Costs for objectives
+    pickup_cost: Dict[Tuple[int, int], int] = {}          # Manhattan time-to-pickup (seconds, int)
+    tie_weight: Dict[Tuple[int, int], int] = {}           # Deterministic small weight
 
-    # Constraints
-    for i in range(len(idle_couriers)):
-        model.AddAtMostOne(x[(i, j)] for j in range(len(candidate_bundles)))
+    I = range(len(idle_couriers))
+    J = range(len(ready_orders))
 
-    order_map = {order.id: i for i, order in enumerate(ready_orders)}
-    for order_id in order_map.keys():
-        tasks_with_this_order = []
-        for j, bundle in enumerate(candidate_bundles):
-            if order_id in bundle:
-                for i in range(len(idle_couriers)):
-                    tasks_with_this_order.append(x[(i, j)])
-        model.AddAtMostOne(tasks_with_this_order)
+    # Build only feasible edges; compute Manhattan pickup time
+    for i in I:
+        ci = idle_couriers[i]
+        for j in J:
+            oj = ready_orders[j]
+            # Use your existing feasibility function
+            finish_cost = _single_edge_manhattan_finish_and_cost(state, ci, oj)
+            if finish_cost is None:
+                continue  # infeasible edge, skip
 
-    # Standardized Multi-Objective Function
-    objective_terms = []
-    for i, courier in enumerate(idle_couriers):
-        for j, bundle in enumerate(candidate_bundles):
-            cost = int(calculate_route_duration(
-                courier.current_location,
-                bundle,
-                state,
-                use_tsp_optimization=False,
-                include_service_times=True
-            ))
-            score = (len(bundle) * PRIORITY_MULTIPLIER) - cost
-            objective_terms.append(score * x[(i, j)])
+            var = model.NewBoolVar(f'x_{i}_{j}')
+            x[(i, j)] = var
 
-    model.Maximize(sum(objective_terms))
+            # Manhattan time-to-pickup in seconds (int)
+            t_pick = _manhattan_travel_time(ci.current_location, oj.restaurant_location, state)
+            pickup_cost[(i, j)] = int(round(t_pick))
+
+            # Deterministic tiebreak weight: prefer lower courier id, then order id
+            # Scale order-id so courier precedence dominates
+            tie_weight[(i, j)] = idle_couriers[i].id * 1_000_000 + ready_orders[j].id
+
+    if not x:
+        return []
+
+    # At-most-one constraints
+    for i in I:
+        vars_i = [x[(i, j)] for j in J if (i, j) in x]
+        if vars_i:
+            model.AddAtMostOne(vars_i)
+
+    for j in J:
+        vars_j = [x[(i, j)] for i in I if (i, j) in x]
+        if vars_j:
+            model.AddAtMostOne(vars_j)
 
     solver = cp_model.CpSolver()
     solver.parameters.log_search_progress = False
-    status = solver.Solve(model)
 
-    final_assignments = []
-    if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-        for i, courier in enumerate(idle_couriers):
-            for j, bundle in enumerate(candidate_bundles):
-                if solver.Value(x[(i, j)]) == 1:
-                    final_assignments.append((courier.id, bundle))
+    # ----- Pass 1: maximize cardinality -----
+    total_assigned = sum(x[e] for e in x)
+    model.Maximize(total_assigned)
+    status = solver.Solve(model)
+    if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        return []
+    best_card = int(round(solver.Value(total_assigned)))
+
+    # ----- Pass 2: fix cardinality, minimize total pickup time -----
+    model.Add(total_assigned == best_card)
+    total_pickup = sum(pickup_cost[e] * x[e] for e in x)
+    model.Minimize(total_pickup)
+    status = solver.Solve(model)
+    if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        return []
+    best_pickup = int(round(solver.Value(total_pickup)))
+
+    # ----- Pass 3: fix both, minimize deterministic tie-weight -----
+    model.Add(total_pickup == best_pickup)
+    total_tie = sum(tie_weight[e] * x[e] for e in x)
+    model.Minimize(total_tie)
+    status = solver.Solve(model)
+    if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        return []
+
+    # Extract assignments in (courier_id, [order_id]) form
+    final_assignments: List[Tuple[int, List[int]]] = []
+    for (i, j), var in x.items():
+        if solver.Value(var) == 1:
+            final_assignments.append((idle_couriers[i].id, [ready_orders[j].id]))
 
     return final_assignments
-
 
 # ============================================================================
 # ALGORITHM 3: SIMPLE BUNDLING (GROUP BY RESTAURANT + HUNGARIAN)
 # ============================================================================
 
 def _generate_partitions(items: List[int], max_size: int = 3) -> List[List[List[int]]]:
-    """
-    DEPRECATED: Used by old partition-based implementation. Kept for backwards compatibility.
 
-    Generate all partitions of items where each part has ≤ max_size elements.
-
-    Args:
-        items: List of items to partition
-        max_size: Maximum size of each partition part
-
-    Returns:
-        List of partitions, where each partition is a list of non-overlapping bundles
-    """
     if not items:
         return [[]]
 
@@ -161,25 +494,8 @@ def _generate_partitions(items: List[int], max_size: int = 3) -> List[List[List[
 
     return result
 
-
 def _generate_heuristic_partitions(order_ids: List[int], max_size: int = 3) -> List[List[List[int]]]:
-    """
-    DEPRECATED: Used by old partition-based implementation. Kept for backwards compatibility.
 
-    Generate 3 strategic partitions instead of full enumeration (prevents explosion).
-
-    Uses three proven strategies:
-    1. All singles: Maximum flexibility, no bundling
-    2. Greedy max bundles: Maximum bundling, minimal partitions
-    3. Balanced pairs/triples: Compromise between singles and max bundles
-
-    Args:
-        order_ids: List of order IDs to partition
-        max_size: Maximum size of each partition part
-
-    Returns:
-        List of 3 strategic partitions
-    """
     n = len(order_ids)
 
     # Strategy 1: All singles [[1], [2], [3], ...]
@@ -198,35 +514,11 @@ def _generate_heuristic_partitions(order_ids: List[int], max_size: int = 3) -> L
 
     return [strategy1, strategy2, strategy3]
 
-
 def _find_best_partition(candidates: List[List[int]], all_order_ids: List[int],
                         couriers: List[Courier], state: SimulationState) -> List[List[int]]:
-    """
-    DEPRECATED: Used by old partition-based implementation. Kept for backwards compatibility.
-
-    Find best non-overlapping partition of orders into bundles.
-
-    Enumerates ALL valid partitions and picks the one with lowest cost
-    (as estimated by Hungarian assignment). This is a fully expressive,
-    optimal search with no heuristic shortcuts.
-
-    Args:
-        candidates: All possible bundles (not used, kept for compatibility)
-        all_order_ids: All order IDs that must be covered
-        couriers: Available couriers (used for cost estimation)
-        state: Simulation state
-
-    Returns:
-        Best partition (list of non-overlapping bundles)
-    """
 
     def estimate_partition_cost(partition):
-        """
-        Estimate REALISTIC total cost of partition using Hungarian assignment.
 
-        This accounts for courier competition - bundles don't get their "best"
-        courier, but rather the optimal global assignment across all bundles.
-        """
         num_couriers_local = len(couriers)
         num_bundles = len(partition)
 
@@ -284,25 +576,8 @@ def _find_best_partition(candidates: List[List[int]], all_order_ids: List[int],
 
     return best_partition
 
-
 def _generate_simple_bundle_candidates(ready_orders: List[Order], max_bundle_size: int = 3) -> List[List[int]]:
-    """
-    NEW IMPLEMENTATION: Generates candidate bundle menu (singles, pairs, triplets).
 
-    Creates the "menu of options" for the solver:
-    - All single orders (Hungarian baseline)
-    - All possible 2-order bundles from same restaurant
-    - All possible 3-order bundles from same restaurant
-
-    This is simpler and more direct than partition enumeration.
-
-    Args:
-        ready_orders: Orders available for assignment
-        max_bundle_size: Maximum orders per bundle (default 3)
-
-    Returns:
-        List of candidate bundles, where each bundle is a list of order IDs
-    """
     from itertools import combinations
 
     # Step 1: Group orders by restaurant
@@ -334,74 +609,147 @@ def _generate_simple_bundle_candidates(ready_orders: List[Order], max_bundle_siz
 
     return candidate_bundles
 
+def assign_simple_bundling(state: SimulationState,
+                           idle_couriers: List[Courier],
+                           ready_orders: List[Order]) -> List[Tuple[int, List[int]]]:
 
-def assign_simple_bundling(state: SimulationState, idle_couriers: List[Courier],
-                          ready_orders: List[Order]) -> List[Tuple[int, List[int]]]:
-    """
-    FINAL, PROVABLY OPTIMAL Simple Bundling Algorithm using the OR-Tools CP-SAT Solver.
-
-    This version uses a multi-objective function to prioritize maximizing the
-    number of orders delivered, and secondarily minimizing total cost.
-    """
-    MAX_BUNDLE_SIZE = 3
+    # Get max bundle size from config if available, otherwise use hardcoded default
+    if state.config and 'algorithms' in state.config and 'bundling' in state.config['algorithms']:
+        MAX_BUNDLE_SIZE = state.config['algorithms']['bundling']['max_bundle_size']
+    else:
+        MAX_BUNDLE_SIZE = 3
 
     if not idle_couriers or not ready_orders:
         return []
 
+    # STRICT READY-ONLY + STRICT PERISHABILITY FILTER
+    now = state.current_time
+    ready_orders = [
+        o for o in ready_orders
+        if o.state == "READY"
+        and o.ready_time <= now
+        and o.expiration_time is not None
+        and o.expiration_time > 0
+        and now <= o.ready_time + o.expiration_time  # not already expired
+    ]
+    if not ready_orders:
+        return []
+
+    # Candidate menu: singles + same-restaurant pairs/triples
     candidate_bundles = _generate_simple_bundle_candidates(ready_orders, max_bundle_size=MAX_BUNDLE_SIZE)
     if not candidate_bundles:
         return []
 
     model = cp_model.CpModel()
-    PRIORITY_MULTIPLIER = 1_000_000
 
-    x = {}
-    for i in range(len(idle_couriers)):
-        for j in range(len(candidate_bundles)):
-            x[(i, j)] = model.NewBoolVar(f'x_{i}_{j}')
+    I = range(len(idle_couriers))
+    J = range(len(candidate_bundles))
 
-    # Constraints
-    for i in range(len(idle_couriers)):
-        model.AddAtMostOne(x[(i, j)] for j in range(len(candidate_bundles)))
+    # Decision vars only for FEASIBLE edges; costs are Manhattan durations from now.
+    x: Dict[Tuple[int, int], cp_model.IntVar] = {}
+    edge_cost_sec: Dict[Tuple[int, int], int] = {}
 
-    order_map = {order.id: i for i, order in enumerate(ready_orders)}
-    for order_id in order_map.keys():
-        tasks_with_this_order = []
-        for j, bundle in enumerate(candidate_bundles):
-            if order_id in bundle:
-                for i in range(len(idle_couriers)):
-                    tasks_with_this_order.append(x[(i, j)])
-        model.AddAtMostOne(tasks_with_this_order)
+    # Bundle metadata
+    bundle_size = [len(candidate_bundles[j]) for j in J]
 
-    # Standardized Multi-Objective Function
-    objective_terms = []
-    for i, courier in enumerate(idle_couriers):
-        for j, bundle in enumerate(candidate_bundles):
-            cost = int(calculate_route_duration(
-                courier.current_location,
-                bundle,
-                state,
-                use_tsp_optimization=(len(bundle) > 1),
-                include_service_times=True
-            ))
-            score = (len(bundle) * PRIORITY_MULTIPLIER) - cost
-            objective_terms.append(score * x[(i, j)])
+    # Build only feasible edges under Manhattan timing and expiries
+    for i in I:
+        courier = idle_couriers[i]
+        for j in J:
+            bundle = candidate_bundles[j]
+            c = _bundle_cost_if_feasible(state, courier, bundle)
+            if c is None:
+                continue  # infeasible under deadlines or restaurant-mix
+            var = model.NewBoolVar(f'x_{i}_{j}')
+            x[(i, j)] = var
+            edge_cost_sec[(i, j)] = int(c)
 
-    model.Maximize(sum(objective_terms))
+    if not x:
+        return []
+
+    # Each courier at most one bundle
+    for i in I:
+        vars_i = [x[(i, j)] for j in J if (i, j) in x]
+        if vars_i:
+            model.AddAtMostOne(vars_i)
+
+    # Each order used at most once across all couriers and bundles
+    order_ids = [o.id for o in ready_orders]
+    for oid in order_ids:
+        hits = []
+        for j in J:
+            if oid in candidate_bundles[j]:
+                for i in I:
+                    if (i, j) in x:
+                        hits.append(x[(i, j)])
+        if hits:
+            model.AddAtMostOne(hits)
+
+    # y[i] indicates whether courier i is used; for Objective 3
+    y: Dict[int, cp_model.IntVar] = {}
+    for i in I:
+        yi = model.NewBoolVar(f'y_{i}')
+        y[i] = yi
+        # Link y[i] >= any x[i,j]
+        vars_i = [x[(i, j)] for j in J if (i, j) in x]
+        if vars_i:
+            model.AddMaxEquality(yi, vars_i)
+        else:
+            # No edges for this courier → force to 0
+            model.Add(yi == 0)
 
     solver = cp_model.CpSolver()
     solver.parameters.log_search_progress = False
-    status = solver.Solve(model)
+    solver.parameters.num_search_workers = 1  # determinism
 
-    final_assignments = []
-    if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-        for i, courier in enumerate(idle_couriers):
-            for j, bundle in enumerate(candidate_bundles):
-                if solver.Value(x[(i, j)]) == 1:
-                    final_assignments.append((courier.id, bundle))
+    # ----- Pass 1: maximize total orders -----
+    total_orders = sum(bundle_size[j] * x[(i, j)] for (i, j) in x.keys())
+    model.Maximize(total_orders)
+    status = solver.Solve(model)
+    if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        return []
+    best_orders = int(solver.Value(total_orders))
+
+    # ----- Pass 2: fix orders, minimize total Manhattan time -----
+    model.Add(total_orders == best_orders)
+    total_time = sum(edge_cost_sec[(i, j)] * x[(i, j)] for (i, j) in x.keys())
+    model.Minimize(total_time)
+    status = solver.Solve(model)
+    if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        return []
+    best_time = int(solver.Value(total_time))
+
+    # ----- Pass 3: fix both, minimize number of couriers used -----
+    model.Add(total_time == best_time)
+    total_couriers_used = sum(y[i] for i in I)
+    model.Minimize(total_couriers_used)
+    status = solver.Solve(model)
+    if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        return []
+
+    # ----- Pass 4: deterministic tie-break (stable, but tiny weight) -----
+    # Courier precedence dominates, then a lexicographic code of bundle ids.
+    # Only matters when orders/time/couriers are identical.
+    tie_weight = {}
+    BASE = 1_000_000  # assumes order ids < 1e6 like _bundle_lex_code
+    for (i, j) in x.keys():
+        code = idle_couriers[i].id * BASE * BASE + _bundle_lex_code(candidate_bundles[j])
+        tie_weight[(i, j)] = code
+
+    model.Add(total_couriers_used == solver.Value(total_couriers_used))
+    total_tie = sum(tie_weight[(i, j)] * x[(i, j)] for (i, j) in x.keys())
+    model.Minimize(total_tie)
+    status = solver.Solve(model)
+    if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+        return []
+
+    # Extract chosen assignments
+    final_assignments: List[Tuple[int, List[int]]] = []
+    for (i, j), var in x.items():
+        if solver.Value(var) == 1:
+            final_assignments.append((idle_couriers[i].id, candidate_bundles[j]))
 
     return final_assignments
-
 
 # ============================================================================
 # ALGORITHM 3.5: CONSTRAINED BUNDLING (TIME-CONSTRAINED OPTIMIZATION)
@@ -410,22 +758,12 @@ def assign_simple_bundling(state: SimulationState, idle_couriers: List[Courier],
 def assign_constrained_bundling(state: SimulationState, idle_couriers: List[Courier],
                                 ready_orders: List[Order],
                                 max_order_duration: float = 2400.0) -> List[Tuple[int, List[int]]]:
-    """
-    Constrained bundling with hard time limit enforcement.
 
-    Filters out courier-bundle pairings that exceed MAX_ORDER_DURATION,
-    then optimizes for max throughput and min cost among valid pairings.
-
-    Args:
-        state: Current simulation state
-        idle_couriers: Available couriers
-        ready_orders: Orders ready for assignment
-        max_order_duration: Maximum seconds from dispatch to final dropoff (default 2400 = 40 min)
-
-    Returns:
-        List of (courier_id, [order_ids]) assignments
-    """
-    MAX_BUNDLE_SIZE = 3
+    # Get max bundle size from config if available, otherwise use hardcoded default
+    if state.config and 'algorithms' in state.config and 'bundling' in state.config['algorithms']:
+        MAX_BUNDLE_SIZE = state.config['algorithms']['bundling']['max_bundle_size']
+    else:
+        MAX_BUNDLE_SIZE = 3
 
     if not idle_couriers or not ready_orders:
         return []
@@ -504,7 +842,6 @@ def assign_constrained_bundling(state: SimulationState, idle_couriers: List[Cour
 
     return final_assignments
 
-
 # ============================================================================
 # ALGORITHM 4: FLEXIBLE BUNDLING (SINGLE + MULTI BUNDLE OPTIMIZATION)
 # ============================================================================
@@ -514,27 +851,12 @@ def calculate_route_duration(courier_location: Tuple[float, float],
                             state: SimulationState,
                             use_tsp_optimization: bool = True,
                             include_service_times: bool = True) -> float:
-    """
-    Calculate total duration for a courier to complete a bundle of orders.
 
-    Route calculation:
-    1. Travel to restaurant(s) - optimized sequence if multiple
-    2. Service time at each pickup
-    3. Travel to all dropoff locations - optimized using TSP
-    4. Service time at each dropoff
-
-    Args:
-        courier_location: Courier's current location
-        order_ids: List of order IDs to deliver
-        state: Current simulation state
-        use_tsp_optimization: Whether to optimize delivery sequence (default True)
-        include_service_times: Whether to include service times (default True)
-
-    Returns:
-        Total time in seconds
-    """
     if not order_ids:
         return 0.0
+
+    # Get service times from config
+    pickup_service_time, dropoff_service_time = _get_service_times(state)
 
     orders = [state.orders[oid] for oid in order_ids]
 
@@ -565,7 +887,7 @@ def calculate_route_duration(courier_location: Tuple[float, float],
             restaurant_loc = restaurant_locations[idx]
             total_time += get_travel_time(current_location, restaurant_loc)
             if include_service_times:
-                total_time += PICKUP_SERVICE_TIME  # Add service time at each restaurant
+                total_time += pickup_service_time  # Add service time at each restaurant
             current_location = restaurant_loc
 
     else:
@@ -573,7 +895,7 @@ def calculate_route_duration(courier_location: Tuple[float, float],
         restaurant_location = orders[0].restaurant_location
         total_time += get_travel_time(current_location, restaurant_location)
         if include_service_times:
-            total_time += PICKUP_SERVICE_TIME  # Add service time at restaurant
+            total_time += pickup_service_time  # Add service time at restaurant
         current_location = restaurant_location
 
     # Calculate optimized delivery time
@@ -587,34 +909,21 @@ def calculate_route_duration(courier_location: Tuple[float, float],
         for idx in delivery_sequence:
             total_time += get_travel_time(current_location, dropoff_locations[idx])
             if include_service_times:
-                total_time += DROPOFF_SERVICE_TIME  # Add service time at each dropoff
+                total_time += dropoff_service_time  # Add service time at each dropoff
             current_location = dropoff_locations[idx]
     else:
         # No optimization or single delivery
         for location in dropoff_locations:
             total_time += get_travel_time(current_location, location)
             if include_service_times:
-                total_time += DROPOFF_SERVICE_TIME  # Add service time at each dropoff
+                total_time += dropoff_service_time  # Add service time at each dropoff
             current_location = location
 
     return total_time
 
-
 def optimize_delivery_sequence(start_location: Tuple[float, float],
                               dropoff_locations: List[Tuple[float, float]]) -> List[int]:
-    """
-    Find optimal sequence to visit all dropoff locations using TSP solver.
 
-    For small instances (n <= 8), uses exact solution via permutations.
-    For larger instances, uses nearest neighbor heuristic.
-
-    Args:
-        start_location: Starting (x, y) coordinates
-        dropoff_locations: List of (x, y) coordinates to visit
-
-    Returns:
-        List of indices representing optimal visit order
-    """
     n = len(dropoff_locations)
 
     if n <= 1:
@@ -665,38 +974,14 @@ def optimize_delivery_sequence(start_location: Tuple[float, float],
 
         return sequence
 
-
 def optimize_pickup_sequence(start_location: Tuple[float, float],
                             pickup_locations: List[Tuple[float, float]]) -> List[int]:
-    """
-    Find optimal sequence to visit all pickup locations (restaurants).
-    Uses same TSP logic as optimize_delivery_sequence.
 
-    Args:
-        start_location: Starting (x, y) coordinates
-        pickup_locations: List of restaurant (x, y) coordinates
-
-    Returns:
-        List of indices representing optimal pickup order
-    """
     # Reuse the same TSP logic for pickups
     return optimize_delivery_sequence(start_location, pickup_locations)
 
-
 def generate_bundle_candidates(ready_orders: List[Order], max_bundle_size: int = 3) -> List[List[int]]:
-    """
-    Generate ALL possible bundle combinations from ready orders.
 
-    No geographic filtering - pure combinatorial approach:
-    - All single-order bundles
-    - All 2-order combinations (any restaurants)
-    - All 3-order combinations (any restaurants)
-
-    The Hungarian solver will pick the best combinations based on pure route cost.
-
-    Returns:
-        List of bundles, where each bundle is a list of order_ids
-    """
     from itertools import combinations
 
     bundles = []
@@ -709,38 +994,11 @@ def generate_bundle_candidates(ready_orders: List[Order], max_bundle_size: int =
 
     return bundles
 
-
 def generate_geographic_bundles(ready_orders: List[Order],
                                 max_bundle_size: int = 3,
                                 max_pickup_radius: float = 1000,
                                 max_dropoff_radius: float = 2000) -> List[List[int]]:
-    """
-    Generate geographically coherent bundles using radius-based clustering.
 
-    This is the "Smart Clustering" approach that creates bundles where:
-    - Restaurants are geographically clustered (within max_pickup_radius)
-    - Customers are geographically clustered (within max_dropoff_radius)
-    - Bundle sizes respect max_bundle_size constraint
-
-    Unlike combinatorial generation which creates ALL possible combinations,
-    this function only creates geographically sensible bundles, dramatically
-    reducing the search space while maintaining solution quality.
-
-    Strategy:
-    1. Cluster orders by restaurant proximity (max_pickup_radius meters)
-    2. Within each restaurant cluster, sub-cluster by customer proximity (max_dropoff_radius)
-    3. Create multi-order bundles (size 2+) from geographically coherent groups
-    4. Add all single-order bundles to give solver flexibility
-
-    Args:
-        ready_orders: List of orders available for bundling
-        max_bundle_size: Maximum orders per bundle (default: 3)
-        max_pickup_radius: Maximum distance between restaurants in a bundle (meters, default: 1000)
-        max_dropoff_radius: Maximum distance between customers in a bundle (meters, default: 2000)
-
-    Returns:
-        List of bundles, where each bundle is a list of order_ids
-    """
     from collections import defaultdict
 
     if not ready_orders:
@@ -830,252 +1088,265 @@ def generate_geographic_bundles(ready_orders: List[Order],
 
     return bundles
 
-
 def assign_network_bundling(state: SimulationState, idle_couriers: List[Courier],
                             ready_orders: List[Order]) -> List[Tuple[int, List[int]]]:
-    """
-    Algorithm 4: Network Bundling (Multi-Restaurant Intelligence)
 
-    Key Innovation: Generates ALL possible multi-restaurant bundle combinations
-    (sizes 1-3) and uses CP-SAT solver to maximize throughput while minimizing
-    total route cost. No geographic filtering for small batches (<=17 orders).
-
-    Strategy:
-    1. Generate ALL combinatorial bundle candidates (no geographic bias)
-    2. CP-SAT solver maximizes: (orders_delivered * 1M) - total_route_cost
-    3. Multi-objective function prioritizes throughput, then efficiency
-
-    This differs from Simple Bundling which only bundles same-restaurant orders.
-    Network Bundling explores the complete multi-restaurant solution space,
-    letting route costs naturally filter out inefficient geographic combinations.
-
-    Returns:
-        List of (courier_id, [order_id1, ...]) assignments
-    """
     if not idle_couriers or not ready_orders:
         return []
 
-    # Step 1: Generate bundle candidates with explosion prevention
-    # Threshold = 17 orders (833 bundle candidates, empirically optimal balance)
-    # Above threshold (18+ orders = 987+ candidates): use geographic clustering
-    if len(ready_orders) <= 17:
-        bundle_candidates = generate_bundle_candidates(ready_orders, max_bundle_size=3)
+    # Get config parameters
+    MAX_BUNDLE_SIZE = state.config['algorithms']['bundling']['max_bundle_size']
+
+    # READY-only filter (same as simple_bundling)
+    now = state.current_time
+    ready_orders = [o for o in ready_orders
+                    if o.state == "READY"
+                    and o.ready_time <= now
+                    and o.expiration_time and o.expiration_time > 0
+                    and now <= o.ready_time + o.expiration_time]
+
+    if not ready_orders:
+        return []
+
+    # Generate candidates with ≤2 restaurants
+    if len(ready_orders) <= 25:
+        # Small batch: enumerate all ≤2 restaurant bundles
+        bundle_candidates = _generate_2r_candidates(ready_orders, MAX_BUNDLE_SIZE)
     else:
-        bundle_candidates = generate_geographic_bundles(
+        # Large batch: use geographic clustering, then filter to ≤2 restaurants
+        geo_bundles = generate_geographic_bundles(
             ready_orders,
-            max_bundle_size=3,
-            max_pickup_radius=1000,   # 1km restaurant clustering
-            max_dropoff_radius=2000   # 2km customer clustering
+            max_bundle_size=MAX_BUNDLE_SIZE,
+            max_pickup_radius=1000,
+            max_dropoff_radius=2000
         )
+        # Filter to keep only ≤2 restaurant bundles
+        bundle_candidates = []
+        for bundle in geo_bundles:
+            bundle_orders = [o for o in ready_orders if o.id in bundle]
+            unique_restaurants = set(o.restaurant_id for o in bundle_orders)
+            if len(unique_restaurants) <= 2:
+                bundle_candidates.append(bundle)
 
     if not bundle_candidates:
         return []
 
-    # Step 2: CP-SAT Optimization Model (Maximize Throughput, Minimize Cost)
+    # CP-SAT model with feasibility checking
     model = cp_model.CpModel()
-    PRIORITY_MULTIPLIER = 1_000_000
-
-    # Decision variables: x[i,j] = 1 if courier i assigned to bundle j
     x = {}
-    for i in range(len(idle_couriers)):
-        for j in range(len(bundle_candidates)):
-            x[(i, j)] = model.NewBoolVar(f'x_{i}_{j}')
+    edge_cost = {}
+    size = {}
 
-    # Constraint 1: Each courier assigned to at most one bundle
-    for i in range(len(idle_couriers)):
-        model.AddAtMostOne(x[(i, j)] for j in range(len(bundle_candidates)))
+    I = range(len(idle_couriers))
+    J = range(len(bundle_candidates))
 
-    # Constraint 2: Each order assigned to at most one courier-bundle pair
-    order_map = {order.id: i for i, order in enumerate(ready_orders)}
-    for order_id in order_map.keys():
-        tasks_with_this_order = []
-        for j, bundle in enumerate(bundle_candidates):
-            if order_id in bundle:
-                for i in range(len(idle_couriers)):
-                    tasks_with_this_order.append(x[(i, j)])
-        model.AddAtMostOne(tasks_with_this_order)
-
-    # Objective: Maximize (orders delivered * 1M - cost)
-    objective_terms = []
-    for i, courier in enumerate(idle_couriers):
-        for j, bundle in enumerate(bundle_candidates):
-            cost = int(calculate_route_duration(
-                courier.current_location,
-                bundle,
-                state,
-                use_tsp_optimization=(len(bundle) > 1),
-                include_service_times=True
-            ))
-            score = (len(bundle) * PRIORITY_MULTIPLIER) - cost
-            objective_terms.append(score * x[(i, j)])
-
-    model.Maximize(sum(objective_terms))
-
-    # Step 3: Solve
-    solver = cp_model.CpSolver()
-    solver.parameters.log_search_progress = False
-    status = solver.Solve(model)
-
-    # Step 4: Extract assignments
-    assignments = []
-    if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
+    # Only create variables for feasible assignments
+    for j, bundle in enumerate(bundle_candidates):
+        size[j] = len(bundle)
         for i, courier in enumerate(idle_couriers):
-            for j, bundle in enumerate(bundle_candidates):
-                if solver.Value(x[(i, j)]) == 1:
-                    assignments.append((courier.id, bundle))
+            # Check feasibility with route simulator
+            result = _simulate_bundle_route(state, courier.current_location, bundle, allow_wait=False)
+            if result is not None:
+                total_time, _ = result
+                x[(i, j)] = model.NewBoolVar(f'x_{i}_{j}')
+                edge_cost[(i, j)] = total_time
+
+    if not x:
+        return []
+
+    # Constraints
+    # At most one bundle per courier
+    for i in I:
+        vars_i = [x[(i, j)] for j in J if (i, j) in x]
+        if vars_i:
+            model.AddAtMostOne(vars_i)
+
+    # At most one assignment per order
+    order_ids = [o.id for o in ready_orders]
+    for oid in order_ids:
+        hits = []
+        for j in J:
+            if oid in bundle_candidates[j]:
+                for i in I:
+                    if (i, j) in x:
+                        hits.append(x[(i, j)])
+        if hits:
+            model.AddAtMostOne(hits)
+
+    # Lexicographic objectives
+    # 1. Maximize orders assigned
+    total_orders = sum(size[j] * x[(i, j)] for (i, j) in x)
+    model.Maximize(total_orders)
+
+    solver = cp_model.CpSolver()
+    solver.parameters.num_search_workers = 1
+    solver.parameters.log_search_progress = False
+    solver.Solve(model)
+    best_orders = int(solver.Value(total_orders))
+
+    # 2. Minimize total time (fixing orders)
+    model.Add(total_orders == best_orders)
+    total_time = sum(edge_cost[(i, j)] * x[(i, j)] for (i, j) in x)
+    model.Minimize(total_time)
+    solver.Solve(model)
+    best_time = int(solver.Value(total_time))
+
+    # 3. Minimize couriers used (fixing time)
+    model.Add(total_time == best_time)
+    y = {}
+    for i in I:
+        y[i] = model.NewBoolVar(f'y_{i}')
+        vars_i = [x[(i, j)] for j in J if (i, j) in x]
+        if vars_i:
+            model.AddMaxEquality(y[i], vars_i)
+        else:
+            model.Add(y[i] == 0)
+
+    total_couriers = sum(y[i] for i in I)
+    model.Minimize(total_couriers)
+    solver.Solve(model)
+
+    # 4. Deterministic tie-breaking
+    BASE = 1_000_000
+    tie = sum((idle_couriers[i].id * BASE * BASE + _bundle_lex_code(bundle_candidates[j])) * x[(i, j)]
+              for (i, j) in x)
+    model.Minimize(tie)
+    solver.Solve(model)
+
+    # Extract solution
+    assignments = []
+    for (i, j), var in x.items():
+        if solver.Value(var) == 1:
+            assignments.append((idle_couriers[i].id, bundle_candidates[j]))
 
     return assignments
-
 
 # ============================================================================
 # ALGORITHM 5: ANTICIPATED NETWORK BUNDLING (THE WORKHORSE)
 # ============================================================================
 
-
 def assign_anticipated_bundling(state: SimulationState, idle_couriers: List[Courier],
-                                ready_orders: List[Order]) -> List[Tuple[int, List[int]]]:
-    """
-    Algorithm 5: Anticipated Network Bundling (The Workhorse) - CP-SAT Maximization
-
-    Extends Network Bundling with temporal intelligence while maintaining the same
-    throughput-first optimization framework.
-
-    Score = (n × 1M) - EffectiveCost
-    Where EffectiveCost = RouteDuration + α·T_wait + β·T_delay - γ·StalenessBonus
-
-    Key Innovation: Anticipatory horizon (5min lookahead) + holistic effective cost
-    that balances route efficiency, temporal penalties, and FIFO fairness.
-
-    Returns:
-        List of (courier_id, [order_id1, ...]) assignments
-    """
-    LOOKAHEAD_WINDOW = 300  # 5 minutes
-    MAX_BUNDLE_SIZE = 3
-    ALPHA_PENALTY = 0.1  # Courier wait penalty
-    BETA_PENALTY = 0.15   # Food delay penalty
-    STALENESS_BONUS = 0.45  # FIFO fairness bonus
-    MAX_STALENESS_BONUS = 140  # Cap to prevent ancient order dominance
+                                _ignored_ready_orders: List[Order]) -> List[Tuple[int, List[int]]]:
 
     if not idle_couriers:
         return []
 
-    # ========================================================================
-    # STEP 1: ANTICIPATORY HORIZON
-    # ========================================================================
-    current_time = state.current_time
-    assignable_orders = [
-        o for o in state.orders.values()
-        if o.state in ["PENDING", "READY"] and o.ready_time <= current_time + LOOKAHEAD_WINDOW
-    ]
+    # Get config parameters
+    LOOKAHEAD_WINDOW = state.config['algorithms']['anticipated']['lookahead_window_s']
+    MAX_BUNDLE_SIZE = state.config['algorithms']['bundling']['max_bundle_size']
 
-    if not assignable_orders:
+    now = state.current_time
+
+    # Include PENDING and READY orders within lookahead window
+    pool = [o for o in state.orders.values()
+            if o.state in ("PENDING", "READY")
+            and o.ready_time <= now + LOOKAHEAD_WINDOW
+            and o.expiration_time and o.expiration_time > 0]
+
+    if not pool:
         return []
 
-    # ========================================================================
-    # STEP 2: BUNDLE GENERATION
-    # ========================================================================
-    if len(assignable_orders) <= 17:
-        candidate_bundles_ids = generate_bundle_candidates(assignable_orders, max_bundle_size=MAX_BUNDLE_SIZE)
-    else:
-        candidate_bundles_ids = generate_geographic_bundles(
-            assignable_orders,
-            max_bundle_size=MAX_BUNDLE_SIZE,
-            max_pickup_radius=1000,
-            max_dropoff_radius=2000
-        )
+    # Same-restaurant candidates only (reuse simple's generator)
+    candidate_bundles = _generate_simple_bundle_candidates(pool, max_bundle_size=MAX_BUNDLE_SIZE)
 
-    if not candidate_bundles_ids:
+    if not candidate_bundles:
         return []
 
-    # ========================================================================
-    # STEP 3: CP-SAT MAXIMIZATION MODEL
-    # ========================================================================
+    # CP-SAT model with feasibility checking
     model = cp_model.CpModel()
-    PRIORITY_MULTIPLIER = 1_000_000
-
-    # Decision variables: x[i,j] = 1 if courier i assigned to bundle j
     x = {}
-    for i in range(len(idle_couriers)):
-        for j in range(len(candidate_bundles_ids)):
-            x[(i, j)] = model.NewBoolVar(f'x_{i}_{j}')
+    edge_cost = {}
+    size = {}
 
-    # Constraint 1: Each courier assigned to at most one bundle
-    for i in range(len(idle_couriers)):
-        model.AddAtMostOne(x[(i, j)] for j in range(len(candidate_bundles_ids)))
+    I = range(len(idle_couriers))
+    J = range(len(candidate_bundles))
 
-    # Constraint 2: Each order assigned to at most one courier-bundle pair
-    order_map = {order.id: order for order in assignable_orders}
-    for order_id in order_map.keys():
-        tasks_with_this_order = []
-        for j, bundle_ids in enumerate(candidate_bundles_ids):
-            if order_id in bundle_ids:
-                for i in range(len(idle_couriers)):
-                    tasks_with_this_order.append(x[(i, j)])
-        model.AddAtMostOne(tasks_with_this_order)
+    # Only create variables for feasible assignments
+    for j, bundle in enumerate(candidate_bundles):
+        size[j] = len(bundle)
+        # Verify same-restaurant constraint (should be guaranteed by generator)
+        bundle_orders = [o for o in pool if o.id in bundle]
+        unique_restaurants = set(o.restaurant_id for o in bundle_orders)
+        if len(unique_restaurants) != 1:
+            continue  # Skip if not same-restaurant
 
-    # Objective: Maximize (orders × 1M) - EffectiveCost
-    objective_terms = []
-    for i, courier in enumerate(idle_couriers):
-        for j, bundle_ids in enumerate(candidate_bundles_ids):
-
-            # --- Calculate Effective Cost components ---
-            bundle_orders = [state.orders[oid] for oid in bundle_ids]
-            bundle_ready_time = max(o.ready_time for o in bundle_orders)
-
-            first_pickup_loc = bundle_orders[0].restaurant_location
-            travel_to_first_pickup = get_travel_time(courier.current_location, first_pickup_loc)
-            courier_arrival_time = current_time + travel_to_first_pickup
-
-            # 1. Route Duration
-            route_duration = calculate_route_duration(
-                courier.current_location,
-                bundle_ids,
-                state,
-                use_tsp_optimization=(len(bundle_ids) > 1),
-                include_service_times=True
-            )
-
-            # 2. Courier Wait Time (T_wait)
-            T_wait = max(0, bundle_ready_time - courier_arrival_time)
-
-            # 3. Food Freshness Loss (T_delay)
-            pickup_start_time = max(courier_arrival_time, bundle_ready_time)
-            T_delay_total = sum(max(0, pickup_start_time - o.ready_time) for o in bundle_orders)
-
-            # 4. Staleness Bonus (FIFO fairness)
-            staleness_bonus_total = 0
-            for o in bundle_orders:
-                if o.state == "READY":
-                    wait_time = current_time - o.ready_time
-                    capped_wait_time = min(wait_time, MAX_STALENESS_BONUS / STALENESS_BONUS)
-                    staleness_bonus_total += capped_wait_time
-
-            # --- Effective Cost ---
-            effective_cost = route_duration + (ALPHA_PENALTY * T_wait) + (BETA_PENALTY * T_delay_total) - (STALENESS_BONUS * staleness_bonus_total)
-
-            # --- Score: Throughput first, efficiency second ---
-            score = (len(bundle_ids) * PRIORITY_MULTIPLIER) - int(effective_cost)
-            objective_terms.append(score * x[(i, j)])
-
-    model.Maximize(sum(objective_terms))
-
-    # ========================================================================
-    # STEP 4: SOLVE
-    # ========================================================================
-    solver = cp_model.CpSolver()
-    solver.parameters.log_search_progress = False
-    status = solver.Solve(model)
-
-    # Extract assignments
-    assignments = []
-    if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
         for i, courier in enumerate(idle_couriers):
-            for j, bundle_ids in enumerate(candidate_bundles_ids):
-                if solver.Value(x[(i, j)]) == 1:
-                    assignments.append((courier.id, bundle_ids))
+            # Check feasibility with route simulator (with waiting allowed)
+            result = _simulate_bundle_route(state, courier.current_location, bundle, allow_wait=True)
+            if result is not None:
+                total_time, _ = result
+                x[(i, j)] = model.NewBoolVar(f'x_{i}_{j}')
+                edge_cost[(i, j)] = total_time
+
+    if not x:
+        return []
+
+    # Constraints
+    # At most one bundle per courier
+    for i in I:
+        vars_i = [x[(i, j)] for j in J if (i, j) in x]
+        if vars_i:
+            model.AddAtMostOne(vars_i)
+
+    # At most one assignment per order
+    pool_ids = [o.id for o in pool]
+    for oid in pool_ids:
+        hits = []
+        for j in J:
+            if oid in candidate_bundles[j]:
+                for i in I:
+                    if (i, j) in x:
+                        hits.append(x[(i, j)])
+        if hits:
+            model.AddAtMostOne(hits)
+
+    # Lexicographic objectives (no penalty terms)
+    # 1. Maximize orders assigned
+    total_orders = sum(size[j] * x[(i, j)] for (i, j) in x)
+    model.Maximize(total_orders)
+
+    solver = cp_model.CpSolver()
+    solver.parameters.num_search_workers = 1
+    solver.parameters.log_search_progress = False
+    solver.Solve(model)
+    best_orders = int(solver.Value(total_orders))
+
+    # 2. Minimize total time (fixing orders)
+    model.Add(total_orders == best_orders)
+    total_time = sum(edge_cost[(i, j)] * x[(i, j)] for (i, j) in x)
+    model.Minimize(total_time)
+    solver.Solve(model)
+    best_time = int(solver.Value(total_time))
+
+    # 3. Minimize couriers used (fixing time)
+    model.Add(total_time == best_time)
+    y = {}
+    for i in I:
+        y[i] = model.NewBoolVar(f'y_{i}')
+        vars_i = [x[(i, j)] for j in J if (i, j) in x]
+        if vars_i:
+            model.AddMaxEquality(y[i], vars_i)
+        else:
+            model.Add(y[i] == 0)
+
+    total_couriers = sum(y[i] for i in I)
+    model.Minimize(total_couriers)
+    solver.Solve(model)
+
+    # 4. Deterministic tie-breaking
+    BASE = 1_000_000
+    tie = sum((idle_couriers[i].id * BASE * BASE + _bundle_lex_code(candidate_bundles[j])) * x[(i, j)]
+              for (i, j) in x)
+    model.Minimize(tie)
+    solver.Solve(model)
+
+    # Extract solution
+    assignments = []
+    for (i, j), var in x.items():
+        if solver.Value(var) == 1:
+            assignments.append((idle_couriers[i].id, candidate_bundles[j]))
 
     return assignments
-
 
 # ============================================================================
 # ALGORITHM REGISTRY
@@ -1090,9 +1361,8 @@ ALGORITHMS = {
     'anticipated_bundling': assign_anticipated_bundling    # Level 5: Anticipatory + network intelligence
 }
 
-
 def get_algorithm(name: str):
-    """Get assignment algorithm by name."""
+
     if name not in ALGORITHMS:
         raise ValueError(f"Unknown algorithm: {name}. Available: {list(ALGORITHMS.keys())}")
     return ALGORITHMS[name]
