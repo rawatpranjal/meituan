@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Test all five algorithms with the unified scenario."""
 
 import sys
 import time
@@ -16,7 +15,6 @@ from assignment_algorithms import (
 )
 
 def test_algorithm(name, assign_func, cfg):
-    """Test a single algorithm and return metrics."""
     print(f"\n{'='*60}")
     print(f"Testing {name} algorithm")
     print('='*60)

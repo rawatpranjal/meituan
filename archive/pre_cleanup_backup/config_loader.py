@@ -133,6 +133,17 @@ def _validate_config(config: Dict[str, Any]) -> None:
             f"got: {config['physics']['batch_interval_s']}"
         )
 
+def save_config_snapshot(config: Dict[str, Any], output_path: str) -> None:
+
+    import json
+    with open(output_path, 'w') as f:
+        json.dump(config, f, indent=2)
+
 def get_scenario_name(config: Dict[str, Any]) -> str:
 
     return config['scenario']['name']
+
+def get_output_directory(config: Dict[str, Any], base_dir: str = 'outputs') -> str:
+
+    scenario_name = get_scenario_name(config)
+    return os.path.join(base_dir, scenario_name)

@@ -3,6 +3,7 @@ import numpy as np
 from datetime import datetime
 from copy import deepcopy
 from typing import List, Tuple, Dict, Optional
+import json
 
 # ============================================================================
 # PHYSICS HELPERS - MANHATTAN ONLY
@@ -480,6 +481,263 @@ class SimulationState:
             self.metrics['avg_bundle_size'] = self.metrics['total_bundle_size'] / self.metrics['bundles_created']
         else:
             self.metrics['avg_bundle_size'] = 0
+
+# ============================================================================
+# SCENARIO GENERATION (LEGACY - USE CONFIG FILES INSTEAD)
+# ============================================================================
+
+def generate_gauntlet_scenario(duration: int = 3600) -> Dict:
+
+    print("Generating the 'Engineered Gauntlet' scenario...")
+
+    # --- GEOGRAPHIC SETUP ---
+    # 3 downtown restaurants, 1 suburban outlier
+    restaurants = [
+        Restaurant(0, (1.5, 1.5)),    # R0 - Downtown Pizzeria (main pileup)
+        Restaurant(1, (1.7, 1.5)),    # R1 - Downtown Cafe (cross-street rival)
+        Restaurant(2, (1.6, 1.7)),    # R2 - Downtown Sushi (impossible deadline origin)
+        Restaurant(3, (4.5, 4.5))     # R3 - Suburban Outlier (the distant bait)
+    ]
+
+    # Strategic courier placement to create dilemmas
+    couriers = [
+        Courier(0, (1.5, 1.4)),   # C0 - Downtown Specialist
+        Courier(1, (1.7, 1.4)),   # C1 - Downtown Specialist
+        Courier(2, (4.4, 4.4)),   # C2 - Suburban Specialist (Perfectly positioned for the bait)
+        Courier(3, (3.0, 3.0)),   # C3 - Central Roamer
+        Courier(4, (1.0, 3.5))    # C4 - Remote Roamer
+    ]
+
+    # --- THE SCRIPTED ORDER SCHEDULE ---
+    order_schedule = []
+    order_id_counter = 0
+
+    def add_order(restaurant_idx, diner_loc, placement_time, meal_prep_time=None, expiration_time=None):
+
+        nonlocal order_id_counter
+        order_schedule.append(
+            Order(order_id_counter, restaurant_idx, restaurants[restaurant_idx].location,
+                  diner_loc, placement_time, meal_prep_time, expiration_time)
+        )
+        order_id_counter += 1
+
+    # === THE GAUNTLET BEGINS ===
+
+    # Test 1 (Minute 5 = 300s): The Distant Bait (To break Greedy)
+    add_order(restaurant_idx=3, diner_loc=(4.8, 4.2), placement_time=300)
+
+    # Test 2 (Minute 15 = 900s): The Pizzeria Pileup (To break 1-to-1 matching)
+    # A sudden burst of 6 orders at R0. Only 4-5 couriers will be free.
+    add_order(restaurant_idx=0, diner_loc=(1.0, 1.0), placement_time=900)
+    add_order(restaurant_idx=0, diner_loc=(1.2, 1.8), placement_time=905)
+    add_order(restaurant_idx=0, diner_loc=(1.8, 1.2), placement_time=910)
+    add_order(restaurant_idx=0, diner_loc=(0.8, 1.5), placement_time=915)
+    add_order(restaurant_idx=0, diner_loc=(1.5, 0.8), placement_time=920)
+    add_order(restaurant_idx=0, diner_loc=(2.0, 2.0), placement_time=925)
+
+    # Test 3 (Minute 20 = 1200s): The Cross-Street Rivalry (To limit Simple Bundling)
+    # 3 new orders appear at R1, right across the street from the R0 pileup.
+    add_order(restaurant_idx=1, diner_loc=(2.5, 1.5), placement_time=1200)
+    add_order(restaurant_idx=1, diner_loc=(2.7, 1.7), placement_time=1205)
+    add_order(restaurant_idx=1, diner_loc=(2.4, 1.3), placement_time=1210)
+
+    # Test 4 (Minute 30 = 1800s): The Impossible Deadline (To crown Anticipated)
+    # THE DECISIVE TEST - Only Anticipated's 15-min lookahead can solve this
+    # Placed: t=1800s (30min) | Ready: t=2400s (40min) | Expires: t=3000s (50min)
+    # Delivery time: ~795s (13.25 min) - too long for 600s reactive window
+    # Reactive: sees at 2400s, needs 795s, expires at 3000s (600s) → IMPOSSIBLE
+    # Anticipated: sees at 1800s, can dispatch early, has 1200s window → POSSIBLE
+    add_order(restaurant_idx=2, diner_loc=(3.5, 3.5), placement_time=1800,
+              meal_prep_time=600, expiration_time=600)  # Custom 10-min expiration window
+
+    # Add some background "noise" orders with variable prep times (7-15 min) for realism
+    # LEGACY: Using hardcoded values for legacy function
+    np.random.seed(42)
+    meal_prep_time = 600  # 10 minutes
+    for t in range(400, duration - meal_prep_time, 350):
+        # Avoid placing noise during the exact moments of our key tests
+        if 900 <= t <= 1300 or 1800 <= t <= 1900 or t == 300:
+            continue
+        # Realistic variable meal prep time: 7-15 minutes (420-900 seconds)
+        variable_prep_time = np.random.uniform(420, 900)
+        add_order(
+            restaurant_idx=np.random.choice([0, 1, 2]),
+            diner_loc=(np.random.uniform(0, 5), np.random.uniform(0, 5)),
+            placement_time=t,
+            meal_prep_time=variable_prep_time
+        )
+
+    return {
+        'restaurants': restaurants,
+        'couriers': couriers,
+        'order_schedule': order_schedule,
+        'duration': duration
+    }
+
+# Keep old function as backup
+def generate_scenario_legacy(seed: int = 42, duration: Optional[int] = None) -> Dict:
+
+    # LEGACY: Using hardcoded values for legacy function
+    np.random.seed(seed)
+    sim_duration = duration if duration is not None else 3600
+    grid_size = 5.0
+    num_restaurants = 4
+
+    # Generate restaurants (tight cluster at town center)
+    restaurants = []
+    center = grid_size / 2
+    for i in range(num_restaurants):
+        location = (
+            center + np.random.uniform(-0.025, 0.025),
+            center + np.random.uniform(-0.025, 0.025)
+        )
+        restaurants.append(Restaurant(i, location))
+
+    # Generate couriers (random start positions)
+    num_couriers = 5
+    couriers = []
+    for i in range(num_couriers):
+        location = (
+            np.random.uniform(0, grid_size),
+            np.random.uniform(0, grid_size)
+        )
+        couriers.append(Courier(i, location))
+
+    # Generate order schedule
+    meal_prep_time = 600
+    num_orders = 80
+    order_schedule = []
+    current_time = 0.0
+    order_id = 0
+    max_placement_time = sim_duration - meal_prep_time
+
+    while order_id < num_orders and current_time < max_placement_time:
+        current_minute = current_time / 60.0
+        if current_minute < 15:
+            lambda_rate = 0.33
+        elif current_minute < 30:
+            lambda_rate = 2.5
+        else:
+            lambda_rate = 0.33
+
+        inter_arrival_time = np.random.exponential(60.0 / lambda_rate)
+        current_time += inter_arrival_time
+
+        if current_time >= max_placement_time:
+            break
+
+        if 15 <= current_minute < 30:
+            restaurant = np.random.choice(restaurants, p=[0.75, 0.25] if len(restaurants) >= 2 else None)
+        else:
+            restaurant = np.random.choice(restaurants)
+
+        angle = np.random.uniform(0, 2 * np.pi)
+        radius = np.random.uniform(1.0, 1.3)
+        diner_location = (
+            center + radius * np.cos(angle),
+            center + radius * np.sin(angle)
+        )
+
+        order = Order(
+            order_id=order_id,
+            restaurant_id=restaurant.id,
+            restaurant_location=restaurant.location,
+            diner_location=diner_location,
+            placement_time=current_time
+        )
+        order_schedule.append(order)
+        order_id += 1
+
+    return {
+        'restaurants': restaurants,
+        'couriers': couriers,
+        'order_schedule': order_schedule,
+        'duration': sim_duration
+    }
+
+# Alias for backward compatibility
+generate_scenario = generate_gauntlet_scenario
+
+def generate_asymmetric_scenario(duration: int = 900) -> Dict:
+
+    # Fixed geographic setup for visual differentiation
+    restaurants = [
+        Restaurant(0, (2.0, 2.0)),    # R1 - Downtown hub
+        Restaurant(1, (2.2, 2.0)),    # R2 - Downtown hub (200m away)
+        Restaurant(2, (4.5, 4.5))     # R3 - Suburban outlier
+    ]
+
+    # Strategic courier placement
+    couriers = [
+        Courier(0, (2.1, 2.0)),   # C0 - Hub courier
+        Courier(1, (2.0, 1.9)),   # C1 - Hub courier
+        Courier(2, (4.4, 4.4)),   # C2 - Suburban courier
+        Courier(3, (3.0, 3.0)),   # C3 - Remote courier
+        Courier(4, (3.2, 3.2)),   # C4 - Remote courier
+    ]
+
+    # For longer simulations, add more couriers
+    if duration > 900:
+        for i in range(5, 10):
+            # Add more remote couriers spread around
+            angle = (i - 5) * 72 * np.pi / 180  # 72 degrees apart
+            distance = 2.0
+            x = 2.5 + distance * np.cos(angle)
+            y = 2.5 + distance * np.sin(angle)
+            couriers.append(Courier(i, (x, y)))
+
+    # Scripted order schedule for maximum differentiation - MORE SPREAD OUT
+    order_schedule = [
+        # The bait - takes suburban courier off the board
+        Order(0, 2, restaurants[2].location, (4.7, 4.3), 60.0),
+
+        # The bundling test - 4 orders at R1 (spread out more)
+        Order(1, 0, restaurants[0].location, (1.6, 2.4), 120.0),  # NW of R1
+        Order(2, 0, restaurants[0].location, (2.4, 1.6), 120.0),  # SE of R1
+        Order(3, 0, restaurants[0].location, (1.5, 1.5), 120.0),  # SW of R1
+        Order(4, 0, restaurants[0].location, (2.5, 2.5), 120.0),  # NE of R1
+
+        # The smart test - 3 orders at R2 (spread out more)
+        Order(5, 1, restaurants[1].location, (1.8, 2.6), 180.0),  # N of R2
+        Order(6, 1, restaurants[1].location, (2.6, 1.4), 180.0),  # SE of R2
+        Order(7, 1, restaurants[1].location, (1.4, 1.8), 180.0)   # W of R2
+    ]
+
+    # For longer simulations, continue with more waves
+    if duration > 900:
+        # Add more order waves with similar patterns
+        order_id = 8
+        # LEGACY: Using hardcoded value for legacy function
+        meal_prep_time = 600
+        for wave_time in range(300, min(duration - meal_prep_time, 10800), 120):
+            # Alternate between hub restaurants with bursts
+            restaurant_idx = 0 if (wave_time // 120) % 2 == 0 else 1
+            restaurant = restaurants[restaurant_idx]
+
+            # Create 2-4 orders per wave
+            num_orders = np.random.randint(2, 5)
+            for _ in range(num_orders):
+                # Diner locations clustered around downtown
+                diner_location = (
+                    2.0 + np.random.uniform(-1.0, 1.0),
+                    2.0 + np.random.uniform(-1.0, 1.0)
+                )
+
+                order_schedule.append(Order(
+                    order_id=order_id,
+                    restaurant_id=restaurant_idx,
+                    restaurant_location=restaurant.location,
+                    diner_location=diner_location,
+                    placement_time=float(wave_time)
+                ))
+                order_id += 1
+
+    return {
+        'restaurants': restaurants,
+        'couriers': couriers,
+        'order_schedule': order_schedule,
+        'duration': duration
+    }
 
 # ============================================================================
 # SIMULATION ENGINE
