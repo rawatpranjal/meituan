@@ -291,25 +291,15 @@ where $T_{total} = |C| \times t_{duration}$
 
 **Scenario:** 60 orders, 8 couriers, 1 hour, 5 restaurants, Poisson arrival (λ = 1/min)
 
-### Customer & Order Metrics
+### Performance Summary (Non-Redundant Metrics)
 
-| Algorithm | Fulfillment Rate | Orders Delivered | Orders Expired | Avg Delivery Time | P90 Delivery Time | Avg Ready-to-Door |
-|-----------|-----------------|------------------|----------------|-------------------|-------------------|-------------------|
-| Greedy | 53.3% | 32/60 | 9 | 23.6 min | 32.1 min | 18.6 min |
-| Hungarian | 55.0% | 33/60 | 14 | 20.5 min | 28.8 min | 15.5 min |
-| Simple Bundling | 71.7% | 43/60 | 6 | 19.6 min | 27.3 min | 14.6 min |
-| Network Bundling | 76.7% | 46/60 | 5 | 22.1 min | 30.5 min | 17.1 min |
-| Anticipated Bundling | 83.3% | 50/60 | 6 | 18.7 min | 30.8 min | 13.7 min |
-
-### Operational & Efficiency Metrics
-
-| Algorithm | Bundles Created | Avg Bundle Size | Courier Utilization | Orders per Courier-Hour | Total Distance | Distance per Order | System Throughput | Algorithm Runtime |
-|-----------|----------------|-----------------|---------------------|------------------------|----------------|-------------------|-------------------|-------------------|
-| Greedy | 0 | - | 81.7% | 4.00 | 110.8 km | 3.46 km | 32.0/hr | 0.1s |
-| Hungarian | 0 | - | 82.3% | 4.12 | 112.8 km | 3.42 km | 33.0/hr | 0.3s |
-| Simple Bundling | 14 | 2.64 | 81.8% | 5.38 | 106.8 km | 2.48 km | 43.0/hr | 0.4s |
-| Network Bundling | 15 | 2.80 | 84.7% | 5.75 | 102.3 km | 2.22 km | 46.0/hr | 1.1s |
-| Anticipated Bundling | 17 | 2.59 | 81.1% | 6.25 | 114.4 km | 2.29 km | 50.0/hr | 0.8s |
+| Algorithm | Fulfillment Rate | Orders Expired | Avg Ready-to-Door | Avg Bundle Size | Courier Utilization | Distance per Order | Orders per Courier-Hr | Runtime |
+|-----------|-----------------|----------------|-------------------|----------------|--------------------|--------------------|---------------------|---------|
+| Greedy | 53.3% | 9 | 18.6 min | - | 81.7% | 3.46 km | 4.00 | 0.1s |
+| Hungarian | 55.0% | 14 | 15.5 min | - | 82.3% | 3.42 km | 4.12 | 0.3s |
+| Simple Bundling | 71.7% | 6 | 14.6 min | 2.64 | 81.8% | 2.48 km | 5.38 | 0.4s |
+| Network Bundling | 76.7% | 5 | 17.1 min | 2.80 | 84.7% | 2.22 km | 5.75 | 1.1s |
+| Anticipated Bundling | 83.3% | 6 | 13.7 min | 2.59 | 81.1% | 2.29 km | 6.25 | 0.8s |
 
 Total runtime: 2.7 seconds
 
